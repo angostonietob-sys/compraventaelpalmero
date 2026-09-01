@@ -16,11 +16,14 @@
       font-weight: 900;
       letter-spacing: -0.03em;
     }
+    .bg-salmon-oscuro {
+      background-color: #C85A5A;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
 
-  <!-- CABECERA -->
+  <!-- CABECERA PRINCIPAL -->
   <header class="w-full bg-white border-t border-b border-slate-300 sticky top-0 z-40 shadow-sm">
     <div class="w-full px-4 sm:px-8 py-3 flex items-center justify-between gap-4">
       <div class="flex items-center shrink-0">
@@ -46,17 +49,20 @@
     </div>
   </header>
 
-  <!-- CONTENIDO -->
+  <!-- CONTENIDO PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
-    <!-- INICIO -->
-    <section id="sec-inicio" class="block">
-      <div class="max-w-4xl space-y-6">
+    
+    <!-- 1. SECCIÓN INICIO -->
+    <section id="sec-inicio" class="block space-y-6">
+      <div class="max-w-4xl space-y-4">
         <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Nuestra Historia</h2>
-        <p class="text-slate-600 leading-relaxed text-base">Espacio reservado para relatar la historia de Compraventas El Palmero.</p>
+        <p class="text-slate-600 leading-relaxed text-base">
+          Espacio reservado para relatar la historia y trayectoria de Compraventas El Palmero. Expertos en vehículos de ocasión revisados y garantizados para ofrecer la máxima confianza a nuestros clientes.
+        </p>
       </div>
     </section>
 
-    <!-- COCHES -->
+    <!-- 2. SECCIÓN COCHES -->
     <section id="sec-coches" class="hidden space-y-8">
       <div class="border-b border-slate-200 pb-4 flex justify-between items-end">
         <div>
@@ -69,14 +75,79 @@
       <div id="grid-coches-publico" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </section>
 
-    <!-- CONTACTO -->
-    <section id="sec-contacto" class="hidden">
-      <div class="max-w-4xl space-y-6">
-        <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Contacto</h2>
-        <p class="text-slate-600">Información y ubicación de contacto.</p>
+    <!-- 3. SECCIÓN CONTACTO -->
+    <section id="sec-contacto" class="hidden space-y-6">
+      <div class="max-w-4xl space-y-4">
+        <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Contacto y Ubicación</h2>
+        <p class="text-slate-600">Ven a visitarnos a nuestras instalaciones o llámanos directamente para cualquier consulta o prueba de vehículo.</p>
       </div>
     </section>
   </main>
+
+  <!-- FOOTER SALMÓN OSCURO CON TEXTO BLANCO -->
+  <footer class="w-full bg-salmon-oscuro text-white mt-auto shadow-2xl border-t-2 border-white/20">
+    <div class="max-w-7xl mx-auto px-6 py-12">
+      
+      <!-- CUADRÍCULA DE DATOS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/20">
+        
+        <!-- COL 1: LOGO E IDENTIDAD -->
+        <div class="space-y-3 md:col-span-1">
+          <div class="flex items-center gap-3">
+            <img src="compraventa.jpg" alt="Logo El Palmero" class="h-12 w-auto rounded border border-white/30 bg-white object-contain p-0.5">
+            <span class="font-palmero text-lg text-white uppercase tracking-tight leading-tight">
+              COMPRAVENTAS <br><span class="text-white drop-shadow-sm">EL PALMERO</span>
+            </span>
+          </div>
+          <p class="text-xs text-white/90 font-medium leading-relaxed">
+            Vehículos de ocasión, nacionales y de importación revisados y garantizados.
+          </p>
+        </div>
+
+        <!-- COL 2: UBICACIÓN Y CONTACTO -->
+        <div class="space-y-2.5">
+          <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">📍 Dónde Estamos</h3>
+          <p class="text-xs text-white/95 leading-relaxed font-semibold">
+            Calle Marcona, 9d<br>
+            Cartagena (Región de Murcia)
+          </p>
+          <div class="pt-1">
+            <a href="tel:699419202" class="inline-flex items-center gap-2 bg-white text-[#C85A5A] font-black px-3.5 py-1.5 rounded-lg text-xs hover:bg-slate-900 hover:text-white transition shadow">
+              📞 699 41 92 02
+            </a>
+          </div>
+        </div>
+
+        <!-- COL 3: HORARIOS -->
+        <div class="space-y-2.5">
+          <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">🕒 Horario de Atención</h3>
+          <div class="text-xs text-white/95 space-y-1 font-semibold">
+            <p><span class="underline">Lunes a Sábado:</span></p>
+            <p class="text-white/90 font-medium">Mañanas: 8:00 a 14:00</p>
+            <p class="text-white/90 font-medium">Tardes: 15:00 a 19:00</p>
+          </div>
+        </div>
+
+        <!-- COL 4: NAVEGACIÓN RÁPIDA -->
+        <div class="space-y-2.5">
+          <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">🔗 Navegación</h3>
+          <div class="flex flex-col gap-2 text-xs font-bold text-white/90">
+            <button type="button" onclick="mostrarSeccion('inicio')" class="text-left hover:text-slate-900 transition cursor-pointer">› Inicio</button>
+            <button type="button" onclick="mostrarSeccion('coches')" class="text-left hover:text-slate-900 transition cursor-pointer">› Coches</button>
+            <button type="button" onclick="mostrarSeccion('contacto')" class="text-left hover:text-slate-900 transition cursor-pointer">› Contacto</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COPYRIGHT Y ACCESO AL PANEL -->
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/80 font-semibold">
+        <p>© 2026 compraventaelpalmero todos los derechos reservados.</p>
+        <a href="admin.html" class="text-white/60 hover:text-white transition text-[11px] underline">Acceso Panel Privado</a>
+      </div>
+
+    </div>
+  </footer>
 
   <script>
     function abrirDB() {
