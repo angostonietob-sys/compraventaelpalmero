@@ -57,7 +57,7 @@
       </div>
     </section>
 
-    <!-- 2. COCHES PÚBLICOS -->
+    <!-- 2. CATÁLOGO DE VEHÍCULOS CON FLECHAS EN CADA TARJETA -->
     <section id="sec-coches" class="hidden space-y-8">
       <div class="border-b border-slate-200 pb-4 flex justify-between items-end">
         <div>
@@ -79,17 +79,6 @@
     </section>
   </main>
 
-  <!-- MODAL DE VISOR (FOTOS Y VÍDEO) -->
-  <div id="modal-galeria" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col justify-between p-6">
-    <div class="flex justify-between items-center text-white border-b border-white/10 pb-4">
-      <h3 id="modal-titulo" class="text-base font-black uppercase"></h3>
-      <button onclick="cerrarGaleria()" class="text-slate-400 hover:text-white font-bold text-2xl cursor-pointer">✕</button>
-    </div>
-    
-    <div id="modal-visor" class="flex-1 flex items-center justify-center p-4"></div>
-    <div id="modal-thumbnails" class="flex gap-2 overflow-x-auto py-2 border-t border-white/10"></div>
-  </div>
-
   <script>
     // BASE DE DATOS INDEXEDDB
     function abrirDB() {
@@ -107,6 +96,8 @@
     }
 
     let cochesCargados = [];
+    // Guardar el índice de la foto activa en cada tarjeta
+    const fotoActualPorCoche = {};
 
     function mostrarSeccion(seccionId) {
       ['inicio', 'coches', 'contacto'].forEach(id => {
@@ -139,37 +130,67 @@
           }
 
           grid.innerHTML = cochesCargados.map((c, idx) => {
-            const fotos = c.media?.filter(m => m.tipo === 'foto') || [];
-            const tieneVideo = c.media?.some(m => m.tipo === 'video');
-            const portada = fotos[0]?.data || '';
+            if (fotoActualPorCoche[idx] === undefined) {
+              fotoActualPorCoche[idx] = 0;
+            }
+            const mediaList = c.media || [];
+            const total = mediaList.length;
+            const currentIdx = fotoActualPorCoche[idx];
+            const item = mediaList[currentIdx] || { tipo: 'foto', data: '' };
 
             return `
-              <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-                <div class="relative h-60 bg-slate-900 cursor-pointer flex items-center justify-center" onclick="abrirGaleria(${idx})">
-                  ${portada ? `<img src="${portada}" class="w-full h-full object-cover">` : `<span class="text-white text-xs">Sin fotos</span>`}
-                  <span class="absolute top-3 right-3 bg-red-600 text-white font-black text-sm px-3.5 py-1 rounded-full shadow-lg">
+              <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                
+                <!-- CONTENEDOR VISOR DE LA TARJETA -->
+                <div class="relative h-64 bg-slate-900 flex items-center justify-center select-none overflow-hidden group">
+                  
+                  <!-- ELEMENTO PRINCIPAL (FOTO O VÍDEO) -->
+                  <div id="media-tarjeta-${idx}" class="w-full h-full">
+                    ${item.tipo === 'video' 
+                      ? `<video controls class="w-full h-full object-cover"><source src="${item.data}" type="video/mp4"></video>` 
+                      : `<img src="${item.data}" class="w-full h-full object-cover">`
+                    }
+                  </div>
+
+                  <!-- ETIQUETA PRECIO -->
+                  <span class="absolute top-3 right-3 bg-red-600 text-white font-black text-sm px-3.5 py-1 rounded-full shadow-lg z-10">
                     ${Number(c.precio).toLocaleString('es-ES')} €
                   </span>
-                  <div class="absolute bottom-3 left-3 flex gap-2">
-                    <span class="bg-black/75 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">📸 ${fotos.length} fotos</span>
-                    ${tieneVideo ? `<span class="bg-red-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🎬 Vídeo</span>` : ''}
-                  </div>
+
+                  <!-- CONTADOR DISCRETO (ej: 1 / 14) -->
+                  ${total > 1 ? `
+                    <span id="badge-tarjeta-${idx}" class="absolute bottom-3 left-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm z-10">
+                      ${currentIdx + 1} / ${total} ${item.tipo === 'video' ? '🎬' : '📸'}
+                    </span>
+                  ` : ''}
+
+                  <!-- FLECHA IZQUIERDA DISCRETA -->
+                  ${total > 1 ? `
+                    <button type="button" onclick="cambiarSlideTarjeta(${idx}, -1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center text-sm font-black transition z-20 backdrop-blur-sm cursor-pointer shadow-md">
+                      &#10094;
+                    </button>
+                  ` : ''}
+
+                  <!-- FLECHA DERECHA DISCRETA -->
+                  ${total > 1 ? `
+                    <button type="button" onclick="cambiarSlideTarjeta(${idx}, 1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center text-sm font-black transition z-20 backdrop-blur-sm cursor-pointer shadow-md">
+                      &#10095;
+                    </button>
+                  ` : ''}
                 </div>
 
-                <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <!-- DATOS DEL COCHE -->
+                <div class="p-6 space-y-4">
                   <div>
-                    <h3 class="font-black text-lg text-slate-900 uppercase">${c.titulo}</h3>
+                    <h3 class="font-black text-lg text-slate-900 uppercase leading-tight">${c.titulo}</h3>
                     <div class="flex flex-wrap gap-2 mt-3">
                       <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">📅 ${c.ano}</span>
                       <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">🛣 ${c.km}</span>
                       <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">⛽ ${c.motor}</span>
                     </div>
                   </div>
-
-                  <button type="button" onclick="abrirGaleria(${idx})" class="w-full bg-slate-900 hover:bg-red-600 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer">
-                    Ver Fotos y Vídeo (${c.media?.length || 0})
-                  </button>
                 </div>
+
               </div>
             `;
           }).join('');
@@ -179,39 +200,33 @@
       }
     }
 
-    function abrirGaleria(idx) {
-      const c = cochesCargados[idx];
-      if (!c || !c.media || c.media.length === 0) return;
+    function cambiarSlideTarjeta(cocheIdx, direccion) {
+      const c = cochesCargados[cocheIdx];
+      if (!c || !c.media || c.media.length <= 1) return;
 
-      document.getElementById('modal-titulo').innerText = `${c.titulo} - ${Number(c.precio).toLocaleString('es-ES')} €`;
-      const visor = document.getElementById('modal-visor');
-      const thumbs = document.getElementById('modal-thumbnails');
+      const total = c.media.length;
+      let actual = fotoActualPorCoche[cocheIdx] || 0;
+      actual = (actual + direccion + total) % total;
+      fotoActualPorCoche[cocheIdx] = actual;
 
-      const setMedia = (m) => {
-        if (m.tipo === 'video') {
-          visor.innerHTML = `<video controls autoplay class="max-h-[70vh] max-w-full rounded-2xl shadow-2xl"><source src="${m.data}" type="video/mp4"></video>`;
+      const item = c.media[actual];
+      const contenedorMedia = document.getElementById(`media-tarjeta-${cocheIdx}`);
+      const badge = document.getElementById(`badge-tarjeta-${cocheIdx}`);
+
+      if (contenedorMedia) {
+        if (item.tipo === 'video') {
+          contenedorMedia.innerHTML = `<video controls autoplay class="w-full h-full object-cover"><source src="${item.data}" type="video/mp4"></video>`;
         } else {
-          visor.innerHTML = `<img src="${m.data}" class="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-2xl">`;
+          contenedorMedia.innerHTML = `<img src="${item.data}" class="w-full h-full object-cover">`;
         }
-      };
+      }
 
-      setMedia(c.media[0]);
-
-      thumbs.innerHTML = c.media.map(m => `
-        <button onclick='(${setMedia.toString()})(${JSON.stringify(m)})' class="h-14 w-20 bg-slate-800 rounded-lg overflow-hidden shrink-0 border border-white/20 hover:border-red-500">
-          ${m.tipo === 'video' ? `<div class="w-full h-full flex items-center justify-center text-white text-[10px] font-black bg-red-950">🎬 VÍDEO</div>` : `<img src="${m.data}" class="w-full h-full object-cover">`}
-        </button>
-      `).join('');
-
-      document.getElementById('modal-galeria').classList.remove('hidden');
+      if (badge) {
+        badge.innerText = `${actual + 1} / ${total} ${item.tipo === 'video' ? '🎬' : '📸'}`;
+      }
     }
 
-    function cerrarGaleria() {
-      document.getElementById('modal-galeria').classList.add('hidden');
-      document.getElementById('modal-visor').innerHTML = '';
-    }
-
-    // Actualización automática si se añade un coche en otra pestaña
+    // Auto-actualizar si se guarda un coche nuevo desde el panel
     window.addEventListener('storage', (e) => {
       if (e.key === 'elpalmero_db_actualizada') {
         renderizarCatalogoPublico();
