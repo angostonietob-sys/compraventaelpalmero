@@ -1,204 +1,224 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compraventas El Palmero</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,800;0,900;1,900&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .font-palmero {
-            font-family: 'Montserrat', sans-serif;
-            font-style: italic;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compraventas El Palmero</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,800;0,900;1,900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: system-ui, -apple-system, sans-serif; }
+    .font-palmero {
+      font-family: 'Montserrat', sans-serif;
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+  </style>
 </head>
-
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
 
-    <header class="w-full bg-white border-t border-b border-slate-300 sticky top-0 z-40 shadow-sm">
-        <div class="w-full px-4 sm:px-8 py-3 flex items-center justify-between gap-4">
-            <div class="flex items-center shrink-0">
-                <button type="button" onclick="mostrarSeccion('inicio')" class="cursor-pointer">
-                    <img src="compraventa.jpg" alt="Foto Compraventas El Palmero"
-                        class="h-16 sm:h-20 w-auto rounded-md border border-slate-200 object-contain">
-                </button>
-            </div>
+  <!-- CABECERA PRINCIPAL -->
+  <header class="w-full bg-white border-t border-b border-slate-300 sticky top-0 z-40 shadow-sm">
+    <div class="w-full px-4 sm:px-8 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center shrink-0">
+        <button type="button" onclick="mostrarSeccion('inicio')" class="cursor-pointer">
+          <img src="compraventa.jpg" alt="Logo El Palmero" class="h-16 sm:h-20 w-auto rounded-md border border-slate-200 object-contain">
+        </button>
+      </div>
 
-            <div class="flex-1 text-center px-2">
-                <h1
-                    class="font-palmero text-xl sm:text-2xl md:text-3xl text-red-600 uppercase tracking-tight transform -skew-x-6 leading-none">
-                    COMPRAVENTAS <span class="text-slate-900">EL PALMERO</span>
-                </h1>
-                <p class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">
-                    Vehículos de Ocasión · Nacionales y de Importación
-                </p>
-            </div>
+      <div class="flex-1 text-center px-2">
+        <h1 class="font-palmero text-xl sm:text-2xl md:text-3xl text-red-600 uppercase tracking-tight transform -skew-x-6 leading-none">
+          COMPRAVENTAS <span class="text-slate-900">EL PALMERO</span>
+        </h1>
+        <p class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">
+          Vehículos de Ocasión · Nacionales y de Importación
+        </p>
+      </div>
 
-            <nav class="flex items-center gap-4 sm:gap-8 shrink-0">
-                <button type="button" onclick="mostrarSeccion('inicio')"
-                    class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">INICIO</button>
-                <button type="button" onclick="mostrarSeccion('coches')"
-                    class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">COCHES</button>
-                <button type="button" onclick="mostrarSeccion('contacto')"
-                    class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">CONTACTO</button>
-            </nav>
-        </div>
-    </header>
-
-    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
-        <section id="sec-inicio" class="block">
-            <div class="max-w-4xl space-y-6">
-                <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">
-                    Nuestra Historia</h2>
-                <p class="text-slate-600 leading-relaxed text-base">Espacio reservado para relatar la historia de
-                    Compraventas El Palmero.</p>
-            </div>
-        </section>
-
-        <!-- SECCIÓN COCHES -->
-        <section id="sec-coches" class="hidden space-y-8">
-            <div class="border-b border-slate-200 pb-4 flex justify-between items-end">
-                <div>
-                    <h2 class="text-3xl font-black text-slate-900 uppercase">Vehículos Disponibles</h2>
-                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Revisión completa y
-                        entrega inmediata</p>
-                </div>
-                <span id="contador-stock" class="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-xl">0
-                    Coches</span>
-            </div>
-
-            <div id="grid-coches-publico" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-        </section>
-
-        <section id="sec-contacto" class="hidden">
-            <div class="max-w-4xl space-y-6">
-                <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">
-                    Contacto</h2>
-                <p class="text-slate-600">Información y ubicación de contacto.</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- MODAL DE FOTOS Y VÍDEO -->
-    <div id="modal-galeria" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col justify-between p-6">
-        <div class="flex justify-between items-center text-white border-b border-white/10 pb-4">
-            <h3 id="modal-titulo" class="text-base font-black uppercase"></h3>
-            <button onclick="cerrarGaleria()"
-                class="text-slate-400 hover:text-white font-bold text-2xl cursor-pointer">✕</button>
-        </div>
-
-        <div id="modal-visor" class="flex-1 flex items-center justify-center p-4"></div>
-
-        <div id="modal-thumbnails" class="flex gap-2 overflow-x-auto py-2 border-t border-white/10"></div>
+      <nav class="flex items-center gap-4 sm:gap-8 shrink-0">
+        <button type="button" onclick="mostrarSeccion('inicio')" class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">INICIO</button>
+        <button type="button" onclick="mostrarSeccion('coches')" class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">COCHES</button>
+        <button type="button" onclick="mostrarSeccion('contacto')" class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">CONTACTO</button>
+      </nav>
     </div>
+  </header>
 
-    <script>
-        function mostrarSeccion(seccionId) {
-            ['inicio', 'coches', 'contacto'].forEach(id => {
-                const el = document.getElementById('sec-' + id);
-                if (el) {
-                    if (id === seccionId) { el.classList.remove('hidden'); el.classList.add('block'); }
-                    else { el.classList.remove('block'); el.classList.add('hidden'); }
-                }
-            });
-            if (seccionId === 'coches') cargarCochesPublicos();
-            window.scrollTo({ top: 0, behavior: 'instant' });
-        }
+  <!-- SECCIONES -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
+    
+    <!-- 1. INICIO -->
+    <section id="sec-inicio" class="block">
+      <div class="max-w-4xl space-y-6">
+        <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Nuestra Historia</h2>
+        <p class="text-slate-600 leading-relaxed text-base">Espacio reservado para relatar la historia de Compraventas El Palmero.</p>
+      </div>
+    </section>
 
-        function cargarCochesPublicos() {
-            const grid = document.getElementById('grid-coches-publico');
-            const contador = document.getElementById('contador-stock');
-            const stock = JSON.parse(localStorage.getItem('elpalmero_stock_rapido') || '[]');
-
-            contador.innerText = `${stock.length} Coches en Stock`;
-
-            if (stock.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-12">No hay coches subidos todavía.</p>`;
-                return;
-            }
-
-            grid.innerHTML = stock.map((c, idx) => `
-        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-          <div class="relative h-60 bg-slate-900 cursor-pointer" onclick="abrirGaleria(${idx})">
-            <img src="${c.portada}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=600&q=80'">
-            <span class="absolute top-3 right-3 bg-red-600 text-white font-black text-sm px-3.5 py-1 rounded-full shadow-lg">
-              ${Number(c.precio).toLocaleString('es-ES')} €
-            </span>
-            <div class="absolute bottom-3 left-3 flex gap-2">
-              <span class="bg-black/75 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">📸 ${c.totalFotos} fotos</span>
-              ${c.tieneVideo ? `<span class="bg-red-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🎬 Vídeo</span>` : ''}
-            </div>
-          </div>
-
-          <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-            <div>
-              <h3 class="font-black text-lg text-slate-900 uppercase">${c.titulo}</h3>
-              <div class="flex flex-wrap gap-2 mt-3">
-                <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">📅 ${c.ano}</span>
-                <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">🛣 ${c.km}</span>
-                <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">⛽ ${c.motor}</span>
-              </div>
-            </div>
-
-            <button type="button" onclick="abrirGaleria(${idx})" class="w-full bg-slate-900 hover:bg-red-600 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer">
-              Ver Galería Completa (${c.totalFotos} Fotos)
-            </button>
-          </div>
+    <!-- 2. COCHES PÚBLICOS -->
+    <section id="sec-coches" class="hidden space-y-8">
+      <div class="border-b border-slate-200 pb-4 flex justify-between items-end">
+        <div>
+          <h2 class="text-3xl font-black text-slate-900 uppercase">Vehículos Disponibles</h2>
+          <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Revisión completa y entrega inmediata</p>
         </div>
+        <span id="contador-stock" class="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-xl">0 Coches en Stock</span>
+      </div>
+
+      <div id="grid-coches-publico" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+
+    <!-- 3. CONTACTO -->
+    <section id="sec-contacto" class="hidden">
+      <div class="max-w-4xl space-y-6">
+        <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Contacto</h2>
+        <p class="text-slate-600">Información y ubicación de contacto.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL DE VISOR (FOTOS Y VÍDEO) -->
+  <div id="modal-galeria" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col justify-between p-6">
+    <div class="flex justify-between items-center text-white border-b border-white/10 pb-4">
+      <h3 id="modal-titulo" class="text-base font-black uppercase"></h3>
+      <button onclick="cerrarGaleria()" class="text-slate-400 hover:text-white font-bold text-2xl cursor-pointer">✕</button>
+    </div>
+    
+    <div id="modal-visor" class="flex-1 flex items-center justify-center p-4"></div>
+    <div id="modal-thumbnails" class="flex gap-2 overflow-x-auto py-2 border-t border-white/10"></div>
+  </div>
+
+  <script>
+    // BASE DE DATOS INDEXEDDB
+    function abrirDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open("ElPalmeroDB", 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains("coches")) {
+            db.createObjectStore("coches", { keyPath: "id" });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    let cochesCargados = [];
+
+    function mostrarSeccion(seccionId) {
+      ['inicio', 'coches', 'contacto'].forEach(id => {
+        const el = document.getElementById('sec-' + id);
+        if (el) {
+          if (id === seccionId) { el.classList.remove('hidden'); el.classList.add('block'); }
+          else { el.classList.remove('block'); el.classList.add('hidden'); }
+        }
+      });
+      if (seccionId === 'coches') renderizarCatalogoPublico();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    async function renderizarCatalogoPublico() {
+      const grid = document.getElementById('grid-coches-publico');
+      const contador = document.getElementById('contador-stock');
+
+      try {
+        const db = await abrirDB();
+        const tx = db.transaction("coches", "readonly");
+        const req = tx.objectStore("coches").getAll();
+
+        req.onsuccess = () => {
+          cochesCargados = req.result.reverse();
+          contador.innerText = `${cochesCargados.length} Coches en Stock`;
+
+          if (cochesCargados.length === 0) {
+            grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-12">No hay coches subidos todavía.</p>`;
+            return;
+          }
+
+          grid.innerHTML = cochesCargados.map((c, idx) => {
+            const fotos = c.media?.filter(m => m.tipo === 'foto') || [];
+            const tieneVideo = c.media?.some(m => m.tipo === 'video');
+            const portada = fotos[0]?.data || '';
+
+            return `
+              <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col justify-between">
+                <div class="relative h-60 bg-slate-900 cursor-pointer flex items-center justify-center" onclick="abrirGaleria(${idx})">
+                  ${portada ? `<img src="${portada}" class="w-full h-full object-cover">` : `<span class="text-white text-xs">Sin fotos</span>`}
+                  <span class="absolute top-3 right-3 bg-red-600 text-white font-black text-sm px-3.5 py-1 rounded-full shadow-lg">
+                    ${Number(c.precio).toLocaleString('es-ES')} €
+                  </span>
+                  <div class="absolute bottom-3 left-3 flex gap-2">
+                    <span class="bg-black/75 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">📸 ${fotos.length} fotos</span>
+                    ${tieneVideo ? `<span class="bg-red-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🎬 Vídeo</span>` : ''}
+                  </div>
+                </div>
+
+                <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                  <div>
+                    <h3 class="font-black text-lg text-slate-900 uppercase">${c.titulo}</h3>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                      <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">📅 ${c.ano}</span>
+                      <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">🛣 ${c.km}</span>
+                      <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">⛽ ${c.motor}</span>
+                    </div>
+                  </div>
+
+                  <button type="button" onclick="abrirGaleria(${idx})" class="w-full bg-slate-900 hover:bg-red-600 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer">
+                    Ver Fotos y Vídeo (${c.media?.length || 0})
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        };
+      } catch (e) {
+        console.error("Error al cargar vehículos:", e);
+      }
+    }
+
+    function abrirGaleria(idx) {
+      const c = cochesCargados[idx];
+      if (!c || !c.media || c.media.length === 0) return;
+
+      document.getElementById('modal-titulo').innerText = `${c.titulo} - ${Number(c.precio).toLocaleString('es-ES')} €`;
+      const visor = document.getElementById('modal-visor');
+      const thumbs = document.getElementById('modal-thumbnails');
+
+      const setMedia = (m) => {
+        if (m.tipo === 'video') {
+          visor.innerHTML = `<video controls autoplay class="max-h-[70vh] max-w-full rounded-2xl shadow-2xl"><source src="${m.data}" type="video/mp4"></video>`;
+        } else {
+          visor.innerHTML = `<img src="${m.data}" class="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-2xl">`;
+        }
+      };
+
+      setMedia(c.media[0]);
+
+      thumbs.innerHTML = c.media.map(m => `
+        <button onclick='(${setMedia.toString()})(${JSON.stringify(m)})' class="h-14 w-20 bg-slate-800 rounded-lg overflow-hidden shrink-0 border border-white/20 hover:border-red-500">
+          ${m.tipo === 'video' ? `<div class="w-full h-full flex items-center justify-center text-white text-[10px] font-black bg-red-950">🎬 VÍDEO</div>` : `<img src="${m.data}" class="w-full h-full object-cover">`}
+        </button>
       `).join('');
-        }
 
-        function abrirGaleria(idx) {
-            const stock = JSON.parse(localStorage.getItem('elpalmero_stock_rapido') || '[]');
-            const coche = stock[idx];
-            if (!coche) return;
+      document.getElementById('modal-galeria').classList.remove('hidden');
+    }
 
-            document.getElementById('modal-titulo').innerText = `${coche.titulo} - ${Number(coche.precio).toLocaleString('es-ES')} €`;
-            const visor = document.getElementById('modal-visor');
-            const thumbs = document.getElementById('modal-thumbnails');
+    function cerrarGaleria() {
+      document.getElementById('modal-galeria').classList.add('hidden');
+      document.getElementById('modal-visor').innerHTML = '';
+    }
 
-            const setImagen = (src) => {
-                visor.innerHTML = `<img src="${src}" class="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-2xl">`;
-            };
+    // Actualización automática si se añade un coche en otra pestaña
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'elpalmero_db_actualizada') {
+        renderizarCatalogoPublico();
+      }
+    });
 
-            setImagen(`coches/${coche.carpeta}/1.jpg`);
-
-            let htmlThumbs = '';
-            if (coche.tieneVideo) {
-                htmlThumbs += `<button onclick="document.getElementById('modal-visor').innerHTML='<video controls autoplay class=\\'max-h-[70vh] max-w-full rounded-2xl\\'><source src=\\'coches/${coche.carpeta}/video.mp4\\'></video>'" class="h-14 w-20 bg-red-700 text-white font-black text-xs rounded-lg shrink-0 flex items-center justify-center">🎬 VÍDEO</button>`;
-            }
-
-            for (let i = 1; i <= coche.totalFotos; i++) {
-                const ruta = `coches/${coche.carpeta}/${i}.jpg`;
-                htmlThumbs += `
-          <button onclick="document.getElementById('modal-visor').innerHTML='<img src=\\'${ruta}\\' class=\\'max-h-[70vh] max-w-full object-contain rounded-2xl\\'>'" class="h-14 w-20 bg-slate-800 rounded-lg overflow-hidden shrink-0 border border-white/20 hover:border-red-500">
-            <img src="${ruta}" class="w-full h-full object-cover">
-          </button>
-        `;
-            }
-
-            thumbs.innerHTML = htmlThumbs;
-            document.getElementById('modal-galeria').classList.remove('hidden');
-        }
-
-        function cerrarGaleria() {
-            document.getElementById('modal-galeria').classList.add('hidden');
-            document.getElementById('modal-visor').innerHTML = '';
-        }
-
-        cargarCochesPublicos();
-    </script>
+    renderizarCatalogoPublico();
+  </script>
 </body>
-
 </html>
