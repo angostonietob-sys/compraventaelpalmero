@@ -94,17 +94,20 @@
       </div>
     </aside>
 
-    <!-- CONTENIDO -->
-    <main class="flex-1 p-8 overflow-y-auto max-h-screen">
+    <!-- CONTENIDO ADMIN -->
+    <main class="flex-1 p-8 overflow-y-auto max-h-screen" id="main-admin">
 
       <!-- 1. INVENTARIO COCHES -->
       <section id="mod-coches" class="block space-y-8 max-w-5xl mx-auto">
-        <div>
-          <h2 class="text-2xl font-black text-slate-900 uppercase">Añadir Vehículo al Stock</h2>
-          <p class="text-xs text-slate-500 font-medium">Sube tus fotos y vídeos directamente para que aparezcan en el catálogo público.</p>
+        <div id="cabecera-formulario">
+          <h2 id="titulo-form-coche" class="text-2xl font-black text-slate-900 uppercase">Añadir Vehículo al Stock</h2>
+          <p id="subtitulo-form-coche" class="text-xs text-slate-500 font-medium">Sube fotos y vídeos directamente para que aparezcan en el catálogo público.</p>
         </div>
 
         <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4 text-xs">
+          <!-- Campo oculto para saber si editamos -->
+          <input type="hidden" id="coche-id-edicion" value="">
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Marca y Modelo *</label>
@@ -134,17 +137,23 @@
           <div class="border-2 border-dashed border-slate-300 hover:border-red-500 rounded-2xl p-6 bg-slate-50 text-center space-y-2 transition">
             <label for="coche-archivos" class="cursor-pointer block">
               <span class="block font-black text-slate-800 text-sm uppercase">📂 Selecciona las fotos y el vídeo</span>
-              <span class="text-[11px] text-slate-500 block mt-1">Puedes seleccionar todas las fotos juntas y el archivo de vídeo a la vez</span>
+              <span id="texto-ayuda-archivos" class="text-[11px] text-slate-500 block mt-1">Puedes seleccionar todas las fotos juntas y el archivo de vídeo a la vez</span>
             </label>
             <input id="coche-archivos" type="file" multiple accept="image/*,video/*" class="hidden" onchange="mostrarArchivosElegidos(this)">
             <div id="info-archivos" class="text-xs font-bold text-emerald-600 hidden pt-2"></div>
           </div>
 
-          <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100 gap-3">
             <span id="estado-guardado" class="text-xs font-bold text-slate-500"></span>
-            <button id="btn-publicar" type="button" onclick="guardarVehiculoCompleto()" class="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-md">
-              + Publicar Coche en la Web
-            </button>
+            
+            <div class="flex items-center gap-3">
+              <button id="btn-cancelar-edicion" type="button" onclick="cancelarModoEdicion()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-black px-4 py-3 rounded-xl uppercase tracking-wider transition cursor-pointer">
+                Cancelar
+              </button>
+              <button id="btn-publicar" type="button" onclick="guardarVehiculoCompleto()" class="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-md">
+                + Publicar Coche en la Web
+              </button>
+            </div>
           </div>
         </div>
 
@@ -154,14 +163,13 @@
         </div>
       </section>
 
-      <!-- 2. ECONOMÍA & BALANCE ACTUALIZADO EN TIEMPO REAL -->
+      <!-- 2. ECONOMÍA & BALANCE -->
       <section id="mod-economia" class="hidden space-y-8 max-w-5xl mx-auto">
         <div>
           <h2 class="text-2xl font-black text-slate-900 uppercase">Economía & Balance Global</h2>
           <p class="text-xs text-slate-500 font-medium">Cálculo en tiempo real del valor total del stock de vehículos publicados.</p>
         </div>
 
-        <!-- TARJETAS DE TOTALES -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
             <span class="text-xs uppercase font-bold text-slate-400 block">Valor Total Stock</span>
@@ -180,11 +188,10 @@
           </div>
         </div>
 
-        <!-- REGISTRO RÁPIDO DE GASTOS -->
         <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4 text-xs">
           <h3 class="text-sm font-black text-slate-900 uppercase">Añadir Gasto de Taller / Compra</h3>
           <form onsubmit="anadirGasto(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <input id="gasto-concepto" type="text" placeholder="Concepto (ej: Compra Opel Corsa, Pintura...)" class="bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600" required>
+            <input id="gasto-concepto" type="text" placeholder="Concepto (ej: Compra coche, Pintura...)" class="bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600" required>
             <input id="gasto-importe" type="number" placeholder="Importe (€)" class="bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600" required>
             <button type="submit" class="bg-slate-900 hover:bg-red-600 text-white font-black py-2.5 rounded-xl uppercase tracking-wider transition cursor-pointer">
               + Registrar Gasto
@@ -317,6 +324,7 @@
     }
 
     let archivosSeleccionados = [];
+    let cocheEnEdicionOriginal = null;
 
     function mostrarArchivosElegidos(input) {
       archivosSeleccionados = Array.from(input.files);
@@ -329,7 +337,56 @@
       }
     }
 
+    async function prepararEdicionCoche(id) {
+      const db = await abrirDB();
+      const tx = db.transaction("coches", "readonly");
+      const req = tx.objectStore("coches").get(id);
+
+      req.onsuccess = () => {
+        const c = req.result;
+        if (!c) return;
+
+        cocheEnEdicionOriginal = c;
+        document.getElementById('coche-id-edicion').value = c.id;
+        document.getElementById('coche-titulo').value = c.titulo;
+        document.getElementById('coche-precio').value = c.precio;
+        document.getElementById('coche-ano').value = c.ano;
+        document.getElementById('coche-km').value = c.km;
+        document.getElementById('coche-motor').value = c.motor;
+
+        document.getElementById('titulo-form-coche').innerText = "Editar Vehículo";
+        document.getElementById('subtitulo-form-coche').innerText = "Modifica los datos y haz clic en Guardar Cambios.";
+        document.getElementById('btn-publicar').innerText = "💾 Guardar Cambios";
+        document.getElementById('btn-publicar').className = "bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-md";
+        document.getElementById('btn-cancelar-edicion').classList.remove('hidden');
+        document.getElementById('texto-ayuda-archivos').innerText = "(Opcional) Selecciona nuevos archivos solo si quieres sustituir las fotos/vídeos existentes";
+
+        document.getElementById('main-admin').scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    }
+
+    function cancelarModoEdicion() {
+      cocheEnEdicionOriginal = null;
+      document.getElementById('coche-id-edicion').value = '';
+      document.getElementById('coche-titulo').value = '';
+      document.getElementById('coche-precio').value = '';
+      document.getElementById('coche-ano').value = '';
+      document.getElementById('coche-km').value = '';
+      document.getElementById('coche-motor').value = '';
+      document.getElementById('coche-archivos').value = '';
+      archivosSeleccionados = [];
+
+      document.getElementById('titulo-form-coche').innerText = "Añadir Vehículo al Stock";
+      document.getElementById('subtitulo-form-coche').innerText = "Sube fotos y vídeos directamente para que aparezcan en el catálogo público.";
+      document.getElementById('btn-publicar').innerText = "+ Publicar Coche en la Web";
+      document.getElementById('btn-publicar').className = "bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-md";
+      document.getElementById('btn-cancelar-edicion').classList.add('hidden');
+      document.getElementById('info-archivos').classList.add('hidden');
+      document.getElementById('texto-ayuda-archivos').innerText = "Puedes seleccionar todas las fotos juntas y el archivo de vídeo a la vez";
+    }
+
     async function guardarVehiculoCompleto() {
+      const idEdicion = document.getElementById('coche-id-edicion').value;
       const titulo = document.getElementById('coche-titulo').value.trim();
       const precio = Number(document.getElementById('coche-precio').value.trim());
       const ano = document.getElementById('coche-ano').value.trim() || '2021';
@@ -344,43 +401,45 @@
       }
 
       btn.disabled = true;
-      estado.innerText = "Guardando archivos...";
+      estado.innerText = "Guardando cambios...";
 
-      const mediaList = [];
-      for (let i = 0; i < archivosSeleccionados.length; i++) {
-        const file = archivosSeleccionados[i];
-        const isVideo = file.type.startsWith('video');
-        const dataUrl = await new Promise((res) => {
-          const r = new FileReader();
-          r.onload = (e) => res(e.target.result);
-          r.readAsDataURL(file);
-        });
-        mediaList.push({ tipo: isVideo ? 'video' : 'foto', data: dataUrl });
+      let mediaFinal = [];
+
+      // Si seleccionó nuevos archivos, los procesamos
+      if (archivosSeleccionados.length > 0) {
+        for (let i = 0; i < archivosSeleccionados.length; i++) {
+          const file = archivosSeleccionados[i];
+          const isVideo = file.type.startsWith('video');
+          const dataUrl = await new Promise((res) => {
+            const r = new FileReader();
+            r.onload = (e) => res(e.target.result);
+            r.readAsDataURL(file);
+          });
+          mediaFinal.push({ tipo: isVideo ? 'video' : 'foto', data: dataUrl });
+        }
+      } else if (idEdicion && cocheEnEdicionOriginal) {
+        // Mantiene las fotos y vídeos que ya tenía
+        mediaFinal = cocheEnEdicionOriginal.media || [];
       }
 
       const cocheObj = {
-        id: Date.now(),
+        id: idEdicion ? Number(idEdicion) : Date.now(),
         titulo,
         precio,
         ano,
         km,
         motor,
-        media: mediaList
+        media: mediaFinal
       };
 
       try {
         const db = await abrirDB();
         const tx = db.transaction("coches", "readwrite");
-        tx.objectStore("coches").add(cocheObj);
+        tx.objectStore("coches").put(cocheObj);
         tx.oncomplete = () => {
           localStorage.setItem('elpalmero_db_actualizada', Date.now().toString());
-          document.getElementById('coche-titulo').value = '';
-          document.getElementById('coche-precio').value = '';
-          document.getElementById('coche-km').value = '';
-          document.getElementById('coche-archivos').value = '';
-          document.getElementById('info-archivos').classList.add('hidden');
-          archivosSeleccionados = [];
-          estado.innerText = "✓ Publicado con éxito";
+          cancelarModoEdicion();
+          estado.innerText = idEdicion ? "✓ Vehículo actualizado" : "✓ Publicado con éxito";
           btn.disabled = false;
           cargarStockAdmin();
           setTimeout(() => { estado.innerText = ""; }, 3000);
@@ -429,7 +488,10 @@
                   </div>
                   <strong class="text-lg font-black text-red-600">${Number(c.precio).toLocaleString('es-ES')} €</strong>
                 </div>
-                <div class="pt-3 border-t border-slate-100 flex justify-end">
+                <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+                  <button onclick="prepararEdicionCoche(${c.id})" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-bold px-4 py-2 rounded-xl transition cursor-pointer">
+                    ✏️ Editar Vehículo
+                  </button>
                   <button onclick="eliminarCocheDB(${c.id})" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold px-4 py-2 rounded-xl transition cursor-pointer">
                     Eliminar Vehículo
                   </button>
@@ -442,6 +504,7 @@
     }
 
     async function eliminarCocheDB(id) {
+      if (!confirm("¿Seguro que deseas eliminar este vehículo del catálogo?")) return;
       const db = await abrirDB();
       const tx = db.transaction("coches", "readwrite");
       tx.objectStore("coches").delete(id);
@@ -502,7 +565,7 @@
                 <td class="py-2 text-slate-400">${g.fecha}</td>
                 <td class="py-2 text-slate-800">${g.concepto}</td>
                 <td class="py-2 text-right text-red-600">-${Number(g.importe).toLocaleString('es-ES')} €</td>
-                <td class="py-2 text-right"><button onclick="eliminarGasto(${g.id})" class="text-slate-400 hover:text-red-600">✕</button></td>
+                <td class="py-2 text-right"><button onclick="eliminarGasto(${g.id})" class="text-slate-400 hover:text-red-600 cursor-pointer">✕</button></td>
               </tr>
             `).join('')}
           </tbody>
@@ -517,7 +580,6 @@
       cargarStockAdmin();
     }
 
-    // NAVEGACIÓN
     function cambiarSeccion(id) {
       ['coches', 'economia', 'mensajes', 'seguridad'].forEach(sec => {
         const bloque = document.getElementById('mod-' + sec);
@@ -535,7 +597,6 @@
       if (id === 'mensajes') cargarMensajesReales();
     }
 
-    // MENSAJES
     function cargarMensajesReales() {
       const raw = localStorage.getItem('elpalmero_mensajes') || '[]';
       const contenedor = document.getElementById('contenedor-mensajes');
