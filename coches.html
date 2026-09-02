@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Compraventas El Palmero - Catálogo de Vehículos</title>
+    <title>Catálogo de Vehículos - Compraventas El Palmero</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,162 +15,144 @@
     <!-- Firebase SDKs (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        palmero: {
-                            red: '#e03a3a',
-                            dark: '#152e4d',
-                            footer: '#c85a54'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 
-<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- CABECERA -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <!-- NAVEGACIÓN (SIN BOTÓN ADMIN) -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-24">
 
-            <!-- LOGO -->
-            <a href="index.html" class="flex items-center gap-4">
-                <img src="compraventa.jpg" alt="Compraventas El Palmero"
-                    class="h-14 w-28 object-cover rounded-md border border-slate-300 shadow-sm"
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="compraventa.jpg" alt="Logo" class="h-12 w-28 object-cover rounded border border-slate-200"
                     onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=160&auto=format&fit=crop&q=80'" />
                 <div>
-                    <div class="text-xl sm:text-2xl font-black tracking-tight text-palmero-red uppercase italic">
-                        COMPRAVENTAS <span class="text-slate-900 not-italic">EL PALMERO</span>
-                    </div>
-                    <p class="text-[10px] sm:text-xs font-bold tracking-wider text-slate-400 uppercase">
-                        Vehículos de Ocasión · Nacionales y de Importación
-                    </p>
+                    <span
+                        class="text-lg sm:text-xl font-black tracking-wide block uppercase text-[#e03a3a]">COMPRAVENTAS
+                        EL PALMERO</span>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Vehículos de
+                        ocasión · Nacionales y de importación</span>
                 </div>
             </a>
 
-            <!-- NAVEGACIÓN -->
-            <nav class="flex items-center space-x-6 sm:space-x-8 text-xs font-black tracking-wider uppercase">
-                <a href="index.html" class="text-slate-700 hover:text-palmero-red transition">Inicio</a>
-                <a href="coches.html" class="text-palmero-red border-b-2 border-palmero-red pb-1">Coches</a>
-                <a href="contacto.html" class="text-slate-700 hover:text-palmero-red transition">Contacto</a>
-            </nav>
+            <div class="hidden md:flex items-center gap-8 font-black text-xs uppercase tracking-wider">
+                <a href="index.html" class="text-slate-700 hover:text-[#e03a3a] transition">Inicio</a>
+                <a href="coches.html" class="text-[#e03a3a] transition">Coches</a>
+                <a href="contacto.html" class="text-slate-700 hover:text-[#e03a3a] transition">Contacto</a>
+            </div>
 
+        </div>
+    </nav>
+
+    <!-- CABECERA DEL CATÁLOGO -->
+    <header class="bg-slate-900 text-white py-12 px-4 border-b border-slate-800 text-center relative overflow-hidden">
+        <div class="max-w-4xl mx-auto space-y-2 relative z-10">
+            <span
+                class="text-xs font-black text-white uppercase tracking-widest bg-[#e03a3a] px-3.5 py-1 rounded-full shadow-sm">Stock
+                Garantizado</span>
+            <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">Vehículos Disponibles</h1>
+            <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
+                Todos nuestros coches son revisados y entregados con garantía. Consulta detalles o agenda tu cita.
+            </p>
         </div>
     </header>
 
-    <!-- LISTADO DE COCHES EN STOCK -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-5">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-black text-palmero-dark tracking-tight uppercase">
-                    Vehículos Disponibles
-                </h1>
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">
-                    Revisión completa y entrega inmediata
-                </p>
+    <!-- CATÁLOGO -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
+            <div class="text-xs font-black text-slate-500 uppercase tracking-wider">
+                Mostrando <span id="totalCarsBadge" class="text-[#e03a3a] font-black">0</span> vehículos en stock
             </div>
-            <div>
-                <span class="bg-palmero-dark text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
-                    <span id="totalCount">0</span> Coches en Stock
-                </span>
+            <a href="contacto.html"
+                class="text-xs font-bold text-slate-600 hover:text-[#e03a3a] transition flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Dónde estamos
+            </a>
+        </div>
+
+        <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div class="col-span-full text-center py-16 text-slate-400 font-bold uppercase text-xs">
+                <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-slate-300"></i>
+                <p>Cargando catálogo en tiempo real...</p>
             </div>
         </div>
-
-        <!-- ESTADO DE CARGA -->
-        <div id="loadingState" class="text-center py-20">
-            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-slate-400 mb-3"></i>
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Cargando catálogo en tiempo real...</p>
-        </div>
-
-        <!-- ESTADO VACÍO -->
-        <div id="emptyState"
-            class="hidden text-center py-20 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
-            <i class="fa-solid fa-car text-4xl text-slate-300 mb-3"></i>
-            <h3 class="text-sm font-bold text-slate-600 uppercase tracking-wide">No hay vehículos registrados</h3>
-            <p class="text-slate-400 text-xs mt-1">Sube nuevos vehículos desde el panel de control.</p>
-        </div>
-
-        <!-- GRID DE VEHÍCULOS -->
-        <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-palmero-footer text-white mt-auto pt-10 pb-6 border-t border-red-900/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-white/20 text-xs">
-
-                <div class="space-y-2">
-                    <div class="flex items-center gap-2">
-                        <img src="compraventa.jpg" alt="Logo"
-                            class="h-10 w-18 object-cover rounded border border-white/30"
-                            onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=100&auto=format&fit=crop&q=80'" />
-                        <div>
-                            <div class="font-black uppercase tracking-tight text-sm">COMPRAVENTAS</div>
-                            <div class="font-bold text-red-100 uppercase text-[10px]">EL PALMERO</div>
-                        </div>
-                    </div>
-                    <p class="text-red-100/90 leading-relaxed pt-1">
-                        Vehículos de ocasión, nacionales y de importación revisados y garantizados.
-                    </p>
+    <footer class="bg-[#c85a54] text-white py-10 border-t border-red-400/30 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <img src="compraventa.jpg" alt="Logo"
+                        class="h-8 w-16 object-cover rounded border border-white/20" />
+                    <span class="font-black uppercase tracking-wider text-sm">COMPRAVENTAS</span>
                 </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> DÓNDE ESTAMOS
-                    </h4>
-                    <p class="text-red-100 leading-relaxed">
-                        Avenida Tito Didio 7E, Pol. Ind. Cabezo Beaza<br />Cartagena (Región de Murcia)
-                    </p>
-                    <div class="pt-1">
-                        <a href="tel:699419202"
-                            class="inline-flex items-center gap-1.5 bg-white text-slate-800 font-bold px-3 py-1 rounded-full text-xs shadow-sm hover:bg-red-50 transition">
-                            <i class="fa-solid fa-phone text-palmero-footer"></i> 699 41 92 02
-                        </a>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-clock"></i> HORARIO DE ATENCIÓN
-                    </h4>
-                    <p class="text-red-100 leading-relaxed">
-                        <strong>Lunes a Sábado:</strong><br />Mañanas: 8:00 a 14:00<br />Tardes: 15:00 a 19:00
-                    </p>
-                    <div class="pt-1">
-                        <a href="https://wa.me/34688298944" target="_blank"
-                            class="inline-flex items-center gap-1.5 bg-emerald-600 text-white font-bold px-3 py-1 rounded-full text-xs hover:bg-emerald-500 transition shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Ventas: 688 29 89 44
-                        </a>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-compass"></i> NAVEGACIÓN
-                    </h4>
-                    <ul class="space-y-1 text-red-100 font-semibold">
-                        <li><a href="index.html" class="hover:underline">› Inicio</a></li>
-                        <li><a href="coches.html" class="hover:underline">› Coches</a></li>
-                        <li><a href="contacto.html" class="hover:underline">› Contacto</a></li>
-                    </ul>
-                </div>
-
+                <p class="text-red-100 text-[11px] leading-relaxed">Vehículos de ocasión, nacionales y de importación
+                    revisados y garantizados.</p>
             </div>
-
-            <div class="pt-4 text-center sm:text-left text-[11px] text-red-200/80">
-                <p>&copy; 2026 compraventaelpalmero todos los derechos reservados.</p>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">DÓNDE ESTAMOS</h4>
+                <p class="text-red-100 text-[11px] leading-relaxed">Avenida Tito Didio 7E, Pol. Ind. Cabezo
+                    Beaza<br>Cartagena (Región de Murcia)</p>
+                <div class="mt-2 text-white font-bold flex items-center gap-1.5"><i class="fa-solid fa-phone"></i> 699
+                    41 92 02</div>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">HORARIO DE ATENCIÓN</h4>
+                <p class="text-red-100 text-[11px] leading-relaxed"><b>Lunes a Sábado:</b><br>Mañanas: 8:00 a
+                    14:00<br>Tardes: 15:00 a 19:00</p>
+                <div
+                    class="mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white px-2.5 py-1 rounded-md text-[11px] font-bold">
+                    <i class="fa-brands fa-whatsapp"></i> Ventas: 688 29 89 44
+                </div>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">NAVEGACIÓN</h4>
+                <ul class="space-y-1 text-red-100 text-[11px] font-medium">
+                    <li><a href="index.html" class="hover:underline">› Inicio</a></li>
+                    <li><a href="coches.html" class="hover:underline">› Coches</a></li>
+                    <li><a href="contacto.html" class="hover:underline">› Contacto</a></li>
+                </ul>
             </div>
         </div>
     </footer>
 
-    <!-- SCRIPT FIREBASE CON CARRUSEL DE FOTOS -->
+    <!-- CHATBOT -->
+    <div id="palmeroChatWidget" class="fixed bottom-5 right-5 z-50">
+        <button onclick="toggleChat()" id="chatToggleBtn"
+            class="w-14 h-14 bg-[#e03a3a] hover:bg-red-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-105 focus:outline-none">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+        <div id="chatWindow"
+            class="hidden absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col transition-all">
+            <div class="bg-[#152e4d] text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-wide">Asistente El Palmero</h4>
+                        <p class="text-[10px] text-slate-300 font-medium">Te atendemos al instante</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()"
+                    class="text-slate-300 hover:text-white text-sm font-bold">&times;</button>
+            </div>
+            <div id="chatBody" class="p-4 h-80 overflow-y-auto space-y-3 bg-slate-50 text-xs">
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1">
+                    <p class="font-black text-[#152e4d]">¡Hola! 👋 ¿Te interesa alguno de nuestros vehículos?</p>
+                    <p>Escribe tu consulta y te responderemos de inmediato.</p>
+                </div>
+            </div>
+            <form id="chatForm" onsubmit="sendChatMessage(event)"
+                class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                <input type="text" id="chatInput" required placeholder="Escribe tu mensaje o teléfono..."
+                    class="flex-1 px-3 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
+                <button type="submit"
+                    class="bg-[#e03a3a] hover:bg-red-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBaKF2UIogxicJYsDR1Un4n7fPg80s-J_g",
@@ -180,142 +162,124 @@
             messagingSenderId: "954644373383",
             appId: "1:954644373383:web:03e0a66fea805def2abd22"
         };
-
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const carsCol = db.collection('coches');
+        const dbChat = firebase.firestore();
 
-        // Objeto en memoria para gestionar el índice de foto activa por cada coche
-        const carSliders = {};
+        let chatOpen = false;
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            const win = document.getElementById('chatWindow');
+            if (chatOpen) { win.classList.remove('hidden'); document.getElementById('chatInput').focus(); }
+            else { win.classList.add('hidden'); }
+        }
 
-        db.collection('coches').onSnapshot((snapshot) => {
-            document.getElementById('loadingState').classList.add('hidden');
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const body = document.getElementById('chatBody');
+            body.innerHTML += `<div class="bg-[#152e4d] text-white p-3 rounded-xl ml-auto max-w-[85%] shadow-sm">${text}</div>`;
+            input.value = '';
+            body.scrollTop = body.scrollHeight;
+
+            try {
+                await dbChat.collection('mensajes_chat').add({
+                    cliente: "Cliente Catálogo",
+                    mensaje: text,
+                    telefono: text.match(/([0-9]{9})/)?.[0] || 'No indicado',
+                    fecha: new Date().toLocaleDateString('es-ES') + ' ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                setTimeout(() => {
+                    body.innerHTML += `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1"><p class="font-bold text-[#152e4d]">¡Mensaje enviado a Jorge! 🚗</p><p>Tu consulta ha quedado registrada en nuestro sistema. ¡Te atenderemos enseguida!</p></div>`;
+                    body.scrollTop = body.scrollHeight;
+                }, 800);
+            } catch (err) { console.error(err); }
+        }
+
+        const carImagesMap = {};
+        carsCol.onSnapshot((snapshot) => {
+            document.getElementById('totalCarsBadge').textContent = snapshot.size;
             const grid = document.getElementById('carsGrid');
-            const empty = document.getElementById('emptyState');
-            const count = document.getElementById('totalCount');
-
-            count.textContent = snapshot.size;
             grid.innerHTML = '';
 
             if (snapshot.empty) {
-                empty.classList.remove('hidden');
+                grid.innerHTML = `<div class="col-span-full bg-white p-12 rounded-2xl border border-dashed border-slate-300 text-center text-slate-400 text-xs font-bold uppercase"><i class="fa-solid fa-car text-4xl mb-3 text-slate-300"></i><p>No hay vehículos disponibles en este momento.</p></div>`;
                 return;
             }
-            empty.classList.add('hidden');
 
             snapshot.forEach(doc => {
                 const car = doc.data();
                 const id = doc.id;
                 const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
+                let imagesArray = (Array.isArray(car.images) && car.images.length > 0) ? car.images : (car.image ? [car.image] : [defaultImg]);
 
-                // Procesar array de fotos
-                let imagesArray = [];
-                if (Array.isArray(car.images) && car.images.length > 0) {
-                    imagesArray = car.images.filter(img => img && img.trim() !== '');
-                } else if (car.image && car.image.trim() !== '') {
-                    imagesArray = [car.image];
-                }
-
-                if (imagesArray.length === 0) {
-                    imagesArray = [defaultImg];
-                }
-
-                // Guardamos las imágenes y el índice actual del slider
-                carSliders[id] = {
-                    images: imagesArray,
-                    currentIndex: 0
-                };
-
-                const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo de Ocasión';
+                carImagesMap[id] = { images: imagesArray, currentIndex: 0 };
+                const totalFotos = imagesArray.length;
+                const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo en Venta';
                 const price = Number(car.price || 0).toLocaleString('es-ES') + ' €';
                 const year = car.year || 'N/D';
                 const km = Number(car.km || 0).toLocaleString('es-ES') + ' km';
                 const fuel = car.fuel || 'Diesel';
-                const totalFotos = imagesArray.length;
+                const hasVideo = Boolean(car.video && car.video.trim() !== '');
 
                 const card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition";
+                card.className = "bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition";
                 card.innerHTML = `
-          <!-- VISOR DE FOTOS -->
           <div class="relative h-60 bg-slate-900 overflow-hidden select-none group">
             <img id="img-${id}" src="${imagesArray[0]}" alt="${title}" class="w-full h-full object-cover transition duration-300" onerror="this.src='${defaultImg}'" />
-            
-            <!-- ETIQUETA DE PRECIO -->
-            <div class="absolute top-3 right-3 bg-[#e03a3a] text-white font-black text-sm px-2.5 py-1 rounded shadow z-10">
-              ${price}
-            </div>
-
-            <!-- CONTADOR DE FOTOS (1/14) -->
+            <div class="absolute top-3 right-3 bg-[#e03a3a] text-white font-black text-sm px-2.5 py-1 rounded shadow z-10">${price}</div>
             <div class="absolute bottom-3 left-3 bg-black/70 text-white font-bold text-[11px] px-2.5 py-1 rounded-md flex items-center gap-1.5 z-10 backdrop-blur-sm">
-              <i class="fa-solid fa-camera text-xs"></i>
-              <span id="counter-${id}">1/${totalFotos}</span>
+              <i class="fa-solid fa-camera text-xs"></i><span id="counter-${id}">1/${totalFotos}</span>
             </div>
-
-            <!-- FLECHA IZQUIERDA -->
             ${totalFotos > 1 ? `
-              <button onclick="prevPhoto('${id}')" aria-label="Foto anterior" class="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10 shadow">
-                <i class="fa-solid fa-chevron-left"></i>
-              </button>
-            ` : ''}
-
-            <!-- FLECHA DERECHA -->
-            ${totalFotos > 1 ? `
-              <button onclick="nextPhoto('${id}')" aria-label="Foto siguiente" class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10 shadow">
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
+              <button onclick="prevPhoto('${id}')" class="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10 shadow"><i class="fa-solid fa-chevron-left"></i></button>
+              <button onclick="nextPhoto('${id}')" class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10 shadow"><i class="fa-solid fa-chevron-right"></i></button>
             ` : ''}
           </div>
-
-          <!-- DETALLES DEL VEHÍCULO -->
           <div class="p-4 flex-1 flex flex-col justify-between">
             <div>
-              <h3 class="text-sm font-black text-slate-900 uppercase tracking-tight">
-                ${title}
-              </h3>
+              <h3 class="text-sm font-black text-slate-900 uppercase tracking-tight">${title}</h3>
               <div class="flex items-center gap-3 mt-2 text-xs font-semibold text-slate-500">
-                <span class="flex items-center gap-1"><i class="fa-regular fa-calendar text-blue-500"></i> ${year}</span>
-                <span>·</span>
-                <span class="flex items-center gap-1"><i class="fa-solid fa-road text-slate-400"></i> ${km}</span>
-                <span>·</span>
+                <span class="flex items-center gap-1"><i class="fa-regular fa-calendar text-blue-500"></i> ${year}</span><span>·</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-road text-slate-400"></i> ${km}</span><span>·</span>
                 <span class="flex items-center gap-1"><i class="fa-solid fa-gas-pump text-slate-400"></i> ${fuel}</span>
               </div>
             </div>
-
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
               <a href="https://wa.me/34688298944?text=Hola,%20estoy%20interesado%20en%20el%20${encodeURIComponent(title)}" target="_blank" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
-                <i class="fa-brands fa-whatsapp text-sm"></i> Consultar WhatsApp
+                <i class="fa-brands fa-whatsapp text-sm"></i> Consultar
               </a>
+              ${hasVideo ? `<a href="${car.video}" target="_blank" class="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-md transition"><i class="fa-solid fa-play text-[10px]"></i> Ver Vídeo</a>` : ''}
             </div>
           </div>
         `;
                 grid.appendChild(card);
             });
-        }, (err) => {
-            console.error(err);
-            document.getElementById('loadingState').innerHTML = '<p class="text-red-500 text-xs font-bold uppercase">Error de conexión con la base de datos.</p>';
         });
 
-        // Funciones del carrusel para avanzar y retroceder fotos
         function nextPhoto(id) {
-            const slider = carSliders[id];
-            if (!slider) return;
-            slider.currentIndex = (slider.currentIndex + 1) % slider.images.length;
-            updateSliderUI(id);
+            const item = carImagesMap[id];
+            if (!item) return;
+            item.currentIndex = (item.currentIndex + 1) % item.images.length;
+            updatePhoto(id);
         }
-
         function prevPhoto(id) {
-            const slider = carSliders[id];
-            if (!slider) return;
-            slider.currentIndex = (slider.currentIndex - 1 + slider.images.length) % slider.images.length;
-            updateSliderUI(id);
+            const item = carImagesMap[id];
+            if (!item) return;
+            item.currentIndex = (item.currentIndex - 1 + item.images.length) % item.images.length;
+            updatePhoto(id);
         }
-
-        function updateSliderUI(id) {
-            const slider = carSliders[id];
+        function updatePhoto(id) {
+            const item = carImagesMap[id];
             const imgEl = document.getElementById(`img-${id}`);
             const counterEl = document.getElementById(`counter-${id}`);
             if (imgEl && counterEl) {
-                imgEl.src = slider.images[slider.currentIndex];
-                counterEl.textContent = `${slider.currentIndex + 1}/${slider.images.length}`;
+                imgEl.src = item.images[item.currentIndex];
+                counterEl.textContent = `${item.currentIndex + 1}/${item.images.length}`;
             }
         }
     </script>

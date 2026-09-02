@@ -4,121 +4,230 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Compraventas El Palmero - Inicio</title>
+    <title>Compraventas El Palmero - Tu Compraventa de Confianza en Cartagena</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        palmero: {
-                            red: '#e03a3a',
-                            dark: '#152e4d',
-                            footer: '#c85a54'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 
-<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-white text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-4">
-                <img src="compraventa.jpg" alt="Compraventas El Palmero"
-                    class="h-14 w-28 object-cover rounded-md border border-slate-300 shadow-sm"
+    <!-- NAVEGACIÓN (SIN BOTÓN ADMIN) -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-24">
+
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="compraventa.jpg" alt="Logo" class="h-12 w-28 object-cover rounded border border-slate-200"
                     onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=160&auto=format&fit=crop&q=80'" />
                 <div>
-                    <div class="text-xl sm:text-2xl font-black tracking-tight text-palmero-red uppercase italic">
-                        COMPRAVENTAS <span class="text-slate-900 not-italic">EL PALMERO</span>
-                    </div>
-                    <p class="text-[10px] sm:text-xs font-bold tracking-wider text-slate-400 uppercase">
-                        Vehículos de Ocasión · Nacionales y de Importación
-                    </p>
+                    <span
+                        class="text-lg sm:text-xl font-black tracking-wide block uppercase text-[#e03a3a]">COMPRAVENTAS
+                        EL PALMERO</span>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Vehículos de
+                        ocasión · Nacionales y de importación</span>
                 </div>
             </a>
 
-            <nav class="flex items-center space-x-6 sm:space-x-8 text-xs font-black tracking-wider uppercase">
-                <a href="index.html" class="text-palmero-red border-b-2 border-palmero-red pb-1">Inicio</a>
-                <a href="coches.html" class="text-slate-700 hover:text-palmero-red transition">Coches</a>
-                <a href="contacto.html" class="text-slate-700 hover:text-palmero-red transition">Contacto</a>
-            </nav>
+            <div class="hidden md:flex items-center gap-8 font-black text-xs uppercase tracking-wider">
+                <a href="index.html" class="text-[#e03a3a] transition">Inicio</a>
+                <a href="coches.html" class="text-slate-700 hover:text-[#e03a3a] transition">Coches</a>
+                <a href="contacto.html" class="text-slate-700 hover:text-[#e03a3a] transition">Contacto</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="bg-slate-900 text-white py-20 px-4 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+            <span
+                class="bg-[#e03a3a] text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
+                Polígono Cabezo Beaza · Cartagena
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-tight">
+                COMPRAVENTAS EL PALMERO
+            </h1>
+            <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-medium">
+                Vehículos de ocasión totalmente revisados, garantizados y listos para entrega inmediata. La mejor
+                relación calidad-precio de la Región.
+            </p>
+            <div class="pt-4 flex flex-wrap justify-center gap-4">
+                <a href="coches.html"
+                    class="bg-[#e03a3a] hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider px-8 py-4 rounded-xl shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-car-side"></i>
+                    <span>Ver Coches en Stock</span>
+                </a>
+                <a href="contacto.html"
+                    class="bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase tracking-wider px-8 py-4 rounded-xl transition border border-white/20">
+                    <span>Contactar con Nosotros</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <main class="flex-grow"></main>
-
-    <footer class="bg-palmero-footer text-white mt-auto pt-10 pb-6 border-t border-red-900/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-white/20 text-xs">
-
-                <div class="space-y-2">
-                    <div class="flex items-center gap-2">
-                        <img src="compraventa.jpg" alt="Logo"
-                            class="h-10 w-18 object-cover rounded border border-white/30"
-                            onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=100&auto=format&fit=crop&q=80'" />
-                        <div>
-                            <div class="font-black uppercase tracking-tight text-sm">COMPRAVENTAS</div>
-                            <div class="font-bold text-red-100 uppercase text-[10px]">EL PALMERO</div>
-                        </div>
-                    </div>
-                    <p class="text-red-100/90 leading-relaxed pt-1">
-                        Vehículos de ocasión, nacionales y de importación revisados y garantizados.
-                    </p>
+    <!-- SECCIÓN CARACTERÍSTICAS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1 w-full space-y-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <div
+                    class="w-14 h-14 bg-red-50 text-[#e03a3a] rounded-2xl flex items-center justify-center text-xl mx-auto">
+                    <i class="fa-solid fa-shield-halved"></i>
                 </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> DÓNDE ESTAMOS
-                    </h4>
-                    <p class="text-red-100 leading-relaxed">
-                        Avenida Tito Didio 7E, Pol. Ind. Cabezo Beaza<br />Cartagena (Región de Murcia)
-                    </p>
-                    <div class="pt-1">
-                        <a href="tel:699419202"
-                            class="inline-flex items-center gap-1.5 bg-white text-slate-800 font-bold px-3 py-1 rounded-full text-xs shadow-sm hover:bg-red-50 transition">
-                            <i class="fa-solid fa-phone text-palmero-footer"></i> 699 41 92 02
-                        </a>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-clock"></i> HORARIO DE ATENCIÓN
-                    </h4>
-                    <p class="text-red-100 leading-relaxed">
-                        <strong>Lunes a Sábado:</strong><br />Mañanas: 8:00 a 14:00<br />Tardes: 15:00 a 19:00
-                    </p>
-                    <div class="pt-1">
-                        <a href="https://wa.me/34688298944" target="_blank"
-                            class="inline-flex items-center gap-1.5 bg-emerald-600 text-white font-bold px-3 py-1 rounded-full text-xs hover:bg-emerald-500 transition shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Ventas: 688 29 89 44
-                        </a>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-compass"></i> NAVEGACIÓN
-                    </h4>
-                    <ul class="space-y-1 text-red-100 font-semibold">
-                        <li><a href="index.html" class="hover:underline">› Inicio</a></li>
-                        <li><a href="coches.html" class="hover:underline">› Coches</a></li>
-                        <li><a href="contacto.html" class="hover:underline">› Contacto</a></li>
-                    </ul>
-                </div>
-
+                <h3 class="text-sm font-black text-slate-900 uppercase">Garantía Profesional</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">Vehículos certificados y revisados minuciosamente en
+                    talleres especializados.</p>
             </div>
 
-            <div class="pt-4 text-center sm:text-left text-[11px] text-red-200/80">
-                <p>&copy; 2026 compraventaelpalmero todos los derechos reservados.</p>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <div
+                    class="w-14 h-14 bg-blue-50 text-blue-900 rounded-2xl flex items-center justify-center text-xl mx-auto">
+                    <i class="fa-solid fa-tags"></i>
+                </div>
+                <h3 class="text-sm font-black text-slate-900 uppercase">Los Mejores Precios</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">Stock renovado semanalmente con opciones para todos
+                    los bolsillos y necesidades.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <div
+                    class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl mx-auto">
+                    <i class="fa-solid fa-handshake"></i>
+                </div>
+                <h3 class="text-sm font-black text-slate-900 uppercase">Gestión Integral</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">Nos encargamos del cambio de titularidad y de la
+                    financiación a tu medida.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#c85a54] text-white py-10 border-t border-red-400/30 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <img src="compraventa.jpg" alt="Logo"
+                        class="h-8 w-16 object-cover rounded border border-white/20" />
+                    <span class="font-black uppercase tracking-wider text-sm">COMPRAVENTAS</span>
+                </div>
+                <p class="text-red-100 text-[11px] leading-relaxed">Vehículos de ocasión, nacionales y de importación
+                    revisados y garantizados.</p>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">DÓNDE ESTAMOS</h4>
+                <p class="text-red-100 text-[11px] leading-relaxed">Avenida Tito Didio 7E, Pol. Ind. Cabezo
+                    Beaza<br>Cartagena (Región de Murcia)</p>
+                <div class="mt-2 text-white font-bold flex items-center gap-1.5"><i class="fa-solid fa-phone"></i> 699
+                    41 92 02</div>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">HORARIO DE ATENCIÓN</h4>
+                <p class="text-red-100 text-[11px] leading-relaxed"><b>Lunes a Sábado:</b><br>Mañanas: 8:00 a
+                    14:00<br>Tardes: 15:00 a 19:00</p>
+                <div
+                    class="mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white px-2.5 py-1 rounded-md text-[11px] font-bold">
+                    <i class="fa-brands fa-whatsapp"></i> Ventas: 688 29 89 44
+                </div>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">NAVEGACIÓN</h4>
+                <ul class="space-y-1 text-red-100 text-[11px] font-medium">
+                    <li><a href="index.html" class="hover:underline">› Inicio</a></li>
+                    <li><a href="coches.html" class="hover:underline">› Coches</a></li>
+                    <li><a href="contacto.html" class="hover:underline">› Contacto</a></li>
+                </ul>
             </div>
         </div>
     </footer>
+
+    <!-- CHATBOT -->
+    <div id="palmeroChatWidget" class="fixed bottom-5 right-5 z-50">
+        <button onclick="toggleChat()" id="chatToggleBtn"
+            class="w-14 h-14 bg-[#e03a3a] hover:bg-red-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-105 focus:outline-none">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+        <div id="chatWindow"
+            class="hidden absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col transition-all">
+            <div class="bg-[#152e4d] text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-wide">Asistente El Palmero</h4>
+                        <p class="text-[10px] text-slate-300 font-medium">Te atendemos al instante</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()"
+                    class="text-slate-300 hover:text-white text-sm font-bold">&times;</button>
+            </div>
+            <div id="chatBody" class="p-4 h-80 overflow-y-auto space-y-3 bg-slate-50 text-xs">
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1">
+                    <p class="font-bold text-[#152e4d]">¡Hola! 👋 Bienvenido a Compraventas El Palmero.</p>
+                    <p>¿Qué vehículo estás buscando o en qué podemos ayudarte hoy?</p>
+                </div>
+            </div>
+            <form id="chatForm" onsubmit="sendChatMessage(event)"
+                class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                <input type="text" id="chatInput" required placeholder="Escribe tu consulta o teléfono..."
+                    class="flex-1 px-3 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
+                <button type="submit"
+                    class="bg-[#e03a3a] hover:bg-red-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaKF2UIogxicJYsDR1Un4n7fPg80s-J_g",
+            authDomain: "compraventaelpalmero.firebaseapp.com",
+            projectId: "compraventaelpalmero",
+            storageBucket: "compraventaelpalmero.firebasestorage.app",
+            messagingSenderId: "954644373383",
+            appId: "1:954644373383:web:03e0a66fea805def2abd22"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const dbChat = firebase.firestore();
+
+        let chatOpen = false;
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            const win = document.getElementById('chatWindow');
+            if (chatOpen) { win.classList.remove('hidden'); document.getElementById('chatInput').focus(); }
+            else { win.classList.add('hidden'); }
+        }
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const body = document.getElementById('chatBody');
+            body.innerHTML += `<div class="bg-[#152e4d] text-white p-3 rounded-xl ml-auto max-w-[85%] shadow-sm">${text}</div>`;
+            input.value = '';
+            body.scrollTop = body.scrollHeight;
+
+            try {
+                await dbChat.collection('mensajes_chat').add({
+                    cliente: "Cliente Web (Inicio)",
+                    mensaje: text,
+                    telefono: text.match(/([0-9]{9})/)?.[0] || 'No indicado',
+                    fecha: new Date().toLocaleDateString('es-ES') + ' ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                setTimeout(() => {
+                    body.innerHTML += `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1"><p class="font-bold text-[#152e4d]">¡Mensaje recibido! 🚗</p><p>Jorge ha recibido tu consulta en el panel. ¡Te contactaremos en breve!</p></div>`;
+                    body.scrollTop = body.scrollHeight;
+                }, 800);
+            } catch (err) { console.error(err); }
+        }
+    </script>
 </body>
 
 </html>
