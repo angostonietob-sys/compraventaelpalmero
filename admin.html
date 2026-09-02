@@ -2,582 +2,709 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control | Compraventas El Palmero</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            font-family: system-ui, -apple-system, sans-serif;
-        }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Control - Compraventas El Palmero</title>
 
-        .font-palmero {
-            font-family: 'Montserrat', sans-serif;
-            font-style: italic;
-            font-weight: 900;
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        palmero: {
+                            red: '#e03a3a',
+                            dark: '#152e4d',
+                            footer: '#c85a54',
+                            sidebar: '#0f172a'
+                        }
+                    }
+                }
+            }
         }
-    </style>
+    </script>
 </head>
 
-<body class="bg-slate-100 text-slate-900 min-h-screen antialiased">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex antialiased">
 
-    <!-- PANTALLA 1: LOGIN -->
-    <div id="vista-login" class="min-h-screen flex items-center justify-center p-4 bg-slate-900">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl space-y-6 text-center">
-            <div>
-                <h1
-                    class="font-palmero text-xl text-red-600 uppercase tracking-tight transform -skew-x-6 leading-tight">
-                    PANEL <span class="text-slate-900">CONTROL</span>
-                </h1>
-                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">El Palmero Automóviles
-                </p>
+    <!-- PANTALLA DE LOGIN -->
+    <div id="loginScreen" class="fixed inset-0 bg-[#0f172a] z-50 flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full rounded-2xl shadow-2xl p-8 border border-slate-700/50 space-y-6">
+
+            <div class="text-center space-y-2">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 bg-red-50 text-[#e03a3a] rounded-2xl text-2xl mb-1 shadow-sm">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-xl font-black text-[#152e4d] uppercase tracking-tight">Acceso Restringido</h2>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Panel de Administración · Jorge
+                    García</p>
             </div>
 
-            <form onsubmit="iniciarSesion(event)" class="space-y-4 text-left text-xs">
+            <div id="loginError"
+                class="hidden p-3 bg-red-100 border border-red-200 text-red-700 text-xs font-bold rounded-xl text-center uppercase tracking-wide">
+                Usuario o contraseña incorrectos
+            </div>
+
+            <form id="loginForm" class="space-y-4 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Usuario</label>
-                    <input id="login-user" type="text" placeholder="Introduce tu usuario"
-                        class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 font-semibold focus:outline-none focus:border-red-600"
-                        required>
+                    <label class="block font-black text-slate-700 uppercase mb-1">Usuario</label>
+                    <div class="relative">
+                        <i
+                            class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="userInput" required placeholder="JORGEGARCIA"
+                            class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl font-bold uppercase focus:outline-none focus:border-[#e03a3a]" />
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Contraseña</label>
-                    <input id="login-pass" type="password" placeholder="Introduce tu contraseña"
-                        class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 font-semibold focus:outline-none focus:border-red-600"
-                        required>
+                    <label class="block font-black text-slate-700 uppercase mb-1">Contraseña</label>
+                    <div class="relative">
+                        <i
+                            class="fa-solid fa-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="password" id="passInput" required placeholder="••••"
+                            class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:border-[#e03a3a]" />
+                    </div>
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-lg">
-                    Acceder al Panel
+                    class="w-full bg-[#e03a3a] hover:bg-red-700 text-white font-black py-3.5 rounded-xl uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 text-xs">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Entrar al Panel</span>
                 </button>
             </form>
 
-            <div class="pt-2 border-t border-slate-100">
-                <a href="index.html" class="text-slate-400 hover:text-slate-600 text-xs font-bold">← Volver a la Web
-                    Pública</a>
+            <div class="text-center pt-2">
+                <a href="index.html" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition">← Volver a
+                    la Web Principal</a>
             </div>
         </div>
     </div>
 
-    <!-- PANTALLA 2: PANEL DE ADMINISTRACIÓN -->
-    <div id="vista-admin" class="hidden min-h-screen flex">
+    <!-- CONTENIDO DEL PANEL -->
+    <div id="panelContent" class="hidden w-full min-h-screen flex">
 
-        <!-- SIDEBAR LATERAL -->
+        <!-- SIDEBAR -->
         <aside
-            class="w-64 bg-slate-900 text-white flex flex-col justify-between shrink-0 min-h-screen border-r border-slate-800 shadow-xl select-none">
-            <div>
-                <div class="p-6 border-b border-slate-800">
-                    <h1
-                        class="font-palmero text-base text-red-600 uppercase tracking-tight transform -skew-x-6 leading-tight">
-                        PANEL <span class="text-white">CONTROL</span>
-                    </h1>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">El Palmero
-                        Automóviles</p>
+            class="w-64 bg-[#0f172a] text-slate-300 min-h-screen flex flex-col justify-between p-4 flex-shrink-0 z-40">
+            <div class="space-y-6">
+                <div class="px-2 py-3 border-b border-slate-800">
+                    <h2 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                        <span class="text-[#e03a3a]">PANEL</span> CONTROL
+                    </h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">El Palmero Automóviles</p>
                 </div>
 
-                <nav class="p-4 space-y-2">
-                    <!-- 1. MENSAJES -->
-                    <button id="nav-mensajes" type="button" onclick="cambiarSeccion('mensajes')"
-                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
-                            </path>
-                        </svg>
-                        <span class="flex-1 text-left">Mensajes Chat</span>
-                        <span id="badge-contador"
-                            class="hidden bg-red-600 text-white font-black text-[10px] px-2 py-0.5 rounded-full">0</span>
+                <nav class="space-y-1.5 text-xs font-bold uppercase tracking-wider">
+                    <button onclick="switchTab('chat')" id="nav-chat"
+                        class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left hover:bg-slate-800 hover:text-white">
+                        <i class="fa-regular fa-comment-dots text-base w-5"></i>
+                        <span>Mensajes Chat</span>
                     </button>
 
-                    <!-- 2. INVENTARIO -->
-                    <button id="nav-coches" type="button" onclick="cambiarSeccion('coches')"
-                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition bg-red-600 text-white shadow-md cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0">
-                            </path>
-                        </svg>
+                    <button onclick="switchTab('inventory')" id="nav-inventory"
+                        class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left bg-[#e03a3a] text-white shadow">
+                        <i class="fa-solid fa-car-side text-base w-5"></i>
                         <span>Inventario Coches</span>
                     </button>
 
-                    <!-- 3. ECONOMÍA -->
-                    <button id="nav-economia" type="button" onclick="cambiarSeccion('economia')"
-                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
+                    <button onclick="switchTab('economy')" id="nav-economy"
+                        class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-sack-dollar text-base w-5"></i>
                         <span>Economía & Caja</span>
                     </button>
 
-                    <!-- 4. SEGURIDAD -->
-                    <button id="nav-seguridad" type="button" onclick="cambiarSeccion('seguridad')"
-                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
-                            </path>
-                        </svg>
+                    <button onclick="switchTab('security')" id="nav-security"
+                        class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-key text-base w-5"></i>
                         <span>Seguridad & Clave</span>
                     </button>
                 </nav>
             </div>
 
-            <!-- BOTONES SALIR Y WEB -->
-            <div class="p-4 border-t border-slate-800 space-y-2">
-                <button type="button" onclick="cerrarSesion()"
-                    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-xl text-xs font-bold transition cursor-pointer">
-                    🚪 Cerrar Sesión
+            <div class="space-y-2 pt-4 border-t border-slate-800 text-xs font-bold">
+                <button onclick="logout()"
+                    class="w-full py-2.5 px-3 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-900/60 hover:text-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Cerrar Sesión</span>
                 </button>
-                <a href="index.html"
-                    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition">
-                    ← Ir a la Web Pública
+                <a href="coches.html" target="_blank"
+                    class="w-full py-2 px-3 rounded-xl bg-slate-800/80 text-slate-400 hover:text-white text-[11px] transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Ir a la Web Pública</span>
                 </a>
             </div>
         </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <main class="flex-1 p-8 overflow-y-auto max-h-screen">
+        <!-- ÁREA PRINCIPAL -->
+        <div class="flex-1 flex flex-col min-w-0">
 
-            <!-- 1. MENSAJES -->
-            <section id="mod-mensajes" class="hidden space-y-6">
-                <div>
-                    <h2 class="text-2xl font-black text-slate-900 uppercase">Consultas del Chatbot</h2>
-                    <p class="text-xs text-slate-500 font-medium">Recepción en tiempo real desde la web.</p>
-                </div>
-                <div class="grid grid-cols-1 gap-5" id="contenedor-mensajes"></div>
-            </section>
-
-            <!-- 2. GESTIÓN DE COCHES (SUBIDA LIBRE DE ARCHIVOS) -->
-            <section id="mod-coches" class="block space-y-8 max-w-5xl mx-auto">
-                <div>
-                    <h2 class="text-2xl font-black text-slate-900 uppercase">Añadir Vehículo al Stock</h2>
-                    <p class="text-xs text-slate-500 font-medium">Sube tus fotos y vídeos directamente para que
-                        aparezcan en el catálogo público.</p>
-                </div>
-
-                <!-- FORMULARIO DIRECTO -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4 text-xs">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Marca y Modelo *</label>
-                            <input id="coche-titulo" type="text" placeholder="Ej: BMW Serie 1 118d M Sport"
-                                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600"
-                                required>
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Precio (€) *</label>
-                            <input id="coche-precio" type="number" placeholder="Ej: 17900"
-                                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600"
-                                required>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Año</label>
-                            <input id="coche-ano" type="number" placeholder="Ej: 2020"
-                                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600">
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Kilómetros</label>
-                            <input id="coche-km" type="text" placeholder="Ej: 110.000 km"
-                                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600">
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Combustible / Transmisión</label>
-                            <input id="coche-motor" type="text" placeholder="Ej: Diésel · Manual"
-                                class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600">
-                        </div>
-                    </div>
-
-                    <!-- SELECCIONAR FOTOS Y VÍDEO -->
-                    <div
-                        class="border-2 border-dashed border-slate-300 hover:border-red-500 rounded-2xl p-6 bg-slate-50 text-center space-y-2 transition">
-                        <label for="coche-archivos" class="cursor-pointer block">
-                            <span class="block font-black text-slate-800 text-sm uppercase">📂 Selecciona las fotos y el
-                                vídeo</span>
-                            <span class="text-[11px] text-slate-500 block mt-1">Puedes seleccionar todas las fotos
-                                juntas y el archivo de vídeo a la vez</span>
-                        </label>
-                        <input id="coche-archivos" type="file" multiple accept="image/*,video/*" class="hidden"
-                            onchange="mostrarArchivosElegidos(this)">
-                        <div id="info-archivos" class="text-xs font-bold text-emerald-600 hidden pt-2"></div>
-                    </div>
-
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-                        <span id="estado-guardado" class="text-xs font-bold text-slate-500"></span>
-                        <button id="btn-publicar" type="button" onclick="guardarVehiculoCompleto()"
-                            class="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-md">
-                            + Publicar Coche en la Web
-                        </button>
-                    </div>
-                </div>
-
-                <!-- LISTA DE COCHES SUBIDOS -->
-                <div class="space-y-4">
-                    <h3 class="text-base font-black text-slate-900 uppercase">Vehículos Publicados</h3>
-                    <div id="lista-coches-admin" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-                </div>
-            </section>
-
-            <!-- 3. ECONOMÍA -->
-            <section id="mod-economia" class="hidden space-y-8">
-                <div>
-                    <h2 class="text-2xl font-black text-slate-900 uppercase">Economía & Balance</h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm"><span
-                            class="text-xs uppercase font-bold text-slate-400 block">Ingresos</span><strong
-                            id="eco-total-ingresos" class="text-2xl font-black text-emerald-600 block mt-1">0 €</strong>
-                    </div>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm"><span
-                            class="text-xs uppercase font-bold text-slate-400 block">Gastos</span><strong
-                            id="eco-total-gastos" class="text-2xl font-black text-red-600 block mt-1">0 €</strong></div>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm"><span
-                            class="text-xs uppercase font-bold text-slate-400 block">Beneficio</span><strong
-                            id="eco-total-beneficio" class="text-2xl font-black text-slate-900 block mt-1">0 €</strong>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 4. SEGURIDAD -->
-            <section id="mod-seguridad" class="hidden space-y-6 max-w-lg">
-                <div>
-                    <h2 class="text-2xl font-black text-slate-900 uppercase">Seguridad del Panel</h2>
-                    <p class="text-xs text-slate-500 font-medium">Cambia el usuario y la clave de acceso.</p>
-                </div>
-
-                <form onsubmit="actualizarCredenciales(event)"
-                    class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4 text-xs">
+            <!-- HEADER -->
+            <header
+                class="bg-[#152e4d] text-white border-b border-slate-700 py-3.5 px-6 sm:px-8 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3">
+                    <img src="compraventa.jpg" alt="Logo" class="h-9 w-20 object-cover rounded border border-white/20"
+                        onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=160&auto=format&fit=crop&q=80'" />
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">Nuevo Usuario *</label>
-                        <input id="user-nuevo" type="text"
-                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600"
-                            required>
+                        <h1 class="text-sm sm:text-base font-black tracking-wide uppercase">PANEL DE CONTROL</h1>
+                        <p class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">USUARIO: <span
+                                class="text-white font-black">JORGEGARCIA</span></p>
                     </div>
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">Contraseña Actual *</label>
-                        <input id="pass-actual" type="password"
-                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600"
-                            required>
+                </div>
+                <a href="coches.html" target="_blank"
+                    class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-3.5 py-2 rounded-lg transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span class="hidden sm:inline">Ver Web Pública</span>
+                </a>
+            </header>
+
+            <!-- ALERTAS -->
+            <div class="px-6 sm:px-8 pt-4">
+                <div id="alertBox"
+                    class="hidden p-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-between shadow-sm">
+                    <span id="alertMsg"></span>
+                    <button onclick="hideAlert()"
+                        class="text-sm font-black opacity-60 hover:opacity-100">&times;</button>
+                </div>
+            </div>
+
+            <!-- PESTAÑAS -->
+            <main class="flex-grow p-6 sm:p-8">
+
+                <!-- 1. INVENTARIO -->
+                <section id="tab-inventory" class="space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                            <div class="border-b border-slate-100 pb-3">
+                                <h2
+                                    class="text-base font-black text-[#152e4d] uppercase tracking-tight flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-plus text-[#e03a3a]"></i> AÑADIR VEHÍCULO AL STOCK
+                                </h2>
+                                <p class="text-[11px] text-slate-400 font-semibold uppercase">Publicación instantánea en
+                                    la web</p>
+                            </div>
+
+                            <form id="carForm" class="space-y-4 text-xs">
+                                <div>
+                                    <label class="block font-black text-slate-700 uppercase mb-1">Marca y Modelo
+                                        *</label>
+                                    <input type="text" id="carTitle" required placeholder="Ej: BMW Serie 1 118d M Sport"
+                                        class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-medium focus:outline-none focus:border-red-500" />
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-black text-slate-700 uppercase mb-1">Precio (€)
+                                            *</label>
+                                        <input type="number" id="carPrice" required placeholder="Ej: 17900"
+                                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-medium focus:outline-none focus:border-red-500" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-black text-slate-700 uppercase mb-1">Año *</label>
+                                        <input type="number" id="carYear" required placeholder="Ej: 2020"
+                                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-medium focus:outline-none focus:border-red-500" />
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-black text-slate-700 uppercase mb-1">Kilómetros
+                                            *</label>
+                                        <input type="number" id="carKm" required placeholder="Ej: 110000"
+                                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-medium focus:outline-none focus:border-red-500" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-black text-slate-700 uppercase mb-1">Combustible /
+                                            Transmisión</label>
+                                        <select id="carFuel"
+                                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold text-slate-700 focus:outline-none focus:border-red-500">
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="Gasolina">Gasolina</option>
+                                            <option value="Híbrido">Híbrido</option>
+                                            <option value="Eléctrico">Eléctrico</option>
+                                            <option value="GLP">GLP</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50/50 hover:bg-slate-50 transition">
+                                    <i class="fa-solid fa-folder-open text-2xl text-amber-500 mb-2"></i>
+                                    <div class="font-black text-slate-700 uppercase text-[11px]">Selecciona las fotos y
+                                        el vídeo</div>
+                                    <input type="file" id="carFiles" accept="image/*" multiple
+                                        class="mt-2 text-[11px] text-slate-500 w-full file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#152e4d] file:text-white cursor-pointer" />
+                                </div>
+
+                                <button type="submit" id="saveCarBtn"
+                                    class="w-full bg-[#e03a3a] hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Publicar Coche en la Web</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="lg:col-span-2 space-y-4">
+                            <div
+                                class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <div>
+                                    <h2 class="text-sm font-black text-[#152e4d] uppercase tracking-tight">Vehículos
+                                        Publicados</h2>
+                                    <p class="text-[11px] text-slate-400 font-semibold uppercase">Stock sincronizado con
+                                        la nube</p>
+                                </div>
+                                <span
+                                    class="bg-slate-100 text-slate-700 text-xs font-black px-3 py-1.5 rounded-full border border-slate-200">
+                                    <span id="stockCount">0</span> Vehículos
+                                </span>
+                            </div>
+
+                            <div id="carsListContainer" class="space-y-3">
+                                <div
+                                    class="text-center py-12 bg-white rounded-xl border border-slate-200 text-slate-400 text-xs font-bold uppercase">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-slate-300"></i>
+                                    <p>Cargando vehículos...</p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">Nueva Contraseña *</label>
-                        <input id="pass-nueva" type="password"
-                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600"
-                            required>
+                </section>
+
+                <!-- 2. CHAT -->
+                <section id="tab-chat" class="hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div>
+                                <h2
+                                    class="text-base font-black text-[#152e4d] uppercase tracking-tight flex items-center gap-2">
+                                    <i class="fa-solid fa-robot text-palmero-red"></i> Mensajes y Consultas de Clientes
+                                    (Chatbot IA)
+                                </h2>
+                                <p class="text-[11px] text-slate-400 font-semibold uppercase">Consultas recibidas por la
+                                    web</p>
+                            </div>
+                            <button onclick="clearChatHistory()"
+                                class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-lg transition">
+                                <i class="fa-solid fa-trash-can"></i> Limpiar Historial
+                            </button>
+                        </div>
+
+                        <div id="chatMessagesList" class="space-y-3">
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
+                                <div class="flex justify-between font-bold text-slate-700">
+                                    <span>Cliente Web (Interesado en Opel Corsa)</span>
+                                    <span class="text-slate-400 font-normal">Hoy</span>
+                                </div>
+                                <p class="text-slate-600">"Hola Jorge, ¿sigue disponible el Corsa para ir a verlo esta
+                                    tarde?"</p>
+                                <div class="pt-2 flex gap-2">
+                                    <a href="https://wa.me/34688298944" target="_blank"
+                                        class="text-emerald-600 font-bold hover:underline">
+                                        <i class="fa-brands fa-whatsapp"></i> Contactar por WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">Confirmar Nueva Contraseña *</label>
-                        <input id="pass-confirmar" type="password"
-                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 font-bold focus:outline-none focus:border-red-600"
-                            required>
+                </section>
+
+                <!-- 3. ECONOMÍA -->
+                <section id="tab-economy" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Ingresos Totales
+                            </div>
+                            <div id="ecoIngresos" class="text-2xl font-black text-emerald-600 mt-1">0 €</div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Gastos / Compras
+                            </div>
+                            <div id="ecoGastos" class="text-2xl font-black text-red-600 mt-1">0 €</div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Balance Neto en
+                                Caja</div>
+                            <div id="ecoBalance" class="text-2xl font-black text-[#152e4d] mt-1">0 €</div>
+                        </div>
                     </div>
 
-                    <div class="pt-2">
-                        <button type="submit"
-                            class="w-full bg-slate-900 hover:bg-red-600 text-white font-black py-3 rounded-xl uppercase tracking-wider transition cursor-pointer shadow-md">
-                            Guardar Credenciales
-                        </button>
-                    </div>
-                </form>
-            </section>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                            <h3 class="text-sm font-black text-[#152e4d] uppercase">Nuevo Apunte de Caja</h3>
+                            <form id="ecoForm" class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-700 uppercase mb-1">Concepto</label>
+                                    <input type="text" id="ecoConcepto" required
+                                        placeholder="Ej: Venta Opel Corsa o Taller revisión"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg" />
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 uppercase mb-1">Importe (€)</label>
+                                        <input type="number" id="ecoImporte" required placeholder="Ej: 9500"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 uppercase mb-1">Tipo</label>
+                                        <select id="ecoTipo"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold">
+                                            <option value="ingreso">Ingreso (+)</option>
+                                            <option value="gasto">Gasto (-)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-[#152e4d] hover:bg-slate-800 text-white font-black py-3 rounded-xl uppercase tracking-wider">
+                                    Registrar Movimiento
+                                </button>
+                            </form>
+                        </div>
 
-        </main>
+                        <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                            <h3 class="text-sm font-black text-[#152e4d] uppercase">Histórico de Movimientos</h3>
+                            <div id="ecoMovementsList" class="space-y-2 text-xs">
+                                <p class="text-slate-400 font-bold uppercase text-center py-6">No hay movimientos
+                                    registrados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. SEGURIDAD -->
+                <section id="tab-security" class="hidden space-y-6">
+                    <div class="max-w-xl bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="border-b border-slate-100 pb-3">
+                            <h2
+                                class="text-base font-black text-[#152e4d] uppercase tracking-tight flex items-center gap-2">
+                                <i class="fa-solid fa-lock text-palmero-red"></i> Seguridad y Cambio de Clave
+                            </h2>
+                            <p class="text-[11px] text-slate-400 font-semibold uppercase">Modifica la clave de acceso de
+                                JORGEGARCIA</p>
+                        </div>
+
+                        <form id="passForm" class="space-y-4 text-xs">
+                            <div>
+                                <label class="block font-bold text-slate-700 uppercase mb-1">Nueva Contraseña</label>
+                                <input type="password" id="newPass" required placeholder="Escribe la nueva clave"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-red-500" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 uppercase mb-1">Confirmar Nueva
+                                    Contraseña</label>
+                                <input type="password" id="confirmPass" required placeholder="Repite la nueva clave"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-red-500" />
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-[#e03a3a] hover:bg-red-700 text-white font-black py-3 rounded-xl uppercase tracking-wider transition">
+                                Actualizar Contraseña
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
     </div>
 
+    <!-- FIREBASE Y LÓGICA -->
     <script>
-        // 1. CREDENCIALES
-        const USER_DEFAULT = "jorgeg";
-        const PASS_DEFAULT = "101010";
+        const AUTH_USER = "JORGEGARCIA";
+        const DEFAULT_PASS = "BBBB";
 
-        function obtenerUsuario() {
-            return localStorage.getItem('elpalmero_admin_user') || USER_DEFAULT;
-        }
-
-        function obtenerClave() {
-            return localStorage.getItem('elpalmero_admin_pass') || PASS_DEFAULT;
-        }
-
-        function verificarSesion() {
-            const estaAutenticado = sessionStorage.getItem('elpalmero_sesion_activa') === 'true';
-            if (estaAutenticado) {
-                document.getElementById('vista-login').classList.add('hidden');
-                document.getElementById('vista-admin').classList.remove('hidden');
-                document.getElementById('user-nuevo').value = obtenerUsuario();
-                cargarStockAdmin();
+        function checkAuth() {
+            const isLogged = sessionStorage.getItem('palmero_logged');
+            if (isLogged === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('panelContent').classList.remove('hidden');
             } else {
-                document.getElementById('vista-login').classList.remove('hidden');
-                document.getElementById('vista-admin').classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('panelContent').classList.add('hidden');
             }
         }
 
-        function iniciarSesion(e) {
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const inputUser = document.getElementById('login-user').value.trim();
-            const inputPass = document.getElementById('login-pass').value.trim();
+            const u = document.getElementById('userInput').value.trim().toUpperCase();
+            const p = document.getElementById('passInput').value;
+            const currentPass = localStorage.getItem('palmero_admin_pass') || DEFAULT_PASS;
 
-            if (inputUser === obtenerUsuario() && inputPass === obtenerClave()) {
-                sessionStorage.setItem('elpalmero_sesion_activa', 'true');
-                document.getElementById('login-user').value = '';
-                document.getElementById('login-pass').value = '';
-                verificarSesion();
+            if (u === AUTH_USER && p === currentPass) {
+                sessionStorage.setItem('palmero_logged', 'true');
+                document.getElementById('loginError').classList.add('hidden');
+                checkAuth();
             } else {
-                alert("Usuario o contraseña incorrectos.");
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        });
+
+        function logout() {
+            if (confirm('¿Cerrar sesión del panel de control?')) {
+                sessionStorage.removeItem('palmero_logged');
+                window.location.reload();
             }
         }
 
-        function cerrarSesion() {
-            sessionStorage.removeItem('elpalmero_sesion_activa');
-            verificarSesion();
-        }
+        checkAuth();
 
-        function actualizarCredenciales(e) {
-            e.preventDefault();
-            const userNuevo = document.getElementById('user-nuevo').value.trim();
-            const passActual = document.getElementById('pass-actual').value.trim();
-            const passNueva = document.getElementById('pass-nueva').value.trim();
-            const passConfirmar = document.getElementById('pass-confirmar').value.trim();
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaKF2UIogxicJYsDR1Un4n7fPg80s-J_g",
+            authDomain: "compraventaelpalmero.firebaseapp.com",
+            projectId: "compraventaelpalmero",
+            storageBucket: "compraventaelpalmero.firebasestorage.app",
+            messagingSenderId: "954644373383",
+            appId: "1:954644373383:web:03e0a66fea805def2abd22"
+        };
 
-            if (passActual !== obtenerClave()) return alert("La contraseña actual no es correcta.");
-            if (passNueva.length < 4) return alert("La nueva contraseña debe tener al menos 4 caracteres.");
-            if (passNueva !== passConfirmar) return alert("Las contraseñas nuevas no coinciden.");
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const carsCol = db.collection('coches');
 
-            localStorage.setItem('elpalmero_admin_user', userNuevo);
-            localStorage.setItem('elpalmero_admin_pass', passNueva);
-
-            alert("✓ Usuario y contraseña actualizados correctamente.");
-            document.getElementById('pass-actual').value = '';
-            document.getElementById('pass-nueva').value = '';
-            document.getElementById('pass-confirmar').value = '';
-            cambiarSeccion('coches');
-        }
-
-        // 2. BASE DE DATOS INDEXEDDB (ALMACENAMIENTO SEGURO DE FOTOS Y VÍDEOS)
-        function abrirDB() {
-            return new Promise((resolve, reject) => {
-                const req = indexedDB.open("ElPalmeroDB", 1);
-                req.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains("coches")) {
-                        db.createObjectStore("coches", { keyPath: "id" });
-                    }
-                };
-                req.onsuccess = () => resolve(req.result);
-                req.onerror = () => reject(req.error);
-            });
-        }
-
-        let archivosSeleccionados = [];
-
-        function mostrarArchivosElegidos(input) {
-            archivosSeleccionados = Array.from(input.files);
-            const info = document.getElementById('info-archivos');
-            if (archivosSeleccionados.length > 0) {
-                info.innerText = `✓ ${archivosSeleccionados.length} archivos seleccionados listos para subir`;
-                info.classList.remove('hidden');
-            } else {
-                info.classList.add('hidden');
-            }
-        }
-
-        async function guardarVehiculoCompleto() {
-            const titulo = document.getElementById('coche-titulo').value.trim();
-            const precio = document.getElementById('coche-precio').value.trim();
-            const ano = document.getElementById('coche-ano').value.trim() || '2020';
-            const km = document.getElementById('coche-km').value.trim() || '0 km';
-            const motor = document.getElementById('coche-motor').value.trim() || 'Diésel';
-            const btn = document.getElementById('btn-publicar');
-            const estado = document.getElementById('estado-guardado');
-
-            if (!titulo || !precio) {
-                alert("Escribe la marca/modelo y el precio.");
-                return;
-            }
-
-            btn.disabled = true;
-            estado.innerText = "Procesando fotos y vídeos...";
-
-            const mediaList = [];
-            for (let i = 0; i < archivosSeleccionados.length; i++) {
-                const file = archivosSeleccionados[i];
-                const isVideo = file.type.startsWith('video');
-                const dataUrl = await new Promise((res) => {
-                    const r = new FileReader();
-                    r.onload = (e) => res(e.target.result);
-                    r.readAsDataURL(file);
-                });
-                mediaList.push({ tipo: isVideo ? 'video' : 'foto', data: dataUrl });
-            }
-
-            const cocheObj = {
-                id: Date.now(),
-                titulo,
-                precio,
-                ano,
-                km,
-                motor,
-                media: mediaList
-            };
-
-            try {
-                const db = await abrirDB();
-                const tx = db.transaction("coches", "readwrite");
-                tx.objectStore("coches").add(cocheObj);
-                tx.oncomplete = () => {
-                    localStorage.setItem('elpalmero_db_actualizada', Date.now().toString());
-                    document.getElementById('coche-titulo').value = '';
-                    document.getElementById('coche-precio').value = '';
-                    document.getElementById('coche-km').value = '';
-                    document.getElementById('coche-archivos').value = '';
-                    document.getElementById('info-archivos').classList.add('hidden');
-                    archivosSeleccionados = [];
-                    estado.innerText = "✓ Publicado con éxito";
-                    btn.disabled = false;
-                    cargarStockAdmin();
-                    setTimeout(() => { estado.innerText = ""; }, 3000);
-                };
-            } catch (err) {
-                alert("Error al guardar: " + err);
-                btn.disabled = false;
-                estado.innerText = "";
-            }
-        }
-
-        async function cargarStockAdmin() {
-            const lista = document.getElementById('lista-coches-admin');
-            const db = await abrirDB();
-            const tx = db.transaction("coches", "readonly");
-            const req = tx.objectStore("coches").getAll();
-
-            req.onsuccess = () => {
-                const coches = req.result.reverse();
-                if (coches.length === 0) {
-                    lista.innerHTML = `<p class="col-span-full text-xs text-slate-400">No hay vehículos publicados todavía.</p>`;
-                    return;
-                }
-
-                lista.innerHTML = coches.map(c => {
-                    const portada = c.media.find(m => m.tipo === 'foto')?.data || '';
-                    const totalFotos = c.media.filter(m => m.tipo === 'foto').length;
-                    const tieneVideo = c.media.some(m => m.tipo === 'video');
-
-                    return `
-            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
-              <div class="relative h-48 bg-slate-900 flex items-center justify-center">
-                ${portada ? `<img src="${portada}" class="w-full h-full object-cover">` : `<span class="text-white text-xs">Sin fotos</span>`}
-                <div class="absolute top-3 right-3 flex gap-1">
-                  <span class="bg-black/75 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${totalFotos} Fotos</span>
-                  ${tieneVideo ? `<span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">🎬 Vídeo</span>` : ''}
-                </div>
-              </div>
-              <div class="p-5 space-y-3">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <h4 class="text-base font-black text-slate-900">${c.titulo}</h4>
-                    <span class="text-xs font-bold text-slate-500">${c.ano} · ${c.km} · ${c.motor}</span>
-                  </div>
-                  <strong class="text-lg font-black text-red-600">${Number(c.precio).toLocaleString('es-ES')} €</strong>
-                </div>
-                <div class="pt-3 border-t border-slate-100 flex justify-end">
-                  <button onclick="eliminarCocheDB(${c.id})" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold px-4 py-2 rounded-xl transition cursor-pointer">
-                    Eliminar Vehículo
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
-                }).join('');
-            };
-        }
-
-        async function eliminarCocheDB(id) {
-            const db = await abrirDB();
-            const tx = db.transaction("coches", "readwrite");
-            tx.objectStore("coches").delete(id);
-            tx.oncomplete = () => {
-                localStorage.setItem('elpalmero_db_actualizada', Date.now().toString());
-                cargarStockAdmin();
-            };
-        }
-
-        // 3. NAVEGACIÓN
-        function cambiarSeccion(id) {
-            ['mensajes', 'coches', 'economia', 'seguridad'].forEach(sec => {
-                const bloque = document.getElementById('mod-' + sec);
-                const boton = document.getElementById('nav-' + sec);
-                if (sec === id) {
-                    bloque.classList.remove('hidden');
-                    boton.className = "w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition bg-red-600 text-white shadow-md cursor-pointer";
-                } else {
-                    bloque.classList.add('hidden');
-                    boton.className = "w-full flex items-center gap-3.5 px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer";
-                }
+        function switchTab(tabName) {
+            ['inventory', 'chat', 'economy', 'security'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`nav-${t}`);
+                btn.className = "w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left hover:bg-slate-800 hover:text-white text-slate-300";
             });
 
-            if (id === 'coches') cargarStockAdmin();
-            if (id === 'mensajes') cargarMensajesReales();
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabName}`);
+            activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left bg-[#e03a3a] text-white shadow";
         }
 
-        // 4. BANDEJA DE MENSAJES
-        function cargarMensajesReales() {
-            const raw = localStorage.getItem('elpalmero_mensajes') || '[]';
-            const contenedor = document.getElementById('contenedor-mensajes');
-            const badge = document.getElementById('badge-contador');
-            const mensajes = JSON.parse(raw);
+        // LISTADO EN TIEMPO REAL
+        carsCol.onSnapshot((snapshot) => {
+            document.getElementById('stockCount').textContent = snapshot.size;
+            const listContainer = document.getElementById('carsListContainer');
+            listContainer.innerHTML = '';
 
-            if (mensajes.length > 0) {
-                badge.innerText = mensajes.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-
-            if (mensajes.length === 0) {
-                contenedor.innerHTML = `
-          <div class="bg-white border border-dashed border-slate-300 rounded-3xl p-12 text-center text-slate-400 space-y-2">
-            <span class="text-3xl block">📭</span>
-            <p class="text-sm font-bold text-slate-600">No hay mensajes pendientes</p>
+            if (snapshot.empty) {
+                listContainer.innerHTML = `
+          <div class="bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center text-slate-400 text-xs font-bold uppercase">
+            <i class="fa-solid fa-car text-3xl mb-2 text-slate-300"></i>
+            <p>No hay coches en stock.</p>
           </div>
         `;
                 return;
             }
 
-            contenedor.innerHTML = mensajes.map((m) => `
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-          <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-            <div>
-              <span class="text-xs font-bold text-red-600 uppercase block">${m.asunto || 'Consulta General'}</span>
-              <h3 class="text-base font-extrabold text-slate-900">${m.nombre}</h3>
+            snapshot.forEach(doc => {
+                const car = doc.data();
+                const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
+                const imgUrl = (Array.isArray(car.images) && car.images.length > 0) ? car.images[0] : (car.image || defaultImg);
+                const fotosCount = Array.isArray(car.images) ? car.images.length : (car.image ? 1 : 0);
+                const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo';
+
+                const item = document.createElement('div');
+                item.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4";
+                item.innerHTML = `
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="relative w-24 h-16 flex-shrink-0">
+              <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover rounded-lg border border-slate-200" onerror="this.src='${defaultImg}'" />
+              <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">${fotosCount} Fotos</span>
             </div>
-            <span class="text-[11px] font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">${m.fecha}</span>
+            <div>
+              <div class="text-sm font-black text-slate-900 uppercase">${title}</div>
+              <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500">
+                <span class="text-[#e03a3a] font-black">${Number(car.price || 0).toLocaleString('es-ES')} €</span>
+                <span>·</span>
+                <span>${car.year || 'N/D'}</span>
+                <span>·</span>
+                <span>${Number(car.km || 0).toLocaleString('es-ES')} km</span>
+                <span>·</span>
+                <span>${car.fuel || 'Diesel'}</span>
+              </div>
+            </div>
           </div>
-          <p class="text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100">"${m.mensaje}"</p>
-          <div class="flex justify-between items-center pt-2">
-            <span class="text-xs font-medium text-slate-500">Email: <strong class="text-slate-800">${m.email}</strong></span>
-            <button onclick="eliminarMensaje(${m.id})" class="text-red-500 hover:text-red-700 text-xs font-bold cursor-pointer">Eliminar</button>
-          </div>
-        </div>
-      `).join('');
+          <button onclick="deleteCar('${doc.id}', '${title}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-black text-xs uppercase px-4 py-2 rounded-lg transition flex items-center gap-1.5 self-end sm:self-center">
+            <i class="fa-solid fa-trash-can"></i>
+            <span>Eliminar</span>
+          </button>
+        `;
+                listContainer.appendChild(item);
+            });
+        });
+
+        // COMPRESOR DE IMÁGENES AL VUELO (OPTIMIZADO PARA GRUPOS DE 14 FOTOS)
+        function comprimirFoto(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const maxW = 600;
+                        let w = img.width;
+                        let h = img.height;
+
+                        if (w > maxW) {
+                            h = Math.round((h * maxW) / w);
+                            w = maxW;
+                        }
+
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.5));
+                    };
+                };
+            });
         }
 
-        function eliminarMensaje(id) {
-            let mensajes = JSON.parse(localStorage.getItem('elpalmero_mensajes') || '[]');
-            mensajes = mensajes.filter(m => m.id !== id);
-            localStorage.setItem('elpalmero_mensajes', JSON.stringify(mensajes));
-            cargarMensajesReales();
+        // SUBIR VEHÍCULO CON SUS 14 FOTOS
+        document.getElementById('carForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveCarBtn');
+            saveBtn.disabled = true;
+
+            const fileInput = document.getElementById('carFiles');
+            const fotosProcesadas = [];
+
+            if (fileInput.files && fileInput.files.length > 0) {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    const file = fileInput.files[i];
+                    if (file.type.startsWith('image/')) {
+                        saveBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Foto ${i + 1} de ${fileInput.files.length}...`;
+                        const base64 = await comprimirFoto(file);
+                        fotosProcesadas.push(base64);
+                    }
+                }
+            }
+
+            saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Guardando en la nube...';
+
+            const newCar = {
+                title: document.getElementById('carTitle').value.trim(),
+                price: Number(document.getElementById('carPrice').value),
+                year: Number(document.getElementById('carYear').value),
+                km: Number(document.getElementById('carKm').value),
+                fuel: document.getElementById('carFuel').value,
+                images: fotosProcesadas,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await carsCol.add(newCar);
+                document.getElementById('carForm').reset();
+                showAlert(`¡Coche y sus ${fotosProcesadas.length} fotos publicados con éxito!`, true);
+            } catch (err) {
+                console.error(err);
+                showAlert('Error al subir el vehículo a la base de datos.', false);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Publicar Coche en la Web';
+            }
+        });
+
+        async function deleteCar(id, name) {
+            if (!confirm(`¿Eliminar definitivamente "${name}"?`)) return;
+            try {
+                await carsCol.doc(id).delete();
+                showAlert(`"${name}" eliminado con éxito.`, true);
+            } catch (err) {
+                showAlert('Error al eliminar.', false);
+            }
         }
 
-        verificarSesion();
+        // ECONOMÍA & CAJA
+        let movimientos = JSON.parse(localStorage.getItem('palmero_eco') || '[]');
+        function updateEco() {
+            let ingresos = 0, gastos = 0;
+            const list = document.getElementById('ecoMovementsList');
+            list.innerHTML = '';
+
+            if (movimientos.length === 0) {
+                list.innerHTML = '<p class="text-slate-400 font-bold uppercase text-center py-6">No hay movimientos registrados.</p>';
+            } else {
+                movimientos.forEach((m, idx) => {
+                    if (m.tipo === 'ingreso') ingresos += m.importe;
+                    else gastos += m.importe;
+
+                    const row = document.createElement('div');
+                    row.className = "p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center";
+                    row.innerHTML = `
+            <div>
+              <span class="font-bold text-slate-800 uppercase">${m.concepto}</span>
+              <span class="text-slate-400 text-[10px] block">${m.fecha}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-black ${m.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">
+                ${m.tipo === 'ingreso' ? '+' : '-'}${m.importe.toLocaleString('es-ES')} €
+              </span>
+              <button onclick="removeEco(${idx})" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          `;
+                    list.appendChild(row);
+                });
+            }
+
+            document.getElementById('ecoIngresos').textContent = `${ingresos.toLocaleString('es-ES')} €`;
+            document.getElementById('ecoGastos').textContent = `${gastos.toLocaleString('es-ES')} €`;
+            document.getElementById('ecoBalance').textContent = `${(ingresos - gastos).toLocaleString('es-ES')} €`;
+            localStorage.setItem('palmero_eco', JSON.stringify(movimientos));
+        }
+
+        document.getElementById('ecoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const concepto = document.getElementById('ecoConcepto').value.trim();
+            const importe = Number(document.getElementById('ecoImporte').value);
+            const tipo = document.getElementById('ecoTipo').value;
+
+            movimientos.unshift({ concepto, importe, tipo, fecha: new Date().toLocaleDateString('es-ES') });
+            updateEco();
+            document.getElementById('ecoForm').reset();
+            showAlert('Movimiento de caja registrado.', true);
+        });
+
+        function removeEco(idx) {
+            movimientos.splice(idx, 1);
+            updateEco();
+        }
+        updateEco();
+
+        // CAMBIO DE CONTRASEÑA
+        document.getElementById('passForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const p1 = document.getElementById('newPass').value;
+            const p2 = document.getElementById('confirmPass').value;
+
+            if (p1 !== p2) {
+                showAlert('Las contraseñas no coinciden.', false);
+                return;
+            }
+            localStorage.setItem('palmero_admin_pass', p1);
+            showAlert('Contraseña actualizada correctamente.', true);
+            document.getElementById('passForm').reset();
+        });
+
+        function clearChatHistory() {
+            if (confirm('¿Vaciar los mensajes del chat?')) {
+                document.getElementById('chatMessagesList').innerHTML = '<p class="text-slate-400 font-bold uppercase text-center py-6">No hay mensajes pendientes.</p>';
+            }
+        }
+
+        function showAlert(msg, isSuccess) {
+            const b = document.getElementById('alertBox');
+            document.getElementById('alertMsg').textContent = msg;
+            b.className = `p-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-between shadow-sm ${isSuccess ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-red-100 text-red-800 border border-red-200'}`;
+            b.classList.remove('hidden');
+            setTimeout(() => b.classList.add('hidden'), 5000);
+        }
+        function hideAlert() { document.getElementById('alertBox').classList.add('hidden'); }
     </script>
 </body>
 
