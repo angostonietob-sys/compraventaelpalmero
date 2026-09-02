@@ -23,124 +23,129 @@
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
 
-  <!-- CABECERA PRINCIPAL -->
+  <!-- CABECERA PRINCIPAL (ADAPTADA A MÓVIL Y ORDENADOR) -->
   <header class="w-full bg-white border-t border-b border-slate-300 sticky top-0 z-40 shadow-sm">
-    <div class="w-full px-4 sm:px-8 py-3 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between gap-2 sm:gap-4">
+      
+      <!-- LOGO -->
       <div class="flex items-center shrink-0">
         <button type="button" onclick="mostrarSeccion('inicio')" class="cursor-pointer">
-          <img src="compraventa.jpg" alt="Logo El Palmero" class="h-16 sm:h-20 w-auto rounded-md border border-slate-200 object-contain">
+          <img src="compraventa.jpg" alt="Logo El Palmero" class="h-12 sm:h-16 md:h-20 w-auto rounded-md border border-slate-200 object-contain">
         </button>
       </div>
 
-      <div class="flex-1 text-center px-2">
-        <h1 class="font-palmero text-xl sm:text-2xl md:text-3xl text-red-600 uppercase tracking-tight transform -skew-x-6 leading-none">
+      <!-- TÍTULO CORPORATIVO -->
+      <div class="flex-1 text-center px-1 sm:px-2">
+        <h1 class="font-palmero text-base sm:text-2xl md:text-3xl text-red-600 uppercase tracking-tight transform -skew-x-6 leading-none">
           COMPRAVENTAS <span class="text-slate-900">EL PALMERO</span>
         </h1>
-        <p class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">
-          Vehículos de Ocasión · Nacionales y de Importación
+        <p class="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mt-0.5 sm:mt-1 truncate sm:whitespace-normal">
+          Vehículos de Ocasión · Cartagena
         </p>
       </div>
 
-      <nav class="flex items-center gap-4 sm:gap-8 shrink-0">
-        <button type="button" onclick="mostrarSeccion('inicio')" class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">INICIO</button>
-        <button type="button" onclick="mostrarSeccion('coches')" class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">COCHES</button>
-        <button type="button" onclick="mostrarSeccion('contacto')" class="text-black font-black text-xs sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer">CONTACTO</button>
+      <!-- BOTONES DE NAVEGACIÓN -->
+      <nav class="flex items-center gap-2 sm:gap-6 md:gap-8 shrink-0">
+        <button type="button" onclick="mostrarSeccion('inicio')" class="text-black font-black text-[11px] sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer px-1 py-1">INICIO</button>
+        <button type="button" onclick="mostrarSeccion('coches')" class="text-black font-black text-[11px] sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer px-1 py-1">COCHES</button>
+        <button type="button" onclick="mostrarSeccion('contacto')" class="text-black font-black text-[11px] sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer px-1 py-1">CONTACTO</button>
       </nav>
     </div>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-10">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
     
     <!-- 1. SECCIÓN INICIO -->
     <section id="sec-inicio" class="block space-y-6">
       <div class="max-w-4xl space-y-4">
-        <h2 class="text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Nuestra Historia</h2>
-        <p class="text-slate-600 leading-relaxed text-base">
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Nuestra Historia</h2>
+        <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
           Espacio reservado para relatar la historia y trayectoria de Compraventas El Palmero. Expertos en vehículos de ocasión revisados y garantizados para ofrecer la máxima confianza a nuestros clientes.
         </p>
       </div>
     </section>
 
     <!-- 2. SECCIÓN COCHES -->
-    <section id="sec-coches" class="hidden space-y-8">
-      <div class="border-b border-slate-200 pb-4 flex justify-between items-end">
+    <section id="sec-coches" class="hidden space-y-6 sm:space-y-8">
+      <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
         <div>
-          <h2 class="text-3xl font-black text-slate-900 uppercase">Vehículos Disponibles</h2>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase">Vehículos Disponibles</h2>
           <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Revisión completa y entrega inmediata</p>
         </div>
-        <span id="contador-stock" class="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-xl">0 Coches en Stock</span>
+        <span id="contador-stock" class="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-xl w-fit">0 Coches en Stock</span>
       </div>
 
-      <div id="grid-coches-publico" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+      <div id="grid-coches-publico" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"></div>
     </section>
 
     <!-- 3. SECCIÓN CONTACTO COMPLETA -->
-    <section id="sec-contacto" class="hidden space-y-8">
+    <section id="sec-contacto" class="hidden space-y-6 sm:space-y-8">
       <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-3xl font-black text-slate-900 uppercase">Contacto y Ubicación</h2>
-        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Estamos a tu disposición para asesorarte y concertar tu cita</p>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase">Contacto y Ubicación</h2>
+        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Visítanos en Cabezo Beaza o contáctanos directamente</p>
       </div>
 
       <!-- BLOQUE DE TARJETAS DE CONTACTO -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         
         <!-- TARJETA 1: TELÉFONOS DE CONTACTO -->
-        <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-6 flex flex-col justify-between">
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
           <div class="space-y-4">
             <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-2xl">
               📞
             </div>
             <div>
-              <h3 class="text-xl font-black text-slate-900 uppercase">Teléfonos Directos</h3>
+              <h3 class="text-lg sm:text-xl font-black text-slate-900 uppercase">Teléfonos Directos</h3>
               <p class="text-xs text-slate-500 font-medium mt-1">Llámanos o escríbenos directamente para consultar stock o citas.</p>
+            </div>
+
+            <!-- TELÉFONO JORGE (COCHES) -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Atención Ventas y Coches (Jorge)</span>
+              <a href="tel:688298944" class="text-lg font-black text-red-600 hover:text-red-700 transition block flex items-center gap-2">
+                <span>688 29 89 44</span>
+              </a>
             </div>
 
             <!-- TELÉFONO EMPRESA -->
             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Teléfono Principal / Empresa</span>
-              <a href="tel:699419202" class="text-lg font-black text-red-600 hover:text-red-700 transition block flex items-center gap-2">
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Teléfono Principal Empresa</span>
+              <a href="tel:699419202" class="text-lg font-black text-slate-900 hover:text-red-600 transition block flex items-center gap-2">
                 <span>699 41 92 02</span>
-              </a>
-            </div>
-
-            <!-- TELÉFONO JORGE -->
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Atención Personalizada (Jorge)</span>
-              <a href="tel:630100301" class="text-lg font-black text-slate-900 hover:text-red-600 transition block flex items-center gap-2">
-                <span>630 10 03 01</span>
               </a>
             </div>
           </div>
 
-          <div class="pt-2">
-            <a href="https://wa.me/34699419202" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
-              💬 Enviar WhatsApp Directo
+          <div class="pt-2 flex flex-col gap-2">
+            <a href="https://wa.me/34688298944" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
+              💬 WhatsApp Jorge (688 29 89 44)
             </a>
           </div>
         </div>
 
         <!-- TARJETA 2: DIRECCIÓN Y HORARIOS -->
-        <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-6 flex flex-col justify-between">
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
           <div class="space-y-4">
             <div class="w-12 h-12 bg-slate-100 text-slate-800 rounded-2xl flex items-center justify-center text-2xl">
               📍
             </div>
             <div>
-              <h3 class="text-xl font-black text-slate-900 uppercase">Nuestra Ubicación</h3>
-              <p class="text-xs text-slate-500 font-medium mt-1">Visita nuestras instalaciones y prueba tu próximo vehículo.</p>
+              <h3 class="text-lg sm:text-xl font-black text-slate-900 uppercase">Nuestra Ubicación</h3>
+              <p class="text-xs text-slate-500 font-medium mt-1">Ven a conocer nuestras instalaciones y probar el coche que buscas.</p>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
               <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Dirección</span>
               <p class="text-sm font-bold text-slate-800 leading-snug">
-                Calle Marcona, 9d<br>
+                Avenida Tito Didio, 7E<br>
+                Pol. Ind. Cabezo Beaza<br>
                 Cartagena (Región de Murcia)
               </p>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Horario de Apertura</span>
+              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Horario Comercial</span>
               <p class="text-xs font-bold text-slate-800">Lunes a Sábado:</p>
               <p class="text-xs text-slate-600">Mañanas: 8:00 a 14:00</p>
               <p class="text-xs text-slate-600">Tardes: 15:00 a 19:00</p>
@@ -148,21 +153,21 @@
           </div>
 
           <div class="pt-2">
-            <a href="https://maps.google.com/?q=Calle+Marcona+9d+Cartagena+Murcia" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-red-600 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
-              🗺️ Cómo Llegar (Google Maps)
+            <a href="https://maps.google.com/?q=Avenida+Tito+Didio+7E+Poligono+Industrial+Cabezo+Beaza+Cartagena" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-red-600 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
+              🗺️ Abrir en Google Maps
             </a>
           </div>
         </div>
 
-        <!-- TARJETA 3: MAPA INTERACTIVO -->
+        <!-- TARJETA 3: MAPA INTERACTIVO CABEZO BEAZA -->
         <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm flex flex-col">
           <div class="p-6 border-b border-slate-100 bg-white">
-            <h3 class="text-base font-black text-slate-900 uppercase">Mapa Interactivo</h3>
-            <p class="text-xs text-slate-500 font-medium">Encuéntranos fácilmente en Cartagena</p>
+            <h3 class="text-base font-black text-slate-900 uppercase">Mapa de Ubicación</h3>
+            <p class="text-xs text-slate-500 font-medium">Pol. Ind. Cabezo Beaza · Cartagena</p>
           </div>
           <div class="flex-1 min-h-[300px] w-full bg-slate-100">
             <iframe 
-              src="https://maps.google.com/maps?q=Calle%20Marcona,%209d,%20Cartagena,%20Murcia&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+              src="https://maps.google.com/maps?q=Avenida%20Tito%20Didio%207E%20Cabezo%20Beaza%20Cartagena&t=&z=16&ie=UTF8&iwloc=&output=embed" 
               class="w-full h-full min-h-[300px] border-0" 
               allowfullscreen="" 
               loading="lazy" 
@@ -175,7 +180,7 @@
     </section>
   </main>
 
-  <!-- FOOTER SALMÓN OSCURO LIMPIO -->
+  <!-- FOOTER SALMÓN OSCURO LIMPIO CON NUEVA DIRECCIÓN -->
   <footer class="w-full bg-salmon-oscuro text-white mt-auto shadow-2xl border-t-2 border-white/20">
     <div class="max-w-7xl mx-auto px-6 py-12">
       
@@ -198,15 +203,16 @@
         <div class="space-y-2.5">
           <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">📍 Dónde Estamos</h3>
           <p class="text-xs text-white/95 leading-relaxed font-semibold">
-            Calle Marcona, 9d<br>
-            Cartagena (Región de Murcia)
+            Av. Tito Didio, 7E<br>
+            Pol. Ind. Cabezo Beaza<br>
+            Cartagena (Murcia)
           </p>
           <div class="pt-1 flex flex-col gap-1.5">
-            <a href="tel:699419202" class="inline-flex items-center gap-2 bg-white text-[#C85A5A] font-black px-3 py-1.5 rounded-lg text-xs hover:bg-slate-900 hover:text-white transition shadow w-fit">
-              📞 Empresa: 699 41 92 02
+            <a href="tel:688298944" class="inline-flex items-center gap-2 bg-white text-[#C85A5A] font-black px-3 py-1.5 rounded-lg text-xs hover:bg-slate-900 hover:text-white transition shadow w-fit">
+              📞 Jorge: 688 29 89 44
             </a>
-            <a href="tel:630100301" class="inline-flex items-center gap-2 bg-white/20 text-white font-black px-3 py-1.5 rounded-lg text-xs hover:bg-white hover:text-[#C85A5A] transition shadow w-fit border border-white/40">
-              📞 Jorge: 630 10 03 01
+            <a href="tel:699419202" class="inline-flex items-center gap-2 bg-white/20 text-white font-black px-3 py-1.5 rounded-lg text-xs hover:bg-white hover:text-[#C85A5A] transition shadow w-fit border border-white/40">
+              📞 Empresa: 699 41 92 02
             </a>
           </div>
         </div>
