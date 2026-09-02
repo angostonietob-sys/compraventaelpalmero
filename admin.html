@@ -36,7 +36,7 @@
 
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex antialiased">
 
-    <!-- PANTALLA DE LOGIN -->
+    <!-- ==================== PANTALLA DE LOGIN ==================== -->
     <div id="loginScreen" class="fixed inset-0 bg-[#0f172a] z-50 flex items-center justify-center p-4">
         <div class="bg-white max-w-md w-full rounded-2xl shadow-2xl p-8 border border-slate-700/50 space-y-6">
 
@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <!-- CONTENIDO DEL PANEL -->
+    <!-- ==================== PANEL PRINCIPAL ==================== -->
     <div id="panelContent" class="hidden w-full min-h-screen flex">
 
         <!-- SIDEBAR -->
@@ -145,10 +145,10 @@
             </div>
         </aside>
 
-        <!-- ÁREA PRINCIPAL -->
+        <!-- ÁREA DE CONTENIDO -->
         <div class="flex-1 flex flex-col min-w-0">
 
-            <!-- HEADER -->
+            <!-- CABECERA -->
             <header
                 class="bg-[#152e4d] text-white border-b border-slate-700 py-3.5 px-6 sm:px-8 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
@@ -177,7 +177,7 @@
                 </div>
             </div>
 
-            <!-- PESTAÑAS -->
+            <!-- MAIN TABS -->
             <main class="flex-grow p-6 sm:p-8">
 
                 <!-- 1. INVENTARIO -->
@@ -190,8 +190,8 @@
                                     class="text-base font-black text-[#152e4d] uppercase tracking-tight flex items-center gap-2">
                                     <i class="fa-solid fa-circle-plus text-[#e03a3a]"></i> AÑADIR VEHÍCULO AL STOCK
                                 </h2>
-                                <p class="text-[11px] text-slate-400 font-semibold uppercase">Publicación instantánea en
-                                    la web</p>
+                                <p class="text-[11px] text-slate-400 font-semibold uppercase">Sube el coche y sincroniza
+                                    con economía</p>
                             </div>
 
                             <form id="carForm" class="space-y-4 text-xs">
@@ -240,8 +240,8 @@
                                 <div
                                     class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50/50 hover:bg-slate-50 transition">
                                     <i class="fa-solid fa-folder-open text-2xl text-amber-500 mb-2"></i>
-                                    <div class="font-black text-slate-700 uppercase text-[11px]">Selecciona las fotos y
-                                        el vídeo</div>
+                                    <div class="font-black text-slate-700 uppercase text-[11px]">Selecciona las 14 fotos
+                                        del coche</div>
                                     <input type="file" id="carFiles" accept="image/*" multiple
                                         class="mt-2 text-[11px] text-slate-500 w-full file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#152e4d] file:text-white cursor-pointer" />
                                 </div>
@@ -249,7 +249,7 @@
                                 <button type="submit" id="saveCarBtn"
                                     class="w-full bg-[#e03a3a] hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow">
                                     <i class="fa-solid fa-plus"></i>
-                                    <span>Publicar Coche en la Web</span>
+                                    <span>Publicar Coche y Sincronizar Caja</span>
                                 </button>
                             </form>
                         </div>
@@ -281,7 +281,7 @@
                     </div>
                 </section>
 
-                <!-- 2. CHAT -->
+                <!-- 2. MENSAJES CHAT (IA) -->
                 <section id="tab-chat" class="hidden space-y-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -319,24 +319,40 @@
                     </div>
                 </section>
 
-                <!-- 3. ECONOMÍA -->
+                <!-- 3. ECONOMÍA & CAJA (CONECTADO A LOS COCHES Y FIRESTORE) -->
                 <section id="tab-economy" class="hidden space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                            <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Ingresos Totales
-                            </div>
-                            <div id="ecoIngresos" class="text-2xl font-black text-emerald-600 mt-1">0 €</div>
+                            <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Valor Stock
+                                Activo</div>
+                            <div id="ecoStockTotal" class="text-2xl font-black text-blue-600 mt-1">0 €</div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Suma total de coches en venta
+                            </p>
                         </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Ingresos /
+                                Ventas</div>
+                            <div id="ecoIngresos" class="text-2xl font-black text-emerald-600 mt-1">0 €</div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Cobros y ventas cerradas</p>
+                        </div>
+
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Gastos / Compras
                             </div>
                             <div id="ecoGastos" class="text-2xl font-black text-red-600 mt-1">0 €</div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Talleres, compras y gestiones
+                            </p>
                         </div>
+
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                             <div class="text-[11px] font-black text-slate-400 uppercase tracking-wider">Balance Neto en
                                 Caja</div>
                             <div id="ecoBalance" class="text-2xl font-black text-[#152e4d] mt-1">0 €</div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Beneficio real en caja</p>
                         </div>
+
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -347,13 +363,13 @@
                                     <label class="block font-bold text-slate-700 uppercase mb-1">Concepto</label>
                                     <input type="text" id="ecoConcepto" required
                                         placeholder="Ej: Venta Opel Corsa o Taller revisión"
-                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg" />
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-medium" />
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <label class="block font-bold text-slate-700 uppercase mb-1">Importe (€)</label>
                                         <input type="number" id="ecoImporte" required placeholder="Ej: 9500"
-                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg" />
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-medium" />
                                     </div>
                                     <div>
                                         <label class="block font-bold text-slate-700 uppercase mb-1">Tipo</label>
@@ -365,17 +381,21 @@
                                     </div>
                                 </div>
                                 <button type="submit"
-                                    class="w-full bg-[#152e4d] hover:bg-slate-800 text-white font-black py-3 rounded-xl uppercase tracking-wider">
-                                    Registrar Movimiento
+                                    class="w-full bg-[#152e4d] hover:bg-slate-800 text-white font-black py-3 rounded-xl uppercase tracking-wider shadow">
+                                    Registrar Movimiento en la Nube
                                 </button>
                             </form>
                         </div>
 
                         <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                            <h3 class="text-sm font-black text-[#152e4d] uppercase">Histórico de Movimientos</h3>
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                                <h3 class="text-sm font-black text-[#152e4d] uppercase">Histórico de Movimientos y
+                                    Entradas</h3>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase">Sincronizado</span>
+                            </div>
                             <div id="ecoMovementsList" class="space-y-2 text-xs">
-                                <p class="text-slate-400 font-bold uppercase text-center py-6">No hay movimientos
-                                    registrados.</p>
+                                <p class="text-slate-400 font-bold uppercase text-center py-6">Cargando apuntes de
+                                    economía...</p>
                             </div>
                         </div>
                     </div>
@@ -418,7 +438,7 @@
 
     </div>
 
-    <!-- FIREBASE Y LÓGICA -->
+    <!-- FIREBASE Y LÓGICA COMPLETA -->
     <script>
         const AUTH_USER = "JORGEGARCIA";
         const DEFAULT_PASS = "BBBB";
@@ -470,6 +490,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const carsCol = db.collection('coches');
+        const ecoCol = db.collection('economia');
 
         function switchTab(tabName) {
             ['inventory', 'chat', 'economy', 'security'].forEach(t => {
@@ -483,11 +504,13 @@
             activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left bg-[#e03a3a] text-white shadow";
         }
 
-        // LISTADO EN TIEMPO REAL
+        // 1. INVENTARIO EN TIEMPO REAL & CÁLCULO DEL VALOR TOTAL DEL STOCK
         carsCol.onSnapshot((snapshot) => {
             document.getElementById('stockCount').textContent = snapshot.size;
             const listContainer = document.getElementById('carsListContainer');
             listContainer.innerHTML = '';
+
+            let valorTotalStock = 0;
 
             if (snapshot.empty) {
                 listContainer.innerHTML = `
@@ -496,47 +519,52 @@
             <p>No hay coches en stock.</p>
           </div>
         `;
-                return;
-            }
+            } else {
+                snapshot.forEach(doc => {
+                    const car = doc.data();
+                    const price = Number(car.price || 0);
+                    valorTotalStock += price;
 
-            snapshot.forEach(doc => {
-                const car = doc.data();
-                const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
-                const imgUrl = (Array.isArray(car.images) && car.images.length > 0) ? car.images[0] : (car.image || defaultImg);
-                const fotosCount = Array.isArray(car.images) ? car.images.length : (car.image ? 1 : 0);
-                const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo';
+                    const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
+                    const imgUrl = (Array.isArray(car.images) && car.images.length > 0) ? car.images[0] : (car.image || defaultImg);
+                    const fotosCount = Array.isArray(car.images) ? car.images.length : (car.image ? 1 : 0);
+                    const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo';
 
-                const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4";
-                item.innerHTML = `
-          <div class="flex items-center gap-4 w-full sm:w-auto">
-            <div class="relative w-24 h-16 flex-shrink-0">
-              <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover rounded-lg border border-slate-200" onerror="this.src='${defaultImg}'" />
-              <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">${fotosCount} Fotos</span>
-            </div>
-            <div>
-              <div class="text-sm font-black text-slate-900 uppercase">${title}</div>
-              <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500">
-                <span class="text-[#e03a3a] font-black">${Number(car.price || 0).toLocaleString('es-ES')} €</span>
-                <span>·</span>
-                <span>${car.year || 'N/D'}</span>
-                <span>·</span>
-                <span>${Number(car.km || 0).toLocaleString('es-ES')} km</span>
-                <span>·</span>
-                <span>${car.fuel || 'Diesel'}</span>
+                    const item = document.createElement('div');
+                    item.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4";
+                    item.innerHTML = `
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+              <div class="relative w-24 h-16 flex-shrink-0">
+                <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover rounded-lg border border-slate-200" onerror="this.src='${defaultImg}'" />
+                <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">${fotosCount} Fotos</span>
+              </div>
+              <div>
+                <div class="text-sm font-black text-slate-900 uppercase">${title}</div>
+                <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500">
+                  <span class="text-[#e03a3a] font-black">${price.toLocaleString('es-ES')} €</span>
+                  <span>·</span>
+                  <span>${car.year || 'N/D'}</span>
+                  <span>·</span>
+                  <span>${Number(car.km || 0).toLocaleString('es-ES')} km</span>
+                  <span>·</span>
+                  <span>${car.fuel || 'Diesel'}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <button onclick="deleteCar('${doc.id}', '${title}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-black text-xs uppercase px-4 py-2 rounded-lg transition flex items-center gap-1.5 self-end sm:self-center">
-            <i class="fa-solid fa-trash-can"></i>
-            <span>Eliminar</span>
-          </button>
-        `;
-                listContainer.appendChild(item);
-            });
+            <button onclick="deleteCar('${doc.id}', '${title}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-black text-xs uppercase px-4 py-2 rounded-lg transition flex items-center gap-1.5 self-end sm:self-center">
+              <i class="fa-solid fa-trash-can"></i>
+              <span>Eliminar</span>
+            </button>
+          `;
+                    listContainer.appendChild(item);
+                });
+            }
+
+            // Actualizar tarjeta de "Valor Stock Activo" en Economía
+            document.getElementById('ecoStockTotal').textContent = `${valorTotalStock.toLocaleString('es-ES')} €`;
         });
 
-        // COMPRESOR DE IMÁGENES AL VUELO (OPTIMIZADO PARA GRUPOS DE 14 FOTOS)
+        // COMPRESOR DE IMÁGENES AL VUELO
         function comprimirFoto(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -565,7 +593,7 @@
             });
         }
 
-        // SUBIR VEHÍCULO CON SUS 14 FOTOS
+        // 2. SUBIR COCHE Y AUTO-REGISTRAR EN ECONOMÍA
         document.getElementById('carForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const saveBtn = document.getElementById('saveCarBtn');
@@ -585,28 +613,44 @@
                 }
             }
 
-            saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Guardando en la nube...';
+            saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Guardando coche y sincronizando caja...';
+
+            const title = document.getElementById('carTitle').value.trim();
+            const price = Number(document.getElementById('carPrice').value);
+            const year = Number(document.getElementById('carYear').value);
+            const km = Number(document.getElementById('carKm').value);
+            const fuel = document.getElementById('carFuel').value;
 
             const newCar = {
-                title: document.getElementById('carTitle').value.trim(),
-                price: Number(document.getElementById('carPrice').value),
-                year: Number(document.getElementById('carYear').value),
-                km: Number(document.getElementById('carKm').value),
-                fuel: document.getElementById('carFuel').value,
+                title,
+                price,
+                year,
+                km,
+                fuel,
                 images: fotosProcesadas,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
             try {
                 await carsCol.add(newCar);
+
+                // Auto-registro en Economía en Firestore
+                await ecoCol.add({
+                    concepto: `Entrada a Stock: ${title}`,
+                    importe: price,
+                    tipo: 'ingreso',
+                    fecha: new Date().toLocaleDateString('es-ES'),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
                 document.getElementById('carForm').reset();
-                showAlert(`¡Coche y sus ${fotosProcesadas.length} fotos publicados con éxito!`, true);
+                showAlert(`¡Coche y sus ${fotosProcesadas.length} fotos publicados! Apunte sumado a Economía.`, true);
             } catch (err) {
                 console.error(err);
                 showAlert('Error al subir el vehículo a la base de datos.', false);
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Publicar Coche en la Web';
+                saveBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Publicar Coche y Sincronizar Caja';
             }
         });
 
@@ -620,32 +664,39 @@
             }
         }
 
-        // ECONOMÍA & CAJA
-        let movimientos = JSON.parse(localStorage.getItem('palmero_eco') || '[]');
-        function updateEco() {
+        // 3. SINCRONIZACIÓN DE LA PESTAÑA ECONOMÍA CON FIRESTORE
+        ecoCol.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
             let ingresos = 0, gastos = 0;
             const list = document.getElementById('ecoMovementsList');
             list.innerHTML = '';
 
-            if (movimientos.length === 0) {
+            if (snapshot.empty) {
                 list.innerHTML = '<p class="text-slate-400 font-bold uppercase text-center py-6">No hay movimientos registrados.</p>';
             } else {
-                movimientos.forEach((m, idx) => {
-                    if (m.tipo === 'ingreso') ingresos += m.importe;
-                    else gastos += m.importe;
+                snapshot.forEach(doc => {
+                    const m = doc.data();
+                    const importe = Number(m.importe || 0);
+
+                    if (m.tipo === 'ingreso') {
+                        ingresos += importe;
+                    } else {
+                        gastos += importe;
+                    }
 
                     const row = document.createElement('div');
                     row.className = "p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center";
                     row.innerHTML = `
             <div>
-              <span class="font-bold text-slate-800 uppercase">${m.concepto}</span>
-              <span class="text-slate-400 text-[10px] block">${m.fecha}</span>
+              <span class="font-bold text-slate-800 uppercase">${m.concepto || 'Movimiento'}</span>
+              <span class="text-slate-400 text-[10px] block">${m.fecha || 'Reciente'}</span>
             </div>
             <div class="flex items-center gap-3">
               <span class="font-black ${m.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">
-                ${m.tipo === 'ingreso' ? '+' : '-'}${m.importe.toLocaleString('es-ES')} €
+                ${m.tipo === 'ingreso' ? '+' : '-'}${importe.toLocaleString('es-ES')} €
               </span>
-              <button onclick="removeEco(${idx})" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark"></i></button>
+              <button onclick="removeEcoDoc('${doc.id}')" class="text-slate-400 hover:text-red-500 transition">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
             </div>
           `;
                     list.appendChild(row);
@@ -655,28 +706,41 @@
             document.getElementById('ecoIngresos').textContent = `${ingresos.toLocaleString('es-ES')} €`;
             document.getElementById('ecoGastos').textContent = `${gastos.toLocaleString('es-ES')} €`;
             document.getElementById('ecoBalance').textContent = `${(ingresos - gastos).toLocaleString('es-ES')} €`;
-            localStorage.setItem('palmero_eco', JSON.stringify(movimientos));
-        }
+        });
 
-        document.getElementById('ecoForm').addEventListener('submit', (e) => {
+        // Formulario manual de ingresos/gastos
+        document.getElementById('ecoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const concepto = document.getElementById('ecoConcepto').value.trim();
             const importe = Number(document.getElementById('ecoImporte').value);
             const tipo = document.getElementById('ecoTipo').value;
 
-            movimientos.unshift({ concepto, importe, tipo, fecha: new Date().toLocaleDateString('es-ES') });
-            updateEco();
-            document.getElementById('ecoForm').reset();
-            showAlert('Movimiento de caja registrado.', true);
+            try {
+                await ecoCol.add({
+                    concepto,
+                    importe,
+                    tipo,
+                    fecha: new Date().toLocaleDateString('es-ES'),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('ecoForm').reset();
+                showAlert('Movimiento registrado en la nube.', true);
+            } catch (err) {
+                showAlert('Error al registrar movimiento.', false);
+            }
         });
 
-        function removeEco(idx) {
-            movimientos.splice(idx, 1);
-            updateEco();
+        async function removeEcoDoc(id) {
+            if (!confirm('¿Eliminar este apunte contable?')) return;
+            try {
+                await ecoCol.doc(id).delete();
+                showAlert('Apunte eliminado.', true);
+            } catch (err) {
+                showAlert('Error al eliminar el apunte.', false);
+            }
         }
-        updateEco();
 
-        // CAMBIO DE CONTRASEÑA
+        // 4. SEGURIDAD Y CLAVE
         document.getElementById('passForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const p1 = document.getElementById('newPass').value;
