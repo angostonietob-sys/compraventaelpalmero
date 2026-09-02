@@ -1,394 +1,385 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compraventas El Palmero</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compraventas El Palmero - Panel y Catálogo de Vehículos</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,800;0,900;1,900&display=swap" rel="stylesheet">
-  <style>
-    * { font-family: system-ui, -apple-system, sans-serif; }
-    .font-palmero {
-      font-family: 'Montserrat', sans-serif;
-      font-style: italic;
-      font-weight: 900;
-      letter-spacing: -0.03em;
+
+  <!-- Font Awesome para Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- SDKs de Firebase (Versión Web Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            palmero: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
     }
-    .bg-salmon-oscuro {
-      background-color: #C85A5A;
-    }
-  </style>
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-  <!-- CABECERA PRINCIPAL (ADAPTADA A MÓVIL Y ORDENADOR) -->
-  <header class="w-full bg-white border-t border-b border-slate-300 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between gap-2 sm:gap-4">
-      
-      <!-- LOGO -->
-      <div class="flex items-center shrink-0">
-        <button type="button" onclick="mostrarSeccion('inicio')" class="cursor-pointer">
-          <img src="compraventa.jpg" alt="Logo El Palmero" class="h-12 sm:h-16 md:h-20 w-auto rounded-md border border-slate-200 object-contain">
-        </button>
+  <!-- CABECERA PRINCIPAL -->
+  <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="bg-palmero-600 p-2.5 rounded-xl shadow-inner text-white">
+          <i class="fa-solid fa-car-side text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white uppercase">Compraventas El Palmero</h1>
+          <p class="text-xs text-slate-400">Gestión y Catálogo de Vehículos</p>
+        </div>
       </div>
 
-      <!-- TÍTULO CORPORATIVO -->
-      <div class="flex-1 text-center px-1 sm:px-2">
-        <h1 class="font-palmero text-base sm:text-2xl md:text-3xl text-red-600 uppercase tracking-tight transform -skew-x-6 leading-none">
-          COMPRAVENTAS <span class="text-slate-900">EL PALMERO</span>
-        </h1>
-        <p class="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mt-0.5 sm:mt-1 truncate sm:whitespace-normal">
-          Vehículos de Ocasión · Cartagena
-        </p>
-      </div>
+      <!-- Accesos Rápidos de Contacto y Ubicación -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+        <a href="https://maps.google.com/?q=Avenida+Tito+Didio+7E+Pol+Ind+Cabezo+Beaza+Cartagena+Murcia" target="_blank" class="flex items-center gap-1.5 bg-slate-700/70 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-600 transition text-slate-200">
+          <i class="fa-solid fa-location-dot text-red-400"></i>
+          <span class="hidden md:inline">Cabezo Beaza, Cartagena</span>
+          <span class="md:hidden">Ubicación</span>
+        </a>
 
-      <!-- BOTONES DE NAVEGACIÓN -->
-      <nav class="flex items-center gap-2 sm:gap-6 md:gap-8 shrink-0">
-        <button type="button" onclick="mostrarSeccion('inicio')" class="text-black font-black text-[11px] sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer px-1 py-1">INICIO</button>
-        <button type="button" onclick="mostrarSeccion('coches')" class="text-black font-black text-[11px] sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer px-1 py-1">COCHES</button>
-        <button type="button" onclick="mostrarSeccion('contacto')" class="text-black font-black text-[11px] sm:text-sm md:text-base uppercase tracking-wider hover:text-red-600 transition cursor-pointer px-1 py-1">CONTACTO</button>
-      </nav>
+        <a href="https://wa.me/34688298944" target="_blank" class="flex items-center gap-1.5 bg-emerald-700/80 hover:bg-emerald-600 px-3 py-1.5 rounded-lg transition text-white font-medium">
+          <i class="fa-brands fa-whatsapp text-emerald-300 text-base"></i>
+          <span>Ventas: 688 29 89 44</span>
+        </a>
+
+        <a href="tel:699419202" class="flex items-center gap-1.5 bg-slate-700/70 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-600 transition text-slate-200">
+          <i class="fa-solid fa-phone text-blue-400"></i>
+          <span>Empresa: 699 41 92 02</span>
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
     
-    <!-- 1. SECCIÓN INICIO -->
-    <section id="sec-inicio" class="block space-y-6">
-      <div class="max-w-4xl space-y-4">
-        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase border-b-2 border-red-600 pb-2 inline-block">Nuestra Historia</h2>
-        <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
-          Espacio reservado para relatar la historia y trayectoria de Compraventas El Palmero. Expertos en vehículos de ocasión revisados y garantizados para ofrecer la máxima confianza a nuestros clientes.
-        </p>
-      </div>
-    </section>
-
-    <!-- 2. SECCIÓN COCHES -->
-    <section id="sec-coches" class="hidden space-y-6 sm:space-y-8">
-      <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
-        <div>
-          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase">Vehículos Disponibles</h2>
-          <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Revisión completa y entrega inmediata</p>
-        </div>
-        <span id="contador-stock" class="text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-xl w-fit">0 Coches en Stock</span>
+    <!-- BARRA DE ACCIÓN: BUSCADOR Y BOTÓN AÑADIR -->
+    <div class="bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-700 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="relative w-full md:w-96">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input type="text" id="searchInput" placeholder="Buscar por marca, modelo o combustible..." 
+               class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-palmero-500 transition text-white placeholder-slate-500" />
       </div>
 
-      <div id="grid-coches-publico" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"></div>
-    </section>
-
-    <!-- 3. SECCIÓN CONTACTO COMPLETA -->
-    <section id="sec-contacto" class="hidden space-y-6 sm:space-y-8">
-      <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase">Contacto y Ubicación</h2>
-        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Visítanos en Cabezo Beaza o contáctanos directamente</p>
+      <div class="flex items-center justify-between w-full md:w-auto gap-4">
+        <div class="text-sm text-slate-400">
+          Vehículos: <span id="totalCount" class="font-bold text-white">0</span>
+        </div>
+        <button onclick="openModal()" class="bg-palmero-600 hover:bg-palmero-500 text-white font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 transition shadow-lg shadow-palmero-900/30">
+          <i class="fa-solid fa-plus"></i>
+          <span>Añadir Vehículo</span>
+        </button>
       </div>
+    </div>
 
-      <!-- BLOQUE DE TARJETAS DE CONTACTO -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-        
-        <!-- TARJETA 1: TELÉFONOS DE CONTACTO -->
-        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-2xl">
-              📞
-            </div>
-            <div>
-              <h3 class="text-lg sm:text-xl font-black text-slate-900 uppercase">Teléfonos Directos</h3>
-              <p class="text-xs text-slate-500 font-medium mt-1">Llámanos o escríbenos directamente para consultar stock o citas.</p>
-            </div>
+    <!-- ESTADO DE CARGA Y ALERTA SIN VEHÍCULOS -->
+    <div id="loadingState" class="text-center py-16">
+      <i class="fa-solid fa-circle-notch fa-spin text-4xl text-palmero-500 mb-3"></i>
+      <p class="text-slate-400 text-sm">Conectando con la base de datos...</p>
+    </div>
 
-            <!-- TELÉFONO JORGE (COCHES) -->
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Atención Ventas y Coches (Jorge)</span>
-              <a href="tel:688298944" class="text-lg font-black text-red-600 hover:text-red-700 transition block flex items-center gap-2">
-                <span>688 29 89 44</span>
-              </a>
-            </div>
+    <div id="emptyState" class="hidden text-center py-16 bg-slate-800/40 border border-dashed border-slate-700 rounded-2xl">
+      <i class="fa-solid fa-car-burst text-4xl text-slate-600 mb-3"></i>
+      <h3 class="text-lg font-semibold text-slate-300">No hay vehículos registrados</h3>
+      <p class="text-slate-500 text-sm mt-1">Haz clic en "Añadir Vehículo" para registrar tu primer coche.</p>
+    </div>
 
-            <!-- TELÉFONO EMPRESA -->
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Teléfono Principal Empresa</span>
-              <a href="tel:699419202" class="text-lg font-black text-slate-900 hover:text-red-600 transition block flex items-center gap-2">
-                <span>699 41 92 02</span>
-              </a>
-            </div>
-          </div>
-
-          <div class="pt-2 flex flex-col gap-2">
-            <a href="https://wa.me/34688298944" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
-              💬 WhatsApp Jorge (688 29 89 44)
-            </a>
-          </div>
-        </div>
-
-        <!-- TARJETA 2: DIRECCIÓN Y HORARIOS -->
-        <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="w-12 h-12 bg-slate-100 text-slate-800 rounded-2xl flex items-center justify-center text-2xl">
-              📍
-            </div>
-            <div>
-              <h3 class="text-lg sm:text-xl font-black text-slate-900 uppercase">Nuestra Ubicación</h3>
-              <p class="text-xs text-slate-500 font-medium mt-1">Ven a conocer nuestras instalaciones y probar el coche que buscas.</p>
-            </div>
-
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Dirección</span>
-              <p class="text-sm font-bold text-slate-800 leading-snug">
-                Avenida Tito Didio, 7E<br>
-                Pol. Ind. Cabezo Beaza<br>
-                Cartagena (Región de Murcia)
-              </p>
-            </div>
-
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1">
-              <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Horario Comercial</span>
-              <p class="text-xs font-bold text-slate-800">Lunes a Sábado:</p>
-              <p class="text-xs text-slate-600">Mañanas: 8:00 a 14:00</p>
-              <p class="text-xs text-slate-600">Tardes: 15:00 a 19:00</p>
-            </div>
-          </div>
-
-          <div class="pt-2">
-            <a href="https://maps.google.com/?q=Avenida+Tito+Didio+7E+Poligono+Industrial+Cabezo+Beaza+Cartagena" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-red-600 text-white font-black py-3 rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
-              🗺️ Abrir en Google Maps
-            </a>
-          </div>
-        </div>
-
-        <!-- TARJETA 3: MAPA INTERACTIVO CABEZO BEAZA -->
-        <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm flex flex-col">
-          <div class="p-6 border-b border-slate-100 bg-white">
-            <h3 class="text-base font-black text-slate-900 uppercase">Mapa de Ubicación</h3>
-            <p class="text-xs text-slate-500 font-medium">Pol. Ind. Cabezo Beaza · Cartagena</p>
-          </div>
-          <div class="flex-1 min-h-[300px] w-full bg-slate-100">
-            <iframe 
-              src="https://maps.google.com/maps?q=Avenida%20Tito%20Didio%207E%20Cabezo%20Beaza%20Cartagena&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-              class="w-full h-full min-h-[300px] border-0" 
-              allowfullscreen="" 
-              loading="lazy" 
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-        </div>
-
-      </div>
-    </section>
+    <!-- LISTADO DE VEHÍCULOS (GRID RESPONSIVE) -->
+    <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </main>
 
-  <!-- FOOTER SALMÓN OSCURO LIMPIO CON NUEVA DIRECCIÓN -->
-  <footer class="w-full bg-salmon-oscuro text-white mt-auto shadow-2xl border-t-2 border-white/20">
-    <div class="max-w-7xl mx-auto px-6 py-12">
-      
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/20">
-        
-        <!-- COL 1: LOGO E IDENTIDAD -->
-        <div class="space-y-3 md:col-span-1">
-          <div class="flex items-center gap-3">
-            <img src="compraventa.jpg" alt="Logo El Palmero" class="h-12 w-auto rounded border border-white/30 bg-white object-contain p-0.5">
-            <span class="font-palmero text-lg text-white uppercase tracking-tight leading-tight">
-              COMPRAVENTAS <br><span class="text-white drop-shadow-sm">EL PALMERO</span>
-            </span>
-          </div>
-          <p class="text-xs text-white/90 font-medium leading-relaxed">
-            Vehículos de ocasión, nacionales y de importación revisados y garantizados.
-          </p>
-        </div>
-
-        <!-- COL 2: UBICACIÓN Y TELÉFONOS -->
-        <div class="space-y-2.5">
-          <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">📍 Dónde Estamos</h3>
-          <p class="text-xs text-white/95 leading-relaxed font-semibold">
-            Av. Tito Didio, 7E<br>
-            Pol. Ind. Cabezo Beaza<br>
-            Cartagena (Murcia)
-          </p>
-          <div class="pt-1 flex flex-col gap-1.5">
-            <a href="tel:688298944" class="inline-flex items-center gap-2 bg-white text-[#C85A5A] font-black px-3 py-1.5 rounded-lg text-xs hover:bg-slate-900 hover:text-white transition shadow w-fit">
-              📞 Jorge: 688 29 89 44
-            </a>
-            <a href="tel:699419202" class="inline-flex items-center gap-2 bg-white/20 text-white font-black px-3 py-1.5 rounded-lg text-xs hover:bg-white hover:text-[#C85A5A] transition shadow w-fit border border-white/40">
-              📞 Empresa: 699 41 92 02
-            </a>
-          </div>
-        </div>
-
-        <!-- COL 3: HORARIOS -->
-        <div class="space-y-2.5">
-          <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">🕒 Horario de Atención</h3>
-          <div class="text-xs text-white/95 space-y-1 font-semibold">
-            <p><span class="underline">Lunes a Sábado:</span></p>
-            <p class="text-white/90 font-medium">Mañanas: 8:00 a 14:00</p>
-            <p class="text-white/90 font-medium">Tardes: 15:00 a 19:00</p>
-          </div>
-        </div>
-
-        <!-- COL 4: NAVEGACIÓN RÁPIDA -->
-        <div class="space-y-2.5">
-          <h3 class="text-xs font-black uppercase tracking-wider text-white border-b border-white/30 pb-1 inline-block">🔗 Navegación</h3>
-          <div class="flex flex-col gap-2 text-xs font-bold text-white/90">
-            <button type="button" onclick="mostrarSeccion('inicio')" class="text-left hover:text-slate-900 transition cursor-pointer">› Inicio</button>
-            <button type="button" onclick="mostrarSeccion('coches')" class="text-left hover:text-slate-900 transition cursor-pointer">› Coches</button>
-            <button type="button" onclick="mostrarSeccion('contacto')" class="text-left hover:text-slate-900 transition cursor-pointer">› Contacto</button>
-          </div>
-        </div>
-
+  <!-- MODAL: FORMULARIO AÑADIR / EDITAR VEHÍCULO -->
+  <div id="carModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-fade-in">
+      <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-lg font-bold text-white">Añadir Nuevo Vehículo</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
       </div>
 
-      <!-- COPYRIGHT -->
-      <div class="pt-6 text-center text-xs text-white/90 font-semibold">
-        <p>© 2026 compraventaelpalmero todos los derechos reservados.</p>
-      </div>
+      <form id="carForm" class="p-6 space-y-4">
+        <input type="hidden" id="carId" />
 
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Marca *</label>
+            <input type="text" id="carBrand" required placeholder="Ej. Audi" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Modelo *</label>
+            <input type="text" id="carModel" required placeholder="Ej. A4 2.0 TDI" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Año *</label>
+            <input type="number" id="carYear" required placeholder="2018" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Kilómetros *</label>
+            <input type="number" id="carKm" required placeholder="120000" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Precio (€) *</label>
+            <input type="number" id="carPrice" required placeholder="14500" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500 font-bold text-palmero-400" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Combustible</label>
+            <select id="carFuel" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500">
+              <option value="Diésel">Diésel</option>
+              <option value="Gasolina">Gasolina</option>
+              <option value="Híbrido">Híbrido</option>
+              <option value="Eléctrico">Eléctrico</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Cambio</label>
+            <select id="carTransmission" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500">
+              <option value="Manual">Manual</option>
+              <option value="Automático">Automático</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">URL de Imagen del Vehículo</label>
+          <input type="url" id="carImage" placeholder="https://ejemplo.com/foto.jpg" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Observaciones / Equipamiento</label>
+          <textarea id="carDescription" rows="2" placeholder="Garantía 12 meses, ITV al día, sensores de aparcamiento..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-palmero-500"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-700 flex justify-end gap-3">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium transition">Cancelar</button>
+          <button type="submit" id="saveBtn" class="px-5 py-2 rounded-lg bg-palmero-600 hover:bg-palmero-500 text-white text-sm font-semibold transition">Guardar Vehículo</button>
+        </div>
+      </form>
     </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <p class="font-semibold text-slate-400">Compraventas El Palmero</p>
+    <p class="mt-1">Avenida Tito Didio 7E, Pol. Ind. Cabezo Beaza, Cartagena (Murcia)</p>
+    <p class="mt-2 text-slate-600">Base de Datos en Tiempo Real &bull; Conexión Permanente</p>
   </footer>
 
+  <!-- SCRIPT DE LÓGICA Y CONEXIÓN A FIREBASE -->
   <script>
-    function abrirDB() {
-      return new Promise((resolve, reject) => {
-        const req = indexedDB.open("ElPalmeroDB", 1);
-        req.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains("coches")) {
-            db.createObjectStore("coches", { keyPath: "id" });
-          }
-        };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
+    // 1. CONFIGURACIÓN PERMANENTE DE TU FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaKF2UIogxicJYsDR1Un4n7fPg80s-J_g",
+      authDomain: "compraventaelpalmero.firebaseapp.com",
+      projectId: "compraventaelpalmero",
+      storageBucket: "compraventaelpalmero.firebasestorage.app",
+      messagingSenderId: "954644373383",
+      appId: "1:954644373383:web:03e0a66fea805def2abd22"
+    };
+
+    // Inicializar Firebase y Firestore
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const carsCollection = db.collection('vehiculos');
+
+    let allCars = [];
+
+    // 2. SINCRONIZACIÓN EN TIEMPO REAL CON FIRESTORE
+    carsCollection.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+      document.getElementById('loadingState').classList.add('hidden');
+      allCars = [];
+      snapshot.forEach((doc) => {
+        allCars.push({ id: doc.id, ...doc.data() });
+      });
+      renderCars(allCars);
+    }, (error) => {
+      console.error("Error al obtener datos:", error);
+      document.getElementById('loadingState').innerHTML = `
+        <p class="text-red-400 text-sm">Error de conexión con la base de datos. Revisa las reglas en Firebase.</p>
+      `;
+    });
+
+    // 3. RENDERIZADO DE VEHÍCULOS
+    function renderCars(cars) {
+      const grid = document.getElementById('carsGrid');
+      const empty = document.getElementById('emptyState');
+      const count = document.getElementById('totalCount');
+
+      count.textContent = cars.length;
+      grid.innerHTML = '';
+
+      if (cars.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      cars.forEach((car) => {
+        const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
+        const imgUrl = car.image && car.image.trim() !== '' ? car.image : defaultImg;
+
+        const card = document.createElement('div');
+        card.className = "bg-slate-800 border border-slate-700/80 rounded-2xl overflow-hidden shadow-lg flex flex-col hover:border-slate-600 transition group";
+        
+        card.innerHTML = `
+          <div class="relative h-48 bg-slate-950 overflow-hidden">
+            <img src="${imgUrl}" alt="${car.brand} ${car.model}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='${defaultImg}'" />
+            <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-palmero-400 border border-slate-700">
+              ${car.fuel || 'Diésel'}
+            </div>
+          </div>
+          
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <h2 class="text-lg font-bold text-white group-hover:text-palmero-400 transition">${car.brand} ${car.model}</h2>
+              </div>
+              <p class="text-2xl font-black text-palmero-400 mt-1">${Number(car.price).toLocaleString('es-ES')} €</p>
+              
+              <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-700/60 text-xs text-slate-300">
+                <div><i class="fa-solid fa-calendar text-slate-500 mr-1.5"></i> Año: <strong class="text-white">${car.year}</strong></div>
+                <div><i class="fa-solid fa-road text-slate-500 mr-1.5"></i> <strong class="text-white">${Number(car.km).toLocaleString('es-ES')}</strong> km</div>
+                <div><i class="fa-solid fa-gears text-slate-500 mr-1.5"></i> <strong class="text-white">${car.transmission || 'Manual'}</strong></div>
+              </div>
+
+              ${car.description ? `<p class="text-xs text-slate-400 mt-3 line-clamp-2 bg-slate-900/50 p-2 rounded-lg">${car.description}</p>` : ''}
+            </div>
+
+            <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between gap-2">
+              <a href="https://wa.me/34688298944?text=Hola,%20estoy%20interesado%20en%20el%20${encodeURIComponent(car.brand + ' ' + car.model + ' (' + car.year + ')')}" target="_blank" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold py-2 px-3 rounded-lg text-center transition flex items-center justify-center gap-1.5">
+                <i class="fa-brands fa-whatsapp text-sm"></i> Consultar
+              </a>
+              <button onclick="editCar('${car.id}')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-300 transition" title="Editar">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button onclick="deleteCar('${car.id}')" class="p-2 bg-rose-950/40 hover:bg-rose-900 text-rose-300 border border-rose-800/40 rounded-lg transition" title="Eliminar">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
       });
     }
 
-    let cochesCargados = [];
-    const fotoActualPorCoche = {};
+    // 4. BÚSQUEDA / FILTRO
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = allCars.filter(c => 
+        (c.brand && c.brand.toLowerCase().includes(q)) ||
+        (c.model && c.model.toLowerCase().includes(q)) ||
+        (c.fuel && c.fuel.toLowerCase().includes(q))
+      );
+      renderCars(filtered);
+    });
 
-    function mostrarSeccion(seccionId) {
-      ['inicio', 'coches', 'contacto'].forEach(id => {
-        const el = document.getElementById('sec-' + id);
-        if (el) {
-          if (id === seccionId) { el.classList.remove('hidden'); el.classList.add('block'); }
-          else { el.classList.remove('block'); el.classList.add('hidden'); }
-        }
-      });
-      if (seccionId === 'coches') renderizarCatalogoPublico();
-      window.scrollTo({ top: 0, behavior: 'instant' });
+    // 5. CONTROL DEL MODAL Y FORMULARIO
+    function openModal() {
+      document.getElementById('carForm').reset();
+      document.getElementById('carId').value = '';
+      document.getElementById('modalTitle').textContent = 'Añadir Nuevo Vehículo';
+      document.getElementById('carModal').classList.remove('hidden');
     }
 
-    async function renderizarCatalogoPublico() {
-      const grid = document.getElementById('grid-coches-publico');
-      const contador = document.getElementById('contador-stock');
+    function closeModal() {
+      document.getElementById('carModal').classList.add('hidden');
+    }
+
+    // GUARDAR O ACTUALIZAR VEHÍCULO
+    document.getElementById('carForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Guardando...';
+
+      const carId = document.getElementById('carId').value;
+      const carData = {
+        brand: document.getElementById('carBrand').value.trim(),
+        model: document.getElementById('carModel').value.trim(),
+        year: Number(document.getElementById('carYear').value),
+        km: Number(document.getElementById('carKm').value),
+        price: Number(document.getElementById('carPrice').value),
+        fuel: document.getElementById('carFuel').value,
+        transmission: document.getElementById('carTransmission').value,
+        image: document.getElementById('carImage').value.trim(),
+        description: document.getElementById('carDescription').value.trim(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
 
       try {
-        const db = await abrirDB();
-        const tx = db.transaction("coches", "readonly");
-        const req = tx.objectStore("coches").getAll();
-
-        req.onsuccess = () => {
-          cochesCargados = req.result.reverse();
-          contador.innerText = `${cochesCargados.length} Coches en Stock`;
-
-          if (cochesCargados.length === 0) {
-            grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-12">No hay coches subidos todavía.</p>`;
-            return;
-          }
-
-          grid.innerHTML = cochesCargados.map((c, idx) => {
-            if (fotoActualPorCoche[idx] === undefined) {
-              fotoActualPorCoche[idx] = 0;
-            }
-            const mediaList = c.media || [];
-            const total = mediaList.length;
-            const currentIdx = fotoActualPorCoche[idx];
-            const item = mediaList[currentIdx] || { tipo: 'foto', data: '' };
-
-            return `
-              <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                <div class="relative h-64 bg-slate-900 flex items-center justify-center select-none overflow-hidden group">
-                  <div id="media-tarjeta-${idx}" class="w-full h-full">
-                    ${item.tipo === 'video' 
-                      ? `<video controls class="w-full h-full object-cover"><source src="${item.data}" type="video/mp4"></video>` 
-                      : `<img src="${item.data}" class="w-full h-full object-cover">`
-                    }
-                  </div>
-
-                  <span class="absolute top-3 right-3 bg-red-600 text-white font-black text-sm px-3.5 py-1 rounded-full shadow-lg z-10">
-                    ${Number(c.precio).toLocaleString('es-ES')} €
-                  </span>
-
-                  ${total > 1 ? `
-                    <span id="badge-tarjeta-${idx}" class="absolute bottom-3 left-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm z-10">
-                      ${currentIdx + 1} / ${total} ${item.tipo === 'video' ? '🎬' : '📸'}
-                    </span>
-                  ` : ''}
-
-                  ${total > 1 ? `
-                    <button type="button" onclick="cambiarSlideTarjeta(${idx}, -1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center text-sm font-black transition z-20 backdrop-blur-sm cursor-pointer shadow-md">
-                      &#10094;
-                    </button>
-                  ` : ''}
-
-                  ${total > 1 ? `
-                    <button type="button" onclick="cambiarSlideTarjeta(${idx}, 1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center text-sm font-black transition z-20 backdrop-blur-sm cursor-pointer shadow-md">
-                      &#10095;
-                    </button>
-                  ` : ''}
-                </div>
-
-                <div class="p-6 space-y-4">
-                  <div>
-                    <h3 class="font-black text-lg text-slate-900 uppercase leading-tight">${c.titulo}</h3>
-                    <div class="flex flex-wrap gap-2 mt-3">
-                      <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">📅 ${c.ano}</span>
-                      <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">🛣 ${c.km}</span>
-                      <span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-2.5 py-1 rounded-lg">⛽ ${c.motor}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }).join('');
-        };
-      } catch (e) {
-        console.error("Error al cargar vehículos:", e);
-      }
-    }
-
-    function cambiarSlideTarjeta(cocheIdx, direccion) {
-      const c = cochesCargados[cocheIdx];
-      if (!c || !c.media || c.media.length <= 1) return;
-
-      const total = c.media.length;
-      let actual = fotoActualPorCoche[cocheIdx] || 0;
-      actual = (actual + direccion + total) % total;
-      fotoActualPorCoche[cocheIdx] = actual;
-
-      const item = c.media[actual];
-      const contenedorMedia = document.getElementById(`media-tarjeta-${cocheIdx}`);
-      const badge = document.getElementById(`badge-tarjeta-${cocheIdx}`);
-
-      if (contenedorMedia) {
-        if (item.tipo === 'video') {
-          contenedorMedia.innerHTML = `<video controls autoplay class="w-full h-full object-cover"><source src="${item.data}" type="video/mp4"></video>`;
+        if (carId) {
+          await carsCollection.doc(carId).update(carData);
         } else {
-          contenedorMedia.innerHTML = `<img src="${item.data}" class="w-full h-full object-cover">`;
+          carData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await carsCollection.add(carData);
         }
-      }
-
-      if (badge) {
-        badge.innerText = `${actual + 1} / ${total} ${item.tipo === 'video' ? '🎬' : '📸'}`;
-      }
-    }
-
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'elpalmero_db_actualizada') {
-        renderizarCatalogoPublico();
+        closeModal();
+      } catch (err) {
+        alert('Error al guardar el vehículo: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Guardar Vehículo';
       }
     });
 
-    renderizarCatalogoPublico();
+    // EDITAR VEHÍCULO
+    function editCar(id) {
+      const car = allCars.find(c => c.id === id);
+      if (!car) return;
+
+      document.getElementById('carId').value = car.id;
+      document.getElementById('carBrand').value = car.brand || '';
+      document.getElementById('carModel').value = car.model || '';
+      document.getElementById('carYear').value = car.year || '';
+      document.getElementById('carKm').value = car.km || '';
+      document.getElementById('carPrice').value = car.price || '';
+      document.getElementById('carFuel').value = car.fuel || 'Diésel';
+      document.getElementById('carTransmission').value = car.transmission || 'Manual';
+      document.getElementById('carImage').value = car.image || '';
+      document.getElementById('carDescription').value = car.description || '';
+
+      document.getElementById('modalTitle').textContent = 'Editar Vehículo';
+      document.getElementById('carModal').classList.remove('hidden');
+    }
+
+    // ELIMINAR VEHÍCULO
+    async function deleteCar(id) {
+      if (confirm('¿Seguro que deseas eliminar este vehículo? Esta acción no se puede deshacer.')) {
+        try {
+          await carsCollection.doc(id).delete();
+        } catch (err) {
+          alert('Error al eliminar: ' + err.message);
+        }
+      }
+    }
   </script>
 </body>
 </html>
