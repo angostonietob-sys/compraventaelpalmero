@@ -15,6 +15,23 @@
     <!-- Firebase SDKs (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        palmero: {
+                            red: '#e03a3a',
+                            dark: '#152e4d',
+                            footer: '#c85a54',
+                            sidebar: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
@@ -33,48 +50,63 @@
                         ocasión · Nacionales y de importación</span>
                 </div>
             </a>
-            <div class="hidden md:flex items-center gap-8 font-black text-xs uppercase tracking-wider">
+
+            <div class="hidden md:flex items-center gap-6 font-black text-xs uppercase tracking-wider">
                 <a href="index.html" class="text-slate-700 hover:text-[#e03a3a] transition">Inicio</a>
                 <a href="coches.html" class="text-[#e03a3a] transition">Coches</a>
                 <a href="contacto.html" class="text-slate-700 hover:text-[#e03a3a] transition">Contacto</a>
+
+                <!-- Botón exclusivo de WhatsApp en la barra de Coches -->
+                <a href="https://wa.me/34688298944?text=Hola,%20estoy%20viendo%20el%20catálogo%20de%20coches%20y%20me%20interesa%20información."
+                    target="_blank"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>WhatsApp Ventas</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- CABECERA DEL CATÁLOGO -->
-    <header class="bg-slate-900 text-white py-12 px-4 border-b border-slate-800 text-center relative overflow-hidden">
-        <div class="max-w-4xl mx-auto space-y-2 relative z-10">
+    <!-- CABECERA DE SECCIÓN -->
+    <header class="bg-[#152e4d] text-white py-12 px-4 border-b border-slate-800 text-center">
+        <div class="max-w-4xl mx-auto space-y-2">
             <span
                 class="text-xs font-black text-white uppercase tracking-widest bg-[#e03a3a] px-3.5 py-1 rounded-full shadow-sm">Stock
-                Garantizado</span>
-            <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">Vehículos Disponibles</h1>
-            <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
-                Todos nuestros coches son revisados y entregados con garantía. Consulta detalles o agenda tu cita.
+                Disponible</span>
+            <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">Catálogo de Vehículos</h1>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto font-medium">
+                Encuentra tu próximo coche totalmente revisado, garantizado y listo para entrega inmediata.
             </p>
         </div>
     </header>
 
-    <!-- CATÁLOGO -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
-        <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
-            <div class="text-xs font-black text-slate-500 uppercase tracking-wider">
-                Mostrando <span id="totalCarsBadge" class="text-[#e03a3a] font-black">0</span> vehículos en stock
+    <!-- CONTENIDO PRINCIPAL: CATÁLOGO -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+
+        <!-- Filtros rápidos o contador -->
+        <div
+            class="flex flex-col sm:flex-row justify-between items-center mb-8 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm gap-4">
+            <div>
+                <h2 class="text-sm font-black text-[#152e4d] uppercase tracking-wider">Vehículos en Exposición</h2>
+                <p class="text-[11px] text-slate-400 font-bold uppercase">Actualizado en tiempo real desde el panel</p>
             </div>
-            <a href="contacto.html"
-                class="text-xs font-bold text-slate-600 hover:text-[#e03a3a] transition flex items-center gap-1">
-                <i class="fa-solid fa-location-dot"></i> Dónde estamos
-            </a>
+            <div class="bg-slate-100 text-slate-700 text-xs font-black px-4 py-2 rounded-xl border border-slate-200">
+                Total en Stock: <span id="publicStockCount" class="text-[#e03a3a]">0</span>
+            </div>
         </div>
 
-        <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div class="col-span-full text-center py-16 text-slate-400 font-bold uppercase text-xs">
+        <!-- Contenedor donde se cargan los coches de Firebase -->
+        <div id="publicCarsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+                class="col-span-full text-center py-20 bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs font-bold uppercase">
                 <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-slate-300"></i>
-                <p>Cargando catálogo en tiempo real...</p>
+                <p>Cargando vehículos disponibles...</p>
             </div>
         </div>
+
     </main>
 
-    <!-- FOOTER -->
+    <!-- FOOTER LIMPIO -->
     <footer class="bg-[#c85a54] text-white py-10 border-t border-red-400/30 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
@@ -99,10 +131,6 @@
                 <h4 class="font-black uppercase tracking-wider mb-2 text-white">HORARIO DE ATENCIÓN</h4>
                 <p class="text-red-100 text-[11px] leading-relaxed"><b>Lunes a Viernes:</b><br>9:30 / 13:30 - 17:00 /
                     20:30<br><br><b>Sábados:</b><br>9:30 / 13:30</p>
-                <div
-                    class="mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white px-2.5 py-1 rounded-md text-[11px] font-bold">
-                    <i class="fa-brands fa-whatsapp"></i> Ventas: 688 29 89 44
-                </div>
             </div>
             <div>
                 <h4 class="font-black uppercase tracking-wider mb-2 text-white">NAVEGACIÓN</h4>
@@ -115,7 +143,7 @@
         </div>
     </footer>
 
-    <!-- CHATBOT -->
+    <!-- CHATBOT FLOTANTE -->
     <div id="palmeroChatWidget" class="fixed bottom-5 right-5 z-50">
         <button onclick="toggleChat()" id="chatToggleBtn"
             class="w-14 h-14 bg-[#e03a3a] hover:bg-red-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-105 focus:outline-none">
@@ -128,7 +156,7 @@
                     <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
                     <div>
                         <h4 class="text-xs font-black uppercase tracking-wide">Asistente El Palmero</h4>
-                        <p class="text-[10px] text-slate-300 font-medium">Te atendemos al instante</p>
+                        <p class="text-[10px] text-slate-300 font-medium">Pregúntanos por cualquier coche</p>
                     </div>
                 </div>
                 <button onclick="toggleChat()"
@@ -136,8 +164,8 @@
             </div>
             <div id="chatBody" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 text-xs">
                 <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1">
-                    <p class="font-black text-[#152e4d]">¡Hola! 👋 ¿Te interesa alguno de nuestros vehículos?</p>
-                    <p>Introduce tu correo, teléfono y consulta para que Jorge te responda.</p>
+                    <p class="font-bold text-[#152e4d]">¡Hola! 👋 ¿Te interesa algún coche del catálogo?</p>
+                    <p>Déjanos tu correo, teléfono y consulta y Jorge te contactará al instante.</p>
                 </div>
             </div>
             <form id="chatForm" onsubmit="sendChatMessage(event)"
@@ -147,7 +175,7 @@
                 <input type="tel" id="chatPhone" required placeholder="Tu teléfono..."
                     class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
                 <div class="flex gap-2">
-                    <input type="text" id="chatInput" required placeholder="Escribe tu consulta..."
+                    <input type="text" id="chatInput" required placeholder="Ej: Me interesa el BMW..."
                         class="flex-1 px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
                     <button type="submit"
                         class="bg-[#e03a3a] hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow">
@@ -158,6 +186,7 @@
         </div>
     </div>
 
+    <!-- SCRIPT DE FIREBASE Y CARGA DE COCHES -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBaKF2UIogxicJYsDR1Un4n7fPg80s-J_g",
@@ -168,10 +197,65 @@
             appId: "1:954644373383:web:03e0a66fea805def2abd22"
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const carsCol = db.collection('coches');
-        const dbChat = firebase.firestore();
+        const dbPublic = firebase.firestore();
 
+        // Cargar inventario público en tiempo real
+        dbPublic.collection('coches').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+            const container = document.getElementById('publicCarsContainer');
+            document.getElementById('publicStockCount').textContent = snapshot.size;
+            container.innerHTML = '';
+
+            if (snapshot.empty) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs font-bold uppercase">
+                        <i class="fa-solid fa-car text-3xl mb-3 text-slate-300"></i>
+                        <p>No hay vehículos disponibles en este momento. ¡Vuelve pronto!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const car = doc.data();
+                const price = Number(car.price || 0).toLocaleString('es-ES');
+                const km = Number(car.km || 0).toLocaleString('es-ES');
+                const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo de Ocasión';
+                const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
+                const imgUrl = (Array.isArray(car.images) && car.images.length > 0) ? car.images[0] : (car.image || defaultImg);
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-48 w-full bg-slate-100 overflow-hidden">
+                            <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'" />
+                            <span class="absolute top-3 left-3 bg-[#152e4d] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">
+                                ${car.fuel || 'Diesel'}
+                            </span>
+                        </div>
+                        <div class="p-5 space-y-3">
+                            <h3 class="text-base font-black text-slate-900 uppercase tracking-tight">${title}</h3>
+                            <div class="flex items-center gap-3 text-xs font-bold text-slate-500">
+                                <span><i class="fa-solid fa-calendar text-[#e03a3a] mr-1"></i> ${car.year || 'N/D'}</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-gauge text-[#e03a3a] mr-1"></i> ${km} km</span>
+                            </div>
+                            <div class="text-xl font-black text-[#e03a3a] pt-1">${price} €</div>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <a href="https://wa.me/34688298944?text=Hola,%20estoy%20interesado%20en%20el%20vehículo:%20${encodeURIComponent(title)}%20con%20precio%20${price}€" target="_blank"
+                            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>Consultar por WhatsApp</span>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        });
+
+        // Lógica del Chatbot
         let chatOpen = false;
         function toggleChat() {
             chatOpen = !chatOpen;
@@ -204,8 +288,8 @@
             body.scrollTop = body.scrollHeight;
 
             try {
-                await dbChat.collection('mensajes_chat').add({
-                    cliente: "Cliente Catálogo",
+                await dbPublic.collection('mensajes_chat').add({
+                    cliente: "Cliente Catálogo Coches",
                     correo: email,
                     telefono: telefono,
                     mensaje: text,
@@ -213,93 +297,10 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 setTimeout(() => {
-                    body.innerHTML += `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1"><p class="font-bold text-[#152e4d]">¡Mensaje enviado a Jorge! 🚗</p><p>Tus datos se han registrado correctamente en el panel. ¡Te llamaremos enseguida!</p></div>`;
+                    body.innerHTML += `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1"><p class="font-bold text-[#152e4d]">¡Mensaje enviado a Jorge! 🚗</p><p>Tus datos se han registrado correctamente. Te responderemos pronto.</p></div>`;
                     body.scrollTop = body.scrollHeight;
                 }, 800);
             } catch (err) { console.error(err); }
-        }
-
-        const carImagesMap = {};
-        carsCol.onSnapshot((snapshot) => {
-            document.getElementById('totalCarsBadge').textContent = snapshot.size;
-            const grid = document.getElementById('carsGrid');
-            grid.innerHTML = '';
-
-            if (snapshot.empty) {
-                grid.innerHTML = `<div class="col-span-full bg-white p-12 rounded-2xl border border-dashed border-slate-300 text-center text-slate-400 text-xs font-bold uppercase"><i class="fa-solid fa-car text-4xl mb-3 text-slate-300"></i><p>No hay vehículos disponibles en este momento.</p></div>`;
-                return;
-            }
-
-            snapshot.forEach(doc => {
-                const car = doc.data();
-                const id = doc.id;
-                const defaultImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&auto=format&fit=crop&q=80';
-                let imagesArray = (Array.isArray(car.images) && car.images.length > 0) ? car.images : (car.image ? [car.image] : [defaultImg]);
-
-                carImagesMap[id] = { images: imagesArray, currentIndex: 0 };
-                const totalFotos = imagesArray.length;
-                const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehículo en Venta';
-                const price = Number(car.price || 0).toLocaleString('es-ES') + ' €';
-                const year = car.year || 'N/D';
-                const km = Number(car.km || 0).toLocaleString('es-ES') + ' km';
-                const fuel = car.fuel || 'Diesel';
-                const hasVideo = Boolean(car.video && car.video.trim() !== '');
-
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition";
-                card.innerHTML = `
-          <div class="relative h-60 bg-slate-900 overflow-hidden select-none group">
-            <img id="img-${id}" src="${imagesArray[0]}" alt="${title}" class="w-full h-full object-cover transition duration-300" onerror="this.src='${defaultImg}'" />
-            <div class="absolute top-3 right-3 bg-[#e03a3a] text-white font-black text-sm px-2.5 py-1 rounded shadow z-10">${price}</div>
-            <div class="absolute bottom-3 left-3 bg-black/70 text-white font-bold text-[11px] px-2.5 py-1 rounded-md flex items-center gap-1.5 z-10 backdrop-blur-sm">
-              <i class="fa-solid fa-camera text-xs"></i><span id="counter-${id}">1/${totalFotos}</span>
-            </div>
-            ${totalFotos > 1 ? `
-              <button onclick="prevPhoto('${id}')" class="absolute left-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10 shadow"><i class="fa-solid fa-chevron-left"></i></button>
-              <button onclick="nextPhoto('${id}')" class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10 shadow"><i class="fa-solid fa-chevron-right"></i></button>
-            ` : ''}
-          </div>
-          <div class="p-4 flex-1 flex flex-col justify-between">
-            <div>
-              <h3 class="text-sm font-black text-slate-900 uppercase tracking-tight">${title}</h3>
-              <div class="flex items-center gap-3 mt-2 text-xs font-semibold text-slate-500">
-                <span class="flex items-center gap-1"><i class="fa-regular fa-calendar text-blue-500"></i> ${year}</span><span>·</span>
-                <span class="flex items-center gap-1"><i class="fa-solid fa-road text-slate-400"></i> ${km}</span><span>·</span>
-                <span class="flex items-center gap-1"><i class="fa-solid fa-gas-pump text-slate-400"></i> ${fuel}</span>
-              </div>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-              <a href="https://wa.me/34688298944?text=Hola,%20estoy%20interesado%20en%20el%20${encodeURIComponent(title)}" target="_blank" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
-                <i class="fa-brands fa-whatsapp text-sm"></i> Consultar
-              </a>
-              ${hasVideo ? `<a href="${car.video}" target="_blank" class="text-xs font-bold text-red-600 hover:text-red-700 flex items-center gap-1 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-md transition"><i class="fa-solid fa-play text-[10px]"></i> Ver Vídeo</a>` : ''}
-            </div>
-          </div>
-        `;
-                grid.appendChild(card);
-            });
-        });
-
-        function nextPhoto(id) {
-            const item = carImagesMap[id];
-            if (!item) return;
-            item.currentIndex = (item.currentIndex + 1) % item.images.length;
-            updatePhoto(id);
-        }
-        function prevPhoto(id) {
-            const item = carImagesMap[id];
-            if (!item) return;
-            item.currentIndex = (item.currentIndex - 1 + item.images.length) % item.images.length;
-            updatePhoto(id);
-        }
-        function updatePhoto(id) {
-            const item = carImagesMap[id];
-            const imgEl = document.getElementById(`img-${id}`);
-            const counterEl = document.getElementById(`counter-${id}`);
-            if (imgEl && counterEl) {
-                imgEl.src = item.images[item.currentIndex];
-                counterEl.textContent = `${item.currentIndex + 1}/${item.images.length}`;
-            }
         }
     </script>
 </body>
