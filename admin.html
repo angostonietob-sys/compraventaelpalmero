@@ -240,7 +240,7 @@
                                 <div
                                     class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50/50 hover:bg-slate-50 transition">
                                     <i class="fa-solid fa-folder-open text-2xl text-amber-500 mb-2"></i>
-                                    <div class="font-black text-slate-700 uppercase text-[11px]">Selecciona las 14 fotos
+                                    <div class="font-black text-slate-700 uppercase text-[11px]">Selecciona las fotos
                                         del coche</div>
                                     <input type="file" id="carFiles" accept="image/*" multiple
                                         class="mt-2 text-[11px] text-slate-500 w-full file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#152e4d] file:text-white cursor-pointer" />
@@ -281,7 +281,7 @@
                     </div>
                 </section>
 
-                <!-- 2. MENSAJES CHAT (IA) -->
+                <!-- 2. MENSAJES CHAT (CONECTADO A FIREBASE) -->
                 <section id="tab-chat" class="hidden space-y-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -294,32 +294,19 @@
                                 <p class="text-[11px] text-slate-400 font-semibold uppercase">Consultas recibidas por la
                                     web</p>
                             </div>
-                            <button onclick="clearChatHistory()"
-                                class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-lg transition">
-                                <i class="fa-solid fa-trash-can"></i> Limpiar Historial
-                            </button>
                         </div>
 
                         <div id="chatMessagesList" class="space-y-3">
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
-                                <div class="flex justify-between font-bold text-slate-700">
-                                    <span>Cliente Web (Interesado en Opel Corsa)</span>
-                                    <span class="text-slate-400 font-normal">Hoy</span>
-                                </div>
-                                <p class="text-slate-600">"Hola Jorge, ¿sigue disponible el Corsa para ir a verlo esta
-                                    tarde?"</p>
-                                <div class="pt-2 flex gap-2">
-                                    <a href="https://wa.me/34688298944" target="_blank"
-                                        class="text-emerald-600 font-bold hover:underline">
-                                        <i class="fa-brands fa-whatsapp"></i> Contactar por WhatsApp
-                                    </a>
-                                </div>
+                            <div
+                                class="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 text-slate-400 text-xs font-bold uppercase">
+                                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-slate-300"></i>
+                                <p>Cargando mensajes...</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- 3. ECONOMÍA & CAJA (CONECTADO A LOS COCHES Y FIRESTORE) -->
+                <!-- 3. ECONOMÍA & CAJA -->
                 <section id="tab-economy" class="hidden space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
@@ -491,6 +478,7 @@
         const db = firebase.firestore();
         const carsCol = db.collection('coches');
         const ecoCol = db.collection('economia');
+        const chatCol = db.collection('mensajes_chat');
 
         function switchTab(tabName) {
             ['inventory', 'chat', 'economy', 'security'].forEach(t => {
@@ -504,7 +492,52 @@
             activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition text-left bg-[#e03a3a] text-white shadow";
         }
 
-        // 1. INVENTARIO EN TIEMPO REAL & CÁLCULO DEL VALOR TOTAL DEL STOCK
+        // 1. ESCUCHAR MENSAJES DEL CHATBOT EN TIEMPO REAL
+        chatCol.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+            const chatContainer = document.getElementById('chatMessagesList');
+            chatContainer.innerHTML = '';
+
+            if (snapshot.empty) {
+                chatContainer.innerHTML = '<p class="text-slate-400 font-bold uppercase text-center py-6">No hay mensajes pendientes.</p>';
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const m = doc.data();
+                const email = m.correo || 'No indicado';
+                const telefono = m.telefono || 'No indicado';
+                const mensaje = m.mensaje || '';
+                const fecha = m.fecha || 'Reciente';
+
+                const card = document.createElement('div');
+                card.className = "p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center font-bold text-slate-700">
+                        <span class="text-[#e03a3a] uppercase font-black">Cliente Web</span>
+                        <span class="text-slate-400 font-normal text-[11px]">${fecha}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <p class="font-black text-slate-900 text-[11px]">📧 Correo: <span class="font-normal text-slate-700">${email}</span></p>
+                        <p class="font-black text-slate-900 text-[11px]">📞 Teléfono: <span class="font-normal text-slate-700">${telefono}</span></p>
+                        <p class="font-black text-slate-900 text-[11px] pt-1">💬 Mensaje:</p>
+                        <p class="text-slate-600 italic">"${mensaje}"</p>
+                    </div>
+                    <div class="pt-1 flex flex-wrap gap-2">
+                        <a href="https://wa.me/34${telefono.replace(/\s+/g, '')}?text=Hola,%20soy%20Jorge%20de%20Compraventas%20El%20Palmero.%20He%20recibido%20tu%20consulta." target="_blank"
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-2 rounded-lg transition inline-flex items-center gap-1.5 text-xs">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                        </a>
+                        <a href="mailto:${email}" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-lg transition inline-flex items-center gap-1.5 text-xs">
+                            <i class="fa-solid fa-envelope text-xs"></i> Enviar Email
+                        </a>
+                    </div>
+                `;
+                chatContainer.appendChild(card);
+            });
+        });
+
+        // 2. INVENTARIO EN TIEMPO REAL & CÁLCULO DEL VALOR TOTAL DEL STOCK
         carsCol.onSnapshot((snapshot) => {
             document.getElementById('stockCount').textContent = snapshot.size;
             const listContainer = document.getElementById('carsListContainer');
@@ -514,11 +547,11 @@
 
             if (snapshot.empty) {
                 listContainer.innerHTML = `
-          <div class="bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center text-slate-400 text-xs font-bold uppercase">
-            <i class="fa-solid fa-car text-3xl mb-2 text-slate-300"></i>
-            <p>No hay coches en stock.</p>
-          </div>
-        `;
+                    <div class="bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center text-slate-400 text-xs font-bold uppercase">
+                        <i class="fa-solid fa-car text-3xl mb-2 text-slate-300"></i>
+                        <p>No hay coches en stock.</p>
+                    </div>
+                `;
             } else {
                 snapshot.forEach(doc => {
                     const car = doc.data();
@@ -533,38 +566,36 @@
                     const item = document.createElement('div');
                     item.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4";
                     item.innerHTML = `
-            <div class="flex items-center gap-4 w-full sm:w-auto">
-              <div class="relative w-24 h-16 flex-shrink-0">
-                <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover rounded-lg border border-slate-200" onerror="this.src='${defaultImg}'" />
-                <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">${fotosCount} Fotos</span>
-              </div>
-              <div>
-                <div class="text-sm font-black text-slate-900 uppercase">${title}</div>
-                <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500">
-                  <span class="text-[#e03a3a] font-black">${price.toLocaleString('es-ES')} €</span>
-                  <span>·</span>
-                  <span>${car.year || 'N/D'}</span>
-                  <span>·</span>
-                  <span>${Number(car.km || 0).toLocaleString('es-ES')} km</span>
-                  <span>·</span>
-                  <span>${car.fuel || 'Diesel'}</span>
-                </div>
-              </div>
-            </div>
-            <button onclick="deleteCar('${doc.id}', '${title}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-black text-xs uppercase px-4 py-2 rounded-lg transition flex items-center gap-1.5 self-end sm:self-center">
-              <i class="fa-solid fa-trash-can"></i>
-              <span>Eliminar</span>
-            </button>
-          `;
+                        <div class="flex items-center gap-4 w-full sm:w-auto">
+                          <div class="relative w-24 h-16 flex-shrink-0">
+                            <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover rounded-lg border border-slate-200" onerror="this.src='${defaultImg}'" />
+                            <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">${fotosCount} Fotos</span>
+                          </div>
+                          <div>
+                            <div class="text-sm font-black text-slate-900 uppercase">${title}</div>
+                            <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500">
+                              <span class="text-[#e03a3a] font-black">${price.toLocaleString('es-ES')} €</span>
+                              <span>·</span>
+                              <span>${car.year || 'N/D'}</span>
+                              <span>·</span>
+                              <span>${Number(car.km || 0).toLocaleString('es-ES')} km</span>
+                              <span>·</span>
+                              <span>${car.fuel || 'Diesel'}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <button onclick="deleteCar('${doc.id}', '${title}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-black text-xs uppercase px-4 py-2 rounded-lg transition flex items-center gap-1.5 self-end sm:self-center">
+                          <i class="fa-solid fa-trash-can"></i>
+                          <span>Eliminar</span>
+                        </button>
+                    `;
                     listContainer.appendChild(item);
                 });
             }
 
-            // Actualizar tarjeta de "Valor Stock Activo" en Economía
             document.getElementById('ecoStockTotal').textContent = `${valorTotalStock.toLocaleString('es-ES')} €`;
         });
 
-        // COMPRESOR DE IMÁGENES AL VUELO
         function comprimirFoto(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -593,7 +624,6 @@
             });
         }
 
-        // 2. SUBIR COCHE Y AUTO-REGISTRAR EN ECONOMÍA
         document.getElementById('carForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const saveBtn = document.getElementById('saveCarBtn');
@@ -634,7 +664,6 @@
             try {
                 await carsCol.add(newCar);
 
-                // Auto-registro en Economía en Firestore
                 await ecoCol.add({
                     concepto: `Entrada a Stock: ${title}`,
                     importe: price,
@@ -664,7 +693,6 @@
             }
         }
 
-        // 3. SINCRONIZACIÓN DE LA PESTAÑA ECONOMÍA CON FIRESTORE
         ecoCol.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
             let ingresos = 0, gastos = 0;
             const list = document.getElementById('ecoMovementsList');
@@ -686,19 +714,19 @@
                     const row = document.createElement('div');
                     row.className = "p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center";
                     row.innerHTML = `
-            <div>
-              <span class="font-bold text-slate-800 uppercase">${m.concepto || 'Movimiento'}</span>
-              <span class="text-slate-400 text-[10px] block">${m.fecha || 'Reciente'}</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="font-black ${m.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">
-                ${m.tipo === 'ingreso' ? '+' : '-'}${importe.toLocaleString('es-ES')} €
-              </span>
-              <button onclick="removeEcoDoc('${doc.id}')" class="text-slate-400 hover:text-red-500 transition">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            </div>
-          `;
+                        <div>
+                          <span class="font-bold text-slate-800 uppercase">${m.concepto || 'Movimiento'}</span>
+                          <span class="text-slate-400 text-[10px] block">${m.fecha || 'Reciente'}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                          <span class="font-black ${m.tipo === 'ingreso' ? 'text-emerald-600' : 'text-red-600'}">
+                            ${m.tipo === 'ingreso' ? '+' : '-'}${importe.toLocaleString('es-ES')} €
+                          </span>
+                          <button onclick="removeEcoDoc('${doc.id}')" class="text-slate-400 hover:text-red-500 transition">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </div>
+                    `;
                     list.appendChild(row);
                 });
             }
@@ -708,7 +736,6 @@
             document.getElementById('ecoBalance').textContent = `${(ingresos - gastos).toLocaleString('es-ES')} €`;
         });
 
-        // Formulario manual de ingresos/gastos
         document.getElementById('ecoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const concepto = document.getElementById('ecoConcepto').value.trim();
@@ -740,7 +767,6 @@
             }
         }
 
-        // 4. SEGURIDAD Y CLAVE
         document.getElementById('passForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const p1 = document.getElementById('newPass').value;
@@ -754,12 +780,6 @@
             showAlert('Contraseña actualizada correctamente.', true);
             document.getElementById('passForm').reset();
         });
-
-        function clearChatHistory() {
-            if (confirm('¿Vaciar los mensajes del chat?')) {
-                document.getElementById('chatMessagesList').innerHTML = '<p class="text-slate-400 font-bold uppercase text-center py-6">No hay mensajes pendientes.</p>';
-            }
-        }
 
         function showAlert(msg, isSuccess) {
             const b = document.getElementById('alertBox');
