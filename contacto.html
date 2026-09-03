@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Compraventas El Palmero - Contacto y Ubicación</title>
+    <title>Contacto - Compraventas El Palmero</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,239 +12,279 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        palmero: {
-                            red: '#e03a3a',
-                            dark: '#152e4d',
-                            footer: '#c85a54'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 
-<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- CABECERA -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-
-            <!-- LOGO -->
-            <a href="index.html" class="flex items-center gap-4">
-                <img src="compraventa.jpg" alt="Compraventas El Palmero"
-                    class="h-14 w-28 object-cover rounded-md border border-slate-300 shadow-sm"
+    <!-- NAVEGACIÓN -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-24">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="compraventa.jpg" alt="Logo" class="h-12 w-28 object-cover rounded border border-slate-200"
                     onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=160&auto=format&fit=crop&q=80'" />
                 <div>
-                    <div class="text-xl sm:text-2xl font-black tracking-tight text-palmero-red uppercase italic">
-                        COMPRAVENTAS <span class="text-slate-900 not-italic">EL PALMERO</span>
-                    </div>
-                    <p class="text-[10px] sm:text-xs font-bold tracking-wider text-slate-400 uppercase">
-                        Vehículos de Ocasión · Nacionales y de Importación
-                    </p>
+                    <span
+                        class="text-lg sm:text-xl font-black tracking-wide block uppercase text-[#e03a3a]">COMPRAVENTAS
+                        EL PALMERO</span>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Vehículos de
+                        ocasión · Nacionales y de importación</span>
                 </div>
             </a>
+            <div class="hidden md:flex items-center gap-8 font-black text-xs uppercase tracking-wider">
+                <a href="index.html" class="text-slate-700 hover:text-[#e03a3a] transition">Inicio</a>
+                <a href="coches.html" class="text-slate-700 hover:text-[#e03a3a] transition">Coches</a>
+                <a href="contacto.html" class="text-[#e03a3a] transition">Contacto</a>
+            </div>
+        </div>
+    </nav>
 
-            <!-- NAVEGACIÓN (CONTACTO ACTIVO) -->
-            <nav class="flex items-center space-x-6 sm:space-x-8 text-xs font-black tracking-wider uppercase">
-                <a href="index.html" class="text-slate-700 hover:text-palmero-red transition">Inicio</a>
-                <a href="coches.html" class="text-slate-700 hover:text-palmero-red transition">Coches</a>
-                <a href="contacto.html" class="text-palmero-red border-b-2 border-palmero-red pb-1">Contacto</a>
-            </nav>
-
+    <!-- CABECERA -->
+    <header class="bg-slate-900 text-white py-12 px-4 border-b border-slate-800 text-center relative overflow-hidden">
+        <div class="max-w-4xl mx-auto space-y-2 relative z-10">
+            <span
+                class="text-xs font-black text-white uppercase tracking-widest bg-[#e03a3a] px-3.5 py-1 rounded-full shadow-sm">Atención
+                Directa</span>
+            <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">Dónde Estamos y Contacto</h1>
+            <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto font-medium">
+                Vente a vernos a nuestro concesionario en Cartagena o contacta con nosotros al instante.
+            </p>
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL: CONTACTO -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
-        <!-- TÍTULO DE SECCIÓN -->
-        <div>
-            <h1 class="text-2xl sm:text-3xl font-black text-palmero-dark tracking-tight uppercase">
-                Contacto
-            </h1>
-            <div class="w-12 h-1 bg-palmero-red mt-1"></div>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-2">
-                Información y ubicación de contacto
-            </p>
-        </div>
+            <!-- TARJETAS DE INFORMACIÓN -->
+            <div class="space-y-6 flex flex-col justify-between">
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-base font-black text-[#152e4d] uppercase tracking-tight flex items-center gap-2">
+                        <i class="fa-solid fa-store text-[#e03a3a]"></i> Datos de la Concesión
+                    </h2>
 
-        <!-- GRID DE 3 TARJETAS INDEPENDIENTES -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-4 text-xs">
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 bg-red-50 text-[#e03a3a] rounded-xl flex items-center justify-center flex-shrink-0 text-sm">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-slate-900 uppercase font-black">Dirección</strong>
+                                <span class="text-slate-600">Avenida Tito Didio 7E, Polígono Industrial Cabezo
+                                    Beaza<br>30353 Cartagena (Región de Murcia)</span>
+                            </div>
+                        </div>
 
-            <!-- TARJETA 1: TELÉFONOS -->
-            <div
-                class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-6 hover:shadow-md transition">
-                <div class="flex items-center gap-3">
-                    <div class="bg-red-50 text-palmero-red p-3 rounded-xl text-lg">
-                        <i class="fa-solid fa-phone-volume"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-black text-slate-900 uppercase">Teléfonos</h2>
-                        <p class="text-[11px] text-slate-400 font-semibold uppercase">Atención directa</p>
-                    </div>
-                </div>
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0 text-sm">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-slate-900 uppercase font-black">WhatsApp Ventas</strong>
+                                <a href="https://wa.me/34688298944" target="_blank"
+                                    class="text-emerald-600 font-bold hover:underline">688 29 89 44</a>
+                            </div>
+                        </div>
 
-                <div class="space-y-3 text-xs">
-                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-                        <span class="font-bold text-slate-600 uppercase">Empresa:</span>
-                        <a href="tel:699419202"
-                            class="font-black text-slate-900 hover:text-palmero-red transition tracking-wide text-sm">699
-                            41 92 02</a>
-                    </div>
-                    <div
-                        class="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                        <span class="font-bold text-emerald-800 uppercase flex items-center gap-1.5">
-                            <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i> WhatsApp:
-                        </span>
-                        <a href="https://wa.me/34688298944" target="_blank"
-                            class="font-black text-emerald-700 hover:underline tracking-wide text-sm">688 29 89 44</a>
-                    </div>
-                </div>
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 bg-blue-50 text-blue-900 rounded-xl flex items-center justify-center flex-shrink-0 text-sm">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-slate-900 uppercase font-black">Teléfono Fijo /
+                                    Oficina</strong>
+                                <span class="text-slate-600">699 41 92 02</span>
+                            </div>
+                        </div>
 
-                <p class="text-[11px] text-slate-400 text-center font-medium">Llámanos o envíanos un WhatsApp para
-                    consultar disponibilidad o concertar cita.</p>
-            </div>
-
-            <!-- TARJETA 2: UBICACIÓN Y BOTÓN MAPS -->
-            <div
-                class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-6 hover:shadow-md transition">
-                <div class="flex items-center gap-3">
-                    <div class="bg-red-50 text-palmero-red p-3 rounded-xl text-lg">
-                        <i class="fa-solid fa-location-dot"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-black text-slate-900 uppercase">Ubicación</h2>
-                        <p class="text-[11px] text-slate-400 font-semibold uppercase">Nuestras Instalaciones</p>
-                    </div>
-                </div>
-
-                <div class="text-xs text-slate-600 space-y-1.5 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <p class="font-bold text-slate-800 uppercase">Polígono Industrial Cabezo Beaza</p>
-                    <p class="font-semibold text-slate-700">Avenida Tito Didio 7E</p>
-                    <p class="text-slate-400">Cartagena (Región de Murcia)</p>
-                </div>
-
-                <a href="https://maps.google.com/?q=Avenida+Tito+Didio+7E+Pol+Ind+Cabezo+Beaza+Cartagena+Murcia"
-                    target="_blank"
-                    class="w-full bg-palmero-dark hover:bg-slate-800 text-white text-xs font-bold uppercase py-3 px-4 rounded-xl text-center transition flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-map-location-dot text-sm"></i>
-                    <span>Conectar con Google Maps</span>
-                </a>
-            </div>
-
-            <!-- TARJETA 3: HORARIO -->
-            <div
-                class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-6 hover:shadow-md transition">
-                <div class="flex items-center gap-3">
-                    <div class="bg-red-50 text-palmero-red p-3 rounded-xl text-lg">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-black text-slate-900 uppercase">Horario</h2>
-                        <p class="text-[11px] text-slate-400 font-semibold uppercase">Atención al público</p>
-                    </div>
-                </div>
-
-                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-2.5">
-                    <p class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Lunes a Sábado:</p>
-                    <div class="flex justify-between items-center text-slate-600 border-b border-slate-200/60 pb-1.5">
-                        <span class="font-medium">Mañanas:</span>
-                        <span class="font-black text-slate-900">8:00 a 14:00</span>
-                    </div>
-                    <div class="flex justify-between items-center text-slate-600 pt-0.5">
-                        <span class="font-medium">Tardes:</span>
-                        <span class="font-black text-slate-900">15:00 a 19:00</span>
-                    </div>
-                </div>
-
-
-
-            </div>
-    </main>
-
-    <!-- FOOTER CORPORATIVO -->
-    <footer class="bg-palmero-footer text-white mt-auto pt-10 pb-6 border-t border-red-900/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-white/20 text-xs">
-
-                <!-- COL 1 -->
-                <div class="space-y-2">
-                    <div class="flex items-center gap-2">
-                        <img src="compraventa.jpg" alt="Logo"
-                            class="h-10 w-18 object-cover rounded border border-white/30"
-                            onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=100&auto=format&fit=crop&q=80'" />
-                        <div>
-                            <div class="font-black uppercase tracking-tight text-sm">COMPRAVENTAS</div>
-                            <div class="font-bold text-red-100 uppercase text-[10px]">EL PALMERO</div>
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-9 h-9 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center flex-shrink-0 text-sm">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-slate-900 uppercase font-black">Correo Electrónico</strong>
+                                <a href="mailto:jorgegarcia@telecartagena.es"
+                                    class="text-blue-600 font-bold hover:underline">jorgegarcia@telecartagena.es</a>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-red-100/90 leading-relaxed pt-1">
-                        Vehículos de ocasión, nacionales y de importación revisados y garantizados.
+                </div>
+
+                <div class="bg-[#152e4d] text-white p-8 rounded-2xl shadow-sm space-y-3">
+                    <h3 class="text-sm font-black uppercase tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-[#e03a3a]"></i> Horario Comercial
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <b>Lunes a Viernes:</b> 9:30 / 13:30 - 17:00 / 20:30<br>
+                        <b>Sábados:</b> 9:30 / 13:30
                     </p>
                 </div>
-
-                <!-- COL 2 -->
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-dot"></i> DÓNDE ESTAMOS
-                    </h4>
-                    <p class="text-red-100 leading-relaxed">
-                        Avenida Tito Didio 7E, Pol. Ind. Cabezo Beaza<br />
-                        Cartagena (Región de Murcia)
-                    </p>
-                    <div class="pt-1">
-                        <a href="tel:699419202"
-                            class="inline-flex items-center gap-1.5 bg-white text-slate-800 font-bold px-3 py-1 rounded-full text-xs shadow-sm hover:bg-red-50 transition">
-                            <i class="fa-solid fa-phone text-palmero-footer"></i> 699 41 92 02
-                        </a>
-                    </div>
-                </div>
-
-                <!-- COL 3 -->
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-clock"></i> HORARIO DE ATENCIÓN
-                    </h4>
-                    <p class="text-red-100 leading-relaxed">
-                        <strong>Lunes a Sábado:</strong><br />
-                        Mañanas: 8:00 a 14:00<br />
-                        Tardes: 15:00 a 19:00
-                    </p>
-                    <div class="pt-1">
-                        <a href="https://wa.me/34688298944" target="_blank"
-                            class="inline-flex items-center gap-1.5 bg-emerald-600 text-white font-bold px-3 py-1 rounded-full text-xs hover:bg-emerald-500 transition shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Ventas: 688 29 89 44
-                        </a>
-                    </div>
-                </div>
-
-                <!-- COL 4 -->
-                <div class="space-y-2">
-                    <h4 class="font-black uppercase tracking-wider text-red-100 flex items-center gap-1.5">
-                        <i class="fa-solid fa-compass"></i> NAVEGACIÓN
-                    </h4>
-                    <ul class="space-y-1 text-red-100 font-semibold">
-                        <li><a href="index.html" class="hover:underline">› Inicio</a></li>
-                        <li><a href="coches.html" class="hover:underline">› Coches</a></li>
-                        <li><a href="contacto.html" class="hover:underline">› Contacto</a></li>
-                    </ul>
-                </div>
-
             </div>
 
-            <!-- COPYRIGHT -->
-            <div class="pt-4 text-center sm:text-left text-[11px] text-red-200/80">
-                <p>&copy; 2026 compraventaelpalmero todos los derechos reservados.</p>
+            <!-- MAPA / UBICACIÓN -->
+            <div
+                class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center min-h-[400px]">
+                <div class="w-full h-full rounded-xl overflow-hidden border border-slate-200 min-h-[350px]">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.243577312154!2d-0.9575!3d37.625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6342416b9b1e95%3A0x7d6f5f3e2e1a!2sPoligono%20Industrial%20Cabezo%20Beaza%2C%20Cartagena!5e0!3m2!1ses!2ses!4v1650000000000!5m2!1ses!2ses"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        class="w-full h-full min-h-[350px]">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#c85a54] text-white py-10 border-t border-red-400/30 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <img src="compraventa.jpg" alt="Logo"
+                        class="h-8 w-16 object-cover rounded border border-white/20" />
+                    <span class="font-black uppercase tracking-wider text-sm">COMPRAVENTAS</span>
+                </div>
+                <p class="text-red-100 text-[11px] leading-relaxed">Vehículos de ocasión, nacionales y de importación
+                    revisados y garantizados.</p>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">DÓNDE ESTAMOS</h4>
+                <p class="text-red-100 text-[11px] leading-relaxed">Avenida Tito Didio 7E, Pol. Ind. Cabezo
+                    Beaza<br>Cartagena (Región de Murcia)</p>
+                <div class="mt-2 text-white font-bold flex items-center gap-1.5"><i class="fa-solid fa-phone"></i> 699
+                    41 92 02</div>
+                <div class="mt-1 text-white font-bold text-[11px]"><i class="fa-solid fa-envelope"></i>
+                    jorgegarcia@telecartagena.es</div>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">HORARIO DE ATENCIÓN</h4>
+                <p class="text-red-100 text-[11px] leading-relaxed"><b>Lunes a Viernes:</b><br>9:30 / 13:30 - 17:00 /
+                    20:30<br><br><b>Sábados:</b><br>9:30 / 13:30</p>
+                <div
+                    class="mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white px-2.5 py-1 rounded-md text-[11px] font-bold">
+                    <i class="fa-brands fa-whatsapp"></i> Ventas: 688 29 89 44
+                </div>
+            </div>
+            <div>
+                <h4 class="font-black uppercase tracking-wider mb-2 text-white">NAVEGACIÓN</h4>
+                <ul class="space-y-1 text-red-100 text-[11px] font-medium">
+                    <li><a href="index.html" class="hover:underline">› Inicio</a></li>
+                    <li><a href="coches.html" class="hover:underline">› Coches</a></li>
+                    <li><a href="contacto.html" class="hover:underline">› Contacto</a></li>
+                </ul>
             </div>
         </div>
     </footer>
 
+    <!-- CHATBOT -->
+    <div id="palmeroChatWidget" class="fixed bottom-5 right-5 z-50">
+        <button onclick="toggleChat()" id="chatToggleBtn"
+            class="w-14 h-14 bg-[#e03a3a] hover:bg-red-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-105 focus:outline-none">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+        <div id="chatWindow"
+            class="hidden absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col transition-all">
+            <div class="bg-[#152e4d] text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-wide">Asistente El Palmero</h4>
+                        <p class="text-[10px] text-slate-300 font-medium">Te atendemos al instante</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()"
+                    class="text-slate-300 hover:text-white text-sm font-bold">&times;</button>
+            </div>
+            <div id="chatBody" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 text-xs">
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1">
+                    <p class="font-bold text-[#152e4d]">¡Hola! 👋 ¿Tienes alguna duda sobre ubicación u horarios?</p>
+                    <p>Introduce tu correo, teléfono y consulta para que Jorge te atienda.</p>
+                </div>
+            </div>
+            <form id="chatForm" onsubmit="sendChatMessage(event)"
+                class="p-3 bg-white border-t border-slate-200 flex flex-col gap-2">
+                <input type="email" id="chatEmail" required placeholder="Tu correo electrónico..."
+                    class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
+                <input type="tel" id="chatPhone" required placeholder="Tu teléfono..."
+                    class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" required placeholder="Escribe tu consulta..."
+                        class="flex-1 px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
+                    <button type="submit"
+                        class="bg-[#e03a3a] hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaKF2UIogxicJYsDR1Un4n7fPg80s-J_g",
+            authDomain: "compraventaelpalmero.firebaseapp.com",
+            projectId: "compraventaelpalmero",
+            storageBucket: "compraventaelpalmero.firebasestorage.app",
+            messagingSenderId: "954644373383",
+            appId: "1:954644373383:web:03e0a66fea805def2abd22"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const dbChat = firebase.firestore();
+
+        let chatOpen = false;
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            const win = document.getElementById('chatWindow');
+            if (chatOpen) { win.classList.remove('hidden'); document.getElementById('chatEmail').focus(); }
+            else { win.classList.add('hidden'); }
+        }
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('chatEmail');
+            const phoneInput = document.getElementById('chatPhone');
+            const textInput = document.getElementById('chatInput');
+
+            const email = emailInput.value.trim();
+            const telefono = phoneInput.value.trim();
+            const text = textInput.value.trim();
+
+            if (!text || !email || !telefono) return;
+
+            const body = document.getElementById('chatBody');
+            body.innerHTML += `<div class="bg-[#152e4d] text-white p-3 rounded-xl ml-auto max-w-[85%] shadow-sm space-y-1">
+                <p class="font-bold text-[10px] text-red-300">📧 ${email} | 📞 ${telefono}</p>
+                <p>${text}</p>
+            </div>`;
+
+            emailInput.value = '';
+            phoneInput.value = '';
+            textInput.value = '';
+            body.scrollTop = body.scrollHeight;
+
+            try {
+                await dbChat.collection('mensajes_chat').add({
+                    cliente: "Cliente Contacto",
+                    correo: email,
+                    telefono: telefono,
+                    mensaje: text,
+                    fecha: new Date().toLocaleDateString('es-ES') + ' ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                setTimeout(() => {
+                    body.innerHTML += `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-slate-700 space-y-1"><p class="font-bold text-[#152e4d]">¡Mensaje enviado a Jorge! 🚗</p><p>Tus datos se han registrado correctamente. ¡Te atenderemos enseguida!</p></div>`;
+                    body.scrollTop = body.scrollHeight;
+                }, 800);
+            } catch (err) { console.error(err); }
+        }
+    </script>
 </body>
 
 </html>
