@@ -573,36 +573,46 @@
 
         async function saveCar(e) {
             e.preventDefault();
-            const carId = document.getElementById('carId').value;
-            const rawKm = document.getElementById('carKm').value;
-            const cleanKm = parseInt(String(rawKm).replace(/\./g, '').replace(/,/g, '')) || 0;
-            const title = document.getElementById('carTitle').value.trim();
-            const price = Number(document.getElementById('carPrice').value);
-
-            const fileInput = document.getElementById('carFiles');
-            const urlInput = document.getElementById('carImage').value.trim();
-
-            let imagesList = urlInput ? [urlInput] : [];
-
-            if (fileInput.files.length > 0) {
-                for (let i = 0; i < fileInput.files.length; i++) {
-                    const file = fileInput.files[i];
-                    const base64 = await toBase64(file);
-                    imagesList.push(base64);
-                }
-            }
-
-            const carData = {
-                title: title,
-                price: price,
-                year: Number(document.getElementById('carYear').value),
-                km: cleanKm,
-                fuel: document.getElementById('carFuel').value,
-                images: imagesList,
-                image: imagesList[0] || ''
-            };
+            const btn = document.getElementById('btnSaveCar');
+            btn.disabled = true;
+            btn.textContent = "Guardando...";
 
             try {
+                const carId = document.getElementById('carId').value;
+                const rawKm = document.getElementById('carKm').value;
+                const cleanKm = parseInt(String(rawKm).replace(/\./g, '').replace(/,/g, '')) || 0;
+                const title = document.getElementById('carTitle').value.trim();
+                const price = Number(document.getElementById('carPrice').value);
+
+                const fileInput = document.getElementById('carFiles');
+                const urlInput = document.getElementById('carImage').value.trim();
+
+                let imagesList = urlInput ? [urlInput] : [];
+
+                if (fileInput.files && fileInput.files.length > 0) {
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        const file = fileInput.files[i];
+                        if (file.size > 1048576) { // 1MB máximo por imagen para evitar sobrecargar Firestore
+                            alert(`La imagen "${file.name}" supera 1MB. Por favor, selecciona una imagen más ligera.`);
+                            btn.disabled = false;
+                            btn.textContent = "Guardar Cambios";
+                            return;
+                        }
+                        const base64 = await toBase64(file);
+                        imagesList.push(base64);
+                    }
+                }
+
+                const carData = {
+                    title: title,
+                    price: price,
+                    year: Number(document.getElementById('carYear').value),
+                    km: cleanKm,
+                    fuel: document.getElementById('carFuel').value,
+                    images: imagesList,
+                    image: imagesList[0] || 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600'
+                };
+
                 if (carId) {
                     await dbAdmin.collection('coches').doc(carId).update(carData);
                     alert("¡Coche actualizado correctamente!");
@@ -618,12 +628,15 @@
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
-                    alert("¡Coche añadido al stock y registrado como inversión (gasto) en economía!");
+                    alert("¡Coche añadido al stock y registrado como inversión en economía!");
                 }
                 closeCarModal();
             } catch (err) {
-                console.error(err);
-                alert("Error al guardar el vehículo.");
+                console.error("Error al guardar coche:", err);
+                alert("Hubo un error al guardar el vehículo. Comprueba tu conexión o el tamaño de las imágenes.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Guardar Cambios";
             }
         }
 
