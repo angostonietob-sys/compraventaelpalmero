@@ -458,7 +458,7 @@
                 });
             });
 
-            // Mensajes Chat con botón de eliminar conversación
+            // Mensajes Chat
             dbAdmin.collection('mensajes_chat').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 const container = document.getElementById('adminMensajesContainer');
                 container.innerHTML = '';
@@ -501,7 +501,7 @@
                 });
             });
 
-            // Economía: GASTO automático al comprar stock + Ingresos/Gastos manuales
+            // Economía corregida: Las entradas de stock son estrictamente GASTOS
             dbAdmin.collection('economia').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 const tbody = document.getElementById('adminEcoTable');
                 tbody.innerHTML = '';
@@ -591,7 +591,6 @@
                 let imagesList = urlInput ? [urlInput] : [];
 
                 if (fileInput.files && fileInput.files.length > 0) {
-                    // Limitamos a un máximo de 6 fotos por subida para evitar saturar la base de datos
                     const maxFiles = Math.min(fileInput.files.length, 6);
                     for (let i = 0; i < maxFiles; i++) {
                         const compressedBase64 = await resizeAndCompressImage(fileInput.files[i], 800, 0.7);
@@ -616,6 +615,7 @@
                     carData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     await dbAdmin.collection('coches').add(carData);
 
+                    // ESTRICTAMENTE REGISTRADO COMO GASTO (Inversión en stock)
                     await dbAdmin.collection('economia').add({
                         concepto: `Entrada a Stock: ${title}`,
                         tipo: 'GASTO',
@@ -624,7 +624,7 @@
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
-                    alert("¡Coche añadido al stock y registrado como inversión en economía!");
+                    alert("¡Coche añadido al stock y registrado como GASTO (inversión) en economía!");
                 }
                 closeCarModal();
             } catch (err) {
@@ -645,7 +645,7 @@
         async function deleteMessage(id) {
             if (confirm("¿Estás seguro de eliminar esta conversación?")) {
                 try {
-                    await dbadmin.collection('mensajes_chat').doc(id).delete();
+                    await dbAdmin.collection('mensajes_chat').doc(id).delete();
                 } catch (err) {
                     console.error(err);
                     alert("Error al eliminar el mensaje.");
