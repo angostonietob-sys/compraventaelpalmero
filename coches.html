@@ -38,10 +38,11 @@
                 <img src="compraventa.jpg" alt="Logo"
                     class="h-10 w-20 sm:h-12 sm:w-24 object-cover rounded border border-slate-200" />
                 <div>
-                    <span class="text-sm sm:text-base font-black uppercase text-[#e03a3a] tracking-tight block">EL
-                        PALMERO</span>
+                    <span
+                        class="text-sm sm:text-base font-black uppercase text-[#e03a3a] tracking-tight block">COMPRAVENTAS
+                        EL PALMERO</span>
                     <span class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Vehículos
-                        de ocasión</span>
+                        de ocasión, nacionales y de importación</span>
                 </div>
             </div>
             <!-- Menú Escritorio -->
@@ -65,12 +66,13 @@
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL: CATÁLOGO Y MODAL DE CONTACTO -->
+    <!-- CONTENIDO PRINCIPAL: CATÁLOGO -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 flex-1 w-full">
         <div
             class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <div>
-                <h1 class="text-xl sm:text-2xl font-black uppercase text-[#152e4d]">Catálogo de Vehículos</h1>
+                <h1 class="text-xl sm:text-2xl font-black uppercase text-[#152e4d]">COMPRAVENTAS EL PALMERO VEHÍCULOS DE
+                    OCASIÓN</h1>
                 <p class="text-xs text-slate-400 font-bold uppercase mt-0.5">Vehículos disponibles actualmente en stock
                 </p>
             </div>
@@ -86,49 +88,6 @@
                 disponibles...</div>
         </div>
     </main>
-
-    <!-- MODAL DE INTERÉS / CONTACTAR POR UN COCHE ESPECÍFICO -->
-    <div id="carContactModal"
-        class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 space-y-6">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h3 class="text-base font-black uppercase text-[#152e4d]" id="modalCarTitle">Me interesa este coche</h3>
-                <button onclick="closeCarContactModal()"
-                    class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
-            </div>
-            <form onsubmit="submitCarInterest(event)" class="space-y-4 text-xs">
-                <input type="hidden" id="selectedCarName" />
-                <div>
-                    <label class="block font-black uppercase text-slate-600 mb-1">Tu Nombre</label>
-                    <input type="text" id="clientName" required placeholder="Introduce tu nombre..."
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]" />
-                </div>
-                <div>
-                    <label class="block font-black uppercase text-slate-600 mb-1">Teléfono (WhatsApp)</label>
-                    <input type="tel" id="clientPhone" required placeholder="Ej: 600123456"
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]" />
-                </div>
-                <div>
-                    <label class="block font-black uppercase text-slate-600 mb-1">Correo Electrónico</label>
-                    <input type="email" id="clientEmail" required placeholder="tucorreo@email.com"
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]" />
-                </div>
-                <div>
-                    <label class="block font-black uppercase text-slate-600 mb-1">Mensaje o Consulta</label>
-                    <textarea id="clientMessage" rows="3"
-                        placeholder="Hola, me interesa este vehículo y quisiera más información..."
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a] resize-none"></textarea>
-                </div>
-                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeCarContactModal()"
-                        class="px-4 py-2 bg-slate-100 hover:bg-slate-200 font-black uppercase rounded-xl text-slate-600">Cancelar</button>
-                    <button type="submit"
-                        class="px-5 py-2 bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase rounded-xl shadow-sm">Enviar
-                        Consulta</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- FOOTER -->
     <footer class="bg-[#c85a54] text-white py-10 border-t border-red-400/30 text-xs mt-12">
@@ -204,27 +163,39 @@
             snapshot.forEach(doc => {
                 const c = doc.data();
                 const price = Number(c.price || 0).toLocaleString('es-ES');
-                const kmNum = Number(String(c.km || 0).replace(/\./g, ''));
-                const kmFormatted = isNaN(kmNum) ? c.km : kmNum.toLocaleString('es-ES');
-                const imgUrl = (c.images && c.images.length > 0) ? c.images[0] : (c.image || 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600');
 
-                let galleryHtml = '';
-                if (c.images && c.images.length > 1) {
-                    galleryHtml = `<div class="flex gap-2 mt-2 overflow-x-auto pb-1">`;
-                    c.images.forEach(img => {
-                        galleryHtml += `<img src="${img}" class="w-12 h-12 object-cover rounded-lg border border-slate-200 cursor-pointer hover:opacity-75 transition flex-shrink-0" onclick="this.closest('.bg-white').querySelector('.main-car-img').src='${img}'" />`;
-                    });
-                    galleryHtml += `</div>`;
+                // Kilómetros formateados correctamente con miles
+                let kmNum = Number(String(c.km || 0).replace(/\./g, '').replace(/,/g, ''));
+                if (kmNum > 0 && kmNum < 1000) {
+                    kmNum = kmNum * 1000;
                 }
+                const kmFormatted = isNaN(kmNum) || kmNum === 0 ? c.km : kmNum.toLocaleString('es-ES');
+
+                // Fotos y galería
+                const images = (c.images && c.images.length > 0) ? c.images : [c.image || 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600'];
+                const cardId = 'car_' + doc.id;
+
+                let thumbsHtml = '';
+                images.forEach((img, idx) => {
+                    thumbsHtml += `<img src="${img}" class="w-12 h-12 object-cover rounded-lg border ${idx === 0 ? 'border-[#e03a3a] ring-2 ring-red-200' : 'border-slate-200'} cursor-pointer hover:opacity-75 transition flex-shrink-0" onclick="changeImage('${cardId}', '${img}', this)" />`;
+                });
 
                 grid.innerHTML += `
-                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between">
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between" id="${cardId}">
                         <div>
-                            <div class="relative h-52 bg-slate-100">
-                                <img src="${imgUrl}" class="main-car-img w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600'" />
+                            <div class="relative h-52 bg-slate-100 group">
+                                <img src="${images[0]}" class="main-car-img w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600'" />
                                 <span class="absolute top-3 right-3 bg-[#e03a3a] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-lg tracking-wider shadow">
                                     ${c.fuel || 'DIESEL'}
                                 </span>
+                                ${images.length > 1 ? `
+                                    <button onclick="prevImage('${cardId}', ${JSON.stringify(images).replace(/"/g, '&quot;')})" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button onclick="nextImage('${cardId}', ${JSON.stringify(images).replace(/"/g, '&quot;')})" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs transition z-10">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                ` : ''}
                             </div>
                             <div class="p-5 space-y-4">
                                 <div>
@@ -235,55 +206,67 @@
                                     <div><i class="fa-solid fa-calendar text-slate-400 mr-1"></i> Año: ${c.year || ''}</div>
                                     <div><i class="fa-solid fa-gauge text-slate-400 mr-1"></i> ${kmFormatted} km</div>
                                 </div>
-                                ${galleryHtml}
+                                <div class="flex gap-2 mt-2 overflow-x-auto pb-1">
+                                    ${thumbsHtml}
+                                </div>
                             </div>
                         </div>
                         <div class="p-5 pt-0">
-                            <button onclick="openCarContactModal('${c.title || 'Vehículo'}')" 
-                                class="w-full bg-[#152e4d] hover:bg-slate-800 text-white font-black py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-envelope"></i> Me interesa / Consultar
-                            </button>
+                            <a href="https://wa.me/34688298944?text=Hola,%20me%20interesa%20el%20vehículo%20${encodeURIComponent(c.title || 'Coche')}%20por%20${price}€" target="_blank"
+                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-base"></i> Contáctame por WhatsApp
+                            </a>
                         </div>
                     </div>
                 `;
             });
         });
 
-        function openCarContactModal(carTitle) {
-            document.getElementById('selectedCarName').value = carTitle;
-            document.getElementById('modalCarTitle').textContent = `Consulta sobre: ${carTitle}`;
-            document.getElementById('carContactModal').classList.remove('hidden');
+        // Funciones para las flechas y miniaturas de las fotos
+        function changeImage(cardId, imgUrl, thumbEl) {
+            const card = document.getElementById(cardId);
+            card.querySelector('.main-car-img').src = imgUrl;
+            card.querySelectorAll('.flex.gap-2 img').forEach(img => {
+                img.classList.remove('border-[#e03a3a]', 'ring-2', 'ring-red-200');
+                img.classList.add('border-slate-200');
+            });
+            thumbEl.classList.remove('border-slate-200');
+            thumbEl.classList.add('border-[#e03a3a]', 'ring-2', 'ring-red-200');
         }
-        function closeCarContactModal() {
-            document.getElementById('carContactModal').classList.add('hidden');
+
+        function prevImage(cardId, images) {
+            const card = document.getElementById(cardId);
+            const mainImg = card.querySelector('.main-car-img');
+            const currentSrc = mainImg.src;
+            let index = images.findIndex(img => currentSrc.includes(img) || img === currentSrc);
+            if (index <= 0) index = images.length - 1;
+            else index--;
+            changeImageByIndex(cardId, images, index);
         }
 
-        async function submitCarInterest(e) {
-            e.preventDefault();
-            const carName = document.getElementById('selectedCarName').value;
-            const clientName = document.getElementById('clientName').value.trim();
-            const clientPhone = document.getElementById('clientPhone').value.trim();
-            const clientEmail = document.getElementById('clientEmail').value.trim();
-            const clientMessage = document.getElementById('clientMessage').value.trim();
+        function nextImage(cardId, images) {
+            const card = document.getElementById(cardId);
+            const mainImg = card.querySelector('.main-car-img');
+            const currentSrc = mainImg.src;
+            let index = images.findIndex(img => currentSrc.includes(img) || img === currentSrc);
+            if (index < 0 || index >= images.length - 1) index = 0;
+            else index++;
+            changeImageByIndex(cardId, images, index);
+        }
 
-            const messageData = {
-                cliente: clientName,
-                telefono: clientPhone,
-                correo: clientEmail,
-                mensaje: `Interesado en [${carName}]. ${clientMessage}`,
-                fecha: new Date().toLocaleDateString('es-ES'),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            try {
-                await dbPublic.collection('mensajes_chat').add(messageData);
-                alert("¡Mensaje enviado con éxito! Nos pondremos en contacto contigo muy pronto.");
-                closeCarContactModal();
-                e.target.reset();
-            } catch (err) {
-                console.error(err);
-                alert("Hubo un error al enviar el mensaje. Inténtalo de nuevo.");
-            }
+        function changeImageByIndex(cardId, images, index) {
+            const card = document.getElementById(cardId);
+            const newUrl = images[index];
+            card.querySelector('.main-car-img').src = newUrl;
+            const thumbs = card.querySelectorAll('.flex.gap-2 img');
+            thumbs.forEach((img, idx) => {
+                img.classList.remove('border-[#e03a3a]', 'ring-2', 'ring-red-200');
+                img.classList.add('border-slate-200');
+                if (idx === index) {
+                    img.classList.remove('border-slate-200');
+                    img.classList.add('border-[#e03a3a]', 'ring-2', 'ring-red-200');
+                }
+            });
         }
     </script>
 </body>

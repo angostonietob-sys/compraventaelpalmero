@@ -419,7 +419,6 @@
             document.getElementById('section' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
             document.getElementById('btnTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-[#e03a3a] text-white transition shadow-sm";
 
-            // Si estamos en móvil, ocultar el menú lateral al cambiar de pestaña
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('adminSidebar');
                 sidebar.classList.add('hidden');
@@ -446,7 +445,7 @@
         function closeEcoModal() { document.getElementById('ecoModal').classList.add('hidden'); }
 
         function loadAdminData() {
-            // Coches
+            // Coches con kilómetros corregidos (formato de miles)
             dbAdmin.collection('coches').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 const tbody = document.getElementById('adminCarsTable');
                 tbody.innerHTML = '';
@@ -458,8 +457,12 @@
                     const c = doc.data();
                     const carId = doc.id;
                     const price = Number(c.price || 0).toLocaleString('es-ES');
-                    const kmNum = Number(String(c.km || 0).replace(/\./g, ''));
-                    const kmFormatted = isNaN(kmNum) ? c.km : kmNum.toLocaleString('es-ES');
+
+                    let kmNum = Number(String(c.km || 0).replace(/\./g, '').replace(/,/g, ''));
+                    if (kmNum > 0 && kmNum < 1000) {
+                        kmNum = kmNum * 1000;
+                    }
+                    const kmFormatted = isNaN(kmNum) || kmNum === 0 ? c.km : kmNum.toLocaleString('es-ES');
                     const imgUrl = (c.images && c.images.length > 0) ? c.images[0] : (c.image || '');
 
                     tbody.innerHTML += `
@@ -486,7 +489,7 @@
                 });
             });
 
-            // Mensajes Chat
+            // Mensajes Chat con botón de eliminar conversación
             dbAdmin.collection('mensajes_chat').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 const container = document.getElementById('adminMensajesContainer');
                 container.innerHTML = '';
@@ -496,27 +499,33 @@
                 }
                 snapshot.forEach(doc => {
                     const m = doc.data();
+                    const msgId = doc.id;
                     const cleanPhone = (m.telefono || '').replace(/\s+/g, '');
                     container.innerHTML += `
-                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                            <div class="flex justify-between items-start">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 relative">
+                            <button onclick="deleteMessage('${msgId}')" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 text-sm transition" title="Eliminar mensaje">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            <div class="flex justify-between items-start pr-8">
                                 <div>
                                     <span class="text-[10px] font-black uppercase text-[#e03a3a] bg-red-50 px-2 py-0.5 rounded">${m.cliente || 'Cliente'}</span>
                                     <h4 class="text-xs font-bold text-slate-900 mt-1">📧 ${m.correo || 'Sin correo'}</h4>
                                     <p class="text-xs font-bold text-slate-700">📞 ${m.telefono || 'Sin teléfono'}</p>
                                 </div>
-                                <span class="text-[10px] text-slate-400">${m.fecha || ''}</span>
                             </div>
                             <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">${m.mensaje || ''}</p>
-                            <div class="flex flex-col sm:flex-row justify-end gap-2 pt-2">
-                                <a href="https://wa.me/34${cleanPhone}?text=Hola,%20le%20escribimos%20de%20Compraventas%20El%20Palmero%20en%20relación%20a%20su%20consulta." target="_blank"
-                                    class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs uppercase transition flex items-center justify-center gap-1.5 shadow-sm">
-                                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
-                                </a>
-                                <a href="mailto:${m.correo}?subject=Consulta%20sobre%20vehículo%20-%20Compraventas%20El%20Palmero&body=Hola%20${encodeURIComponent(m.cliente || 'cliente')},%0A%0ANos%20ponemos%20en%20contacto%20desde%20Compraventas%20El%20Palmero%20en%20relación%20a%20su%20consulta%20sobre%20el%20vehículo.%0A%0AUn%20saludo,%0AJorge%20García%20(jorgegarcia@telecartagena.es)" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs uppercase transition flex items-center justify-center gap-1.5 shadow-sm">
-                                    <i class="fa-solid fa-envelope"></i> Correo
-                                </a>
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2">
+                                <span class="text-[10px] text-slate-400">${m.fecha || ''}</span>
+                                <div class="flex gap-2 w-full sm:w-auto">
+                                    <a href="https://wa.me/34${cleanPhone}?text=Hola,%20le%20escribimos%20de%20Compraventas%20El%20Palmero%20en%20relación%20a%20su%20consulta." target="_blank"
+                                        class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs uppercase transition flex items-center justify-center gap-1.5 shadow-sm">
+                                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                    <a href="mailto:${m.correo}?subject=Consulta%20sobre%20vehículo%20-%20Compraventas%20El%20Palmero" 
+                                        class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs uppercase transition flex items-center justify-center gap-1.5 shadow-sm">
+                                        <i class="fa-solid fa-envelope"></i> Correo
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -562,7 +571,6 @@
             });
         }
 
-        // GUARDAR COCHE E INCLUIR SU INVERSIÓN COMO GASTO EN ECONOMÍA
         async function saveCar(e) {
             e.preventDefault();
             const carId = document.getElementById('carId').value;
@@ -600,10 +608,8 @@
                     alert("¡Coche actualizado correctamente!");
                 } else {
                     carData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                    // 1. Guardar el coche en el inventario
                     await dbAdmin.collection('coches').add(carData);
 
-                    // 2. Registrar automáticamente la compra del coche como un GASTO / Inversión de stock
                     await dbAdmin.collection('economia').add({
                         concepto: `Entrada a Stock: ${title}`,
                         tipo: 'GASTO',
@@ -636,7 +642,17 @@
             }
         }
 
-        // Economía: Guardar y Borrar manual
+        async function deleteMessage(id) {
+            if (confirm("¿Estás seguro de eliminar esta conversación?")) {
+                try {
+                    await dbAdmin.collection('mensajes_chat').doc(id).delete();
+                } catch (err) {
+                    console.error(err);
+                    alert("Error al eliminar el mensaje.");
+                }
+            }
+        }
+
         async function saveEco(e) {
             e.preventDefault();
             const ecoData = {
