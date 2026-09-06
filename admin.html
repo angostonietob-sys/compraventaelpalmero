@@ -40,7 +40,8 @@
     <div id="loginScreen" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md p-6 sm:p-8 rounded-2xl shadow-2xl border border-slate-200 space-y-6">
             <div class="text-center space-y-2">
-                <img src="compraventa.jpg" alt="Logo" class="h-16 w-32 object-cover mx-auto rounded border border-slate-200"
+                <img src="compraventa.jpg" alt="Logo"
+                    class="h-16 w-32 object-cover mx-auto rounded border border-slate-200"
                     onerror="this.src='https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=160&auto=format&fit=crop&q=80'" />
                 <h1 class="text-xl font-black uppercase text-[#152e4d] tracking-tight">Panel de Administración</h1>
                 <p class="text-xs text-slate-400 font-bold uppercase">Acceso exclusivo para Jorge</p>
@@ -52,7 +53,8 @@
                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
                 </div>
                 <div>
-                    <label class="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1">Contraseña</label>
+                    <label
+                        class="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1">Contraseña</label>
                     <input type="password" id="passInput" required placeholder="Contraseña..."
                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-[#e03a3a]" />
                 </div>
@@ -66,9 +68,10 @@
 
     <!-- CONTENEDOR PRINCIPAL DEL PANEL -->
     <div id="adminPanel" class="hidden min-h-screen flex flex-col md:flex-row">
-        
+
         <!-- BARRA SUPERIOR MÓVIL (HEADER ADMIN) -->
-        <div class="md:hidden bg-[#0f172a] text-white px-4 py-3 flex items-center justify-between border-b border-slate-800 sticky top-0 z-40">
+        <div
+            class="md:hidden bg-[#0f172a] text-white px-4 py-3 flex items-center justify-between border-b border-slate-800 sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <img src="compraventa.jpg" alt="Logo" class="h-8 w-16 object-cover rounded border border-slate-700" />
                 <span class="text-xs font-black uppercase tracking-wider text-[#e03a3a]">Admin El Palmero</span>
@@ -79,10 +82,12 @@
         </div>
 
         <!-- SIDEBAR -->
-        <aside id="adminSidebar" class="hidden md:flex w-full md:w-64 bg-[#0f172a] text-white flex-col justify-between border-r border-slate-800 md:min-h-screen">
+        <aside id="adminSidebar"
+            class="hidden md:flex w-full md:w-64 bg-[#0f172a] text-white flex-col justify-between border-r border-slate-800 md:min-h-screen">
             <div class="p-6 space-y-8">
                 <div class="hidden md:flex items-center gap-3">
-                    <img src="compraventa.jpg" alt="Logo" class="h-10 w-20 object-cover rounded border border-slate-700" />
+                    <img src="compraventa.jpg" alt="Logo"
+                        class="h-10 w-20 object-cover rounded border border-slate-700" />
                     <div>
                         <span class="text-xs font-black tracking-wider block uppercase text-[#e03a3a]">EL PALMERO</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">Panel Admin</span>
@@ -110,7 +115,8 @@
             </div>
 
             <div class="p-6 border-t border-slate-800">
-                <button onclick="location.reload()" class="w-full flex items-center justify-center gap-2 text-red-400 hover:text-red-300 text-xs font-black uppercase tracking-wider py-2">
+                <button onclick="location.reload()"
+                    class="w-full flex items-center justify-center gap-2 text-red-400 hover:text-red-300 text-xs font-black uppercase tracking-wider py-2">
                     <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
                 </button>
             </div>
@@ -118,13 +124,16 @@
 
         <!-- CONTENIDO CENTRAL -->
         <main class="flex-1 p-4 sm:p-6 md:p-10 space-y-6 overflow-y-auto w-full">
-            
+
             <!-- SECCIÓN: COCHES -->
             <section id="sectionCoches" class="space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                     <div>
-                        <h2 class="text-base sm:text-lg font-black uppercase text-[#152e4d]">Gestión de Stock de Coches</h2>
-                        <p class="text-xs text-slate-400 font-bold uppercase">Añade, edita o elimina vehículos del catálogo</p>
+                        <h2 class="text-base sm:text-lg font-black uppercase text-[#152e4d]">Gestión de Stock de Coches
+                        </h2>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Añade, edita o elimina vehículos del
+                            catálogo</p>
                     </div>
                     <button onclick="openCarModal()"
                         class="bg-[#152e4d] hover:bg-slate-800 text-white font-black py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 w-full sm:w-auto justify-center">
@@ -146,7 +155,9 @@
                                 </tr>
                             </thead>
                             <tbody id="adminCarsTable" class="divide-y divide-slate-100 text-slate-700 font-medium">
-                                <tr><td colspan="6" class="p-6 text-center text-slate-400">Cargando vehículos...</td></tr>
+                                <tr>
+                                    <td colspan="6" class="p-6 text-center text-slate-400">Cargando vehículos...</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -156,8 +167,10 @@
             <!-- SECCIÓN: MENSAJES CHAT -->
             <section id="sectionMensajes" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h2 class="text-base sm:text-lg font-black uppercase text-[#152e4d]">Mensajes de Clientes (Chat)</h2>
-                    <p class="text-xs text-slate-400 font-bold uppercase">Contacta directamente al móvil o correo del cliente</p>
+                    <h2 class="text-base sm:text-lg font-black uppercase text-[#152e4d]">Mensajes de Clientes (Chat)
+                    </h2>
+                    <p class="text-xs text-slate-400 font-bold uppercase">Contacta directamente al móvil o correo del
+                        cliente</p>
                 </div>
                 <div id="adminMensajesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <p class="text-xs text-slate-400">Cargando mensajes...</p>
@@ -166,14 +179,16 @@
 
             <!-- SECCIÓN: ECONOMÍA -->
             <section id="sectionEconomia" class="hidden space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                     <div>
                         <h2 class="text-base sm:text-lg font-black uppercase text-[#152e4d]">Control Financiero</h2>
-                        <p class="text-xs text-slate-400 font-bold uppercase">Ingresos y Gastos de la Compraventa</p>
+                        <p class="text-xs text-slate-400 font-bold uppercase">Ingresos por ventas y Gastos / Inversiones
+                        </p>
                     </div>
                     <button onclick="openEcoModal()"
-                        class="bg-[#152e4d] hover:bg-slate-800 text-white font-black py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 w-full sm:w-auto justify-center">
-                        <i class="fa-solid fa-plus"></i> Registrar Movimiento
+                        class="bg-[#e03a3a] hover:bg-red-700 text-white font-black py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 w-full sm:w-auto justify-center">
+                        <i class="fa-solid fa-plus"></i> Registrar Ingreso / Gasto
                     </button>
                 </div>
 
@@ -184,16 +199,22 @@
                         <div id="totalIngresos" class="text-xl sm:text-2xl font-black text-emerald-600">0 €</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                        <span class="text-xs font-black uppercase text-slate-400">Total Gastos (Inversión Stock)</span>
+                        <span class="text-xs font-black uppercase text-slate-400">Total Gastos</span>
                         <div id="totalGastos" class="text-xl sm:text-2xl font-black text-red-600">0 €</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                        <span class="text-xs font-black uppercase text-slate-400">Balance Neto</span>
+                        <span class="text-xs font-black uppercase text-slate-400">Balance Neto (Beneficio)</span>
                         <div id="balanceNeto" class="text-xl sm:text-2xl font-black text-blue-900">0 €</div>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                        <span class="text-xs font-black uppercase text-slate-600">Historial de Movimientos
+                            Financieros</span>
+                        <span class="text-[10px] text-slate-400 font-bold">Control manual con opción de editar o
+                            borrar</span>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs min-w-[500px]">
                             <thead>
@@ -206,7 +227,9 @@
                                 </tr>
                             </thead>
                             <tbody id="adminEcoTable" class="divide-y divide-slate-100 text-slate-700 font-medium">
-                                <tr><td colspan="5" class="p-6 text-center text-slate-400">Cargando registros...</td></tr>
+                                <tr>
+                                    <td colspan="5" class="p-6 text-center text-slate-400">Cargando registros...</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -226,7 +249,8 @@
                             <input type="password" id="newPass" required placeholder="Introduce la nueva contraseña..."
                                 class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]" />
                         </div>
-                        <button type="submit" class="bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase py-2.5 px-5 rounded-xl text-xs transition shadow-sm w-full sm:w-auto">
+                        <button type="submit"
+                            class="bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase py-2.5 px-5 rounded-xl text-xs transition shadow-sm w-full sm:w-auto">
                             Actualizar Contraseña
                         </button>
                     </form>
@@ -237,11 +261,15 @@
     </div>
 
     <!-- MODAL NUEVO / EDITAR COCHE -->
-    <div id="carModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-2xl border border-slate-200 space-y-6 max-h-[90vh] overflow-y-auto">
+    <div id="carModal"
+        class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+            class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-2xl border border-slate-200 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h3 id="modalTitle" class="text-sm sm:text-base font-black uppercase text-[#152e4d]">Añadir Nuevo Vehículo</h3>
-                <button onclick="closeCarModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+                <h3 id="modalTitle" class="text-sm sm:text-base font-black uppercase text-[#152e4d]">Añadir Nuevo
+                    Vehículo</h3>
+                <button onclick="closeCarModal()"
+                    class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
             </div>
             <form onsubmit="saveCar(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="carId" />
@@ -271,7 +299,8 @@
                     </div>
                     <div>
                         <label class="block font-black uppercase text-slate-600 mb-1">Combustible</label>
-                        <select id="carFuel" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]">
+                        <select id="carFuel"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]">
                             <option value="DIESEL">Diesel</option>
                             <option value="GASOLINA">Gasolina</option>
                             <option value="HÍBRIDO">Híbrido</option>
@@ -280,39 +309,49 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block font-black uppercase text-slate-600 mb-1">Imágenes (Selecciona varias o URL)</label>
+                    <label class="block font-black uppercase text-slate-600 mb-1">Imágenes (Selecciona varias o
+                        URL)</label>
                     <input type="file" id="carFiles" multiple accept="image/*"
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#152e4d] file:text-white hover:file:bg-slate-800" />
                     <input type="url" id="carImage" placeholder="O pega URL principal..."
                         class="w-full mt-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]" />
                 </div>
                 <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeCarModal()" class="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 font-black uppercase rounded-xl text-slate-600">Cancelar</button>
-                    <button type="submit" id="btnSaveCar" class="w-full sm:w-auto px-5 py-2.5 bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase rounded-xl shadow-sm">Guardar Cambios</button>
+                    <button type="button" onclick="closeCarModal()"
+                        class="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 font-black uppercase rounded-xl text-slate-600">Cancelar</button>
+                    <button type="submit" id="btnSaveCar"
+                        class="w-full sm:w-auto px-5 py-2.5 bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase rounded-xl shadow-sm">Guardar
+                        Cambios</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL NUEVO MOVIMIENTO DE ECONOMÍA -->
-    <div id="ecoModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <!-- MODAL NUEVO / EDITAR MOVIMIENTO DE ECONOMÍA -->
+    <div id="ecoModal"
+        class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 space-y-6">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h3 class="text-sm sm:text-base font-black uppercase text-[#152e4d]">Registrar Movimiento</h3>
-                <button onclick="closeEcoModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+                <h3 id="ecoModalTitle" class="text-sm sm:text-base font-black uppercase text-[#152e4d]">Registrar
+                    Ingreso o Gasto</h3>
+                <button onclick="closeEcoModal()"
+                    class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
             </div>
             <form onsubmit="saveEco(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="ecoId" />
                 <div>
                     <label class="block font-black uppercase text-slate-600 mb-1">Concepto</label>
-                    <input type="text" id="ecoConcepto" required placeholder="Ej: Venta Skoda / Reparación taller..."
+                    <input type="text" id="ecoConcepto" required
+                        placeholder="Ej: Venta Skoda / Alquiler nave / Reparación..."
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]" />
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-black uppercase text-slate-600 mb-1">Tipo</label>
-                        <select id="ecoTipo" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]">
-                            <option value="INGRESO">Ingreso</option>
-                            <option value="GASTO">Gasto</option>
+                        <label class="block font-black uppercase text-slate-600 mb-1">Tipo de Movimiento</label>
+                        <select id="ecoTipo"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#e03a3a]">
+                            <option value="INGRESO">🟢 INGRESO (Venta / Cobro)</option>
+                            <option value="GASTO">🔴 GASTO (Compra / Pago)</option>
                         </select>
                     </div>
                     <div>
@@ -322,8 +361,11 @@
                     </div>
                 </div>
                 <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeEcoModal()" class="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 font-black uppercase rounded-xl text-slate-600">Cancelar</button>
-                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase rounded-xl shadow-sm">Guardar</button>
+                    <button type="button" onclick="closeEcoModal()"
+                        class="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 font-black uppercase rounded-xl text-slate-600">Cancelar</button>
+                    <button type="submit"
+                        class="w-full sm:w-auto px-5 py-2.5 bg-[#e03a3a] hover:bg-red-700 text-white font-black uppercase rounded-xl shadow-sm">Guardar
+                        Movimiento</button>
                 </div>
             </form>
         </div>
@@ -387,7 +429,7 @@
             });
             document.getElementById('section' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
             document.getElementById('btnTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-[#e03a3a] text-white transition shadow-sm";
-            
+
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('adminSidebar');
                 sidebar.classList.add('hidden');
@@ -410,7 +452,14 @@
         }
         function closeCarModal() { document.getElementById('carModal').classList.add('hidden'); }
 
-        function openEcoModal() { document.getElementById('ecoModal').classList.remove('hidden'); }
+        function openEcoModal(id = '', concepto = '', tipo = 'INGRESO', importe = '') {
+            document.getElementById('ecoId').value = id;
+            document.getElementById('ecoConcepto').value = concepto;
+            document.getElementById('ecoTipo').value = tipo;
+            document.getElementById('ecoImporte').value = importe;
+            document.getElementById('ecoModalTitle').textContent = id ? 'Editar Movimiento' : 'Registrar Ingreso o Gasto';
+            document.getElementById('ecoModal').classList.remove('hidden');
+        }
         function closeEcoModal() { document.getElementById('ecoModal').classList.add('hidden'); }
 
         function loadAdminData() {
@@ -426,7 +475,7 @@
                     const c = doc.data();
                     const carId = doc.id;
                     const price = Number(c.price || 0).toLocaleString('es-ES');
-                    
+
                     let kmNum = Number(String(c.km || 0).replace(/\./g, '').replace(/,/g, ''));
                     if (kmNum > 0 && kmNum < 1000) {
                         kmNum = kmNum * 1000;
@@ -501,7 +550,7 @@
                 });
             });
 
-            // Economía corregida: Las entradas de stock son estrictamente GASTOS
+            // Economía con botones de editar y borrar
             dbAdmin.collection('economia').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 const tbody = document.getElementById('adminEcoTable');
                 tbody.innerHTML = '';
@@ -515,6 +564,7 @@
                 }
                 snapshot.forEach(doc => {
                     const e = doc.data();
+                    const ecoId = doc.id;
                     const imp = Number(e.importe || 0);
                     if (e.tipo === 'INGRESO') ing += imp;
                     else gas += imp;
@@ -525,8 +575,14 @@
                             <td class="p-4 font-bold">${e.concepto || ''}</td>
                             <td class="p-4 uppercase whitespace-nowrap"><span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${e.tipo === 'INGRESO' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">${e.tipo}</span></td>
                             <td class="p-4 font-black whitespace-nowrap ${e.tipo === 'INGRESO' ? 'text-emerald-600' : 'text-red-600'}">${imp.toLocaleString('es-ES')} €</td>
-                            <td class="p-4 text-right whitespace-nowrap">
-                                <button onclick="deleteEco('${doc.id}')" class="text-red-500 hover:text-red-700 p-2"><i class="fa-solid fa-trash"></i></button>
+                            <td class="p-4 text-right space-x-2 whitespace-nowrap">
+                                <button onclick="openEcoModal('${ecoId}', '${encodeURIComponent(e.concepto || '')}', '${e.tipo || 'INGRESO'}', '${e.importe || ''}')" 
+                                    class="text-blue-500 hover:text-blue-700 p-2" title="Editar movimiento">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="deleteEco('${ecoId}')" class="text-red-500 hover:text-red-700 p-2" title="Eliminar movimiento">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     `;
@@ -540,7 +596,6 @@
             });
         }
 
-        // Función para comprimir y redimensionar imágenes automáticamente antes de subirlas
         function resizeAndCompressImage(file, maxWidth = 800, quality = 0.7) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -584,7 +639,7 @@
                 const cleanKm = parseInt(String(rawKm).replace(/\./g, '').replace(/,/g, '')) || 0;
                 const title = document.getElementById('carTitle').value.trim();
                 const price = Number(document.getElementById('carPrice').value);
-                
+
                 const fileInput = document.getElementById('carFiles');
                 const urlInput = document.getElementById('carImage').value.trim();
 
@@ -614,17 +669,7 @@
                 } else {
                     carData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     await dbAdmin.collection('coches').add(carData);
-
-                    // ESTRICTAMENTE REGISTRADO COMO GASTO (Inversión en stock)
-                    await dbAdmin.collection('economia').add({
-                        concepto: `Entrada a Stock: ${title}`,
-                        tipo: 'GASTO',
-                        importe: price,
-                        fecha: new Date().toLocaleDateString('es-ES'),
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    alert("¡Coche añadido al stock y registrado como GASTO (inversión) en economía!");
+                    alert("¡Coche añadido al stock correctamente!");
                 }
                 closeCarModal();
             } catch (err) {
@@ -655,19 +700,29 @@
 
         async function saveEco(e) {
             e.preventDefault();
+            const ecoId = document.getElementById('ecoId').value;
             const ecoData = {
                 concepto: document.getElementById('ecoConcepto').value.trim(),
                 tipo: document.getElementById('ecoTipo').value,
                 importe: Number(document.getElementById('ecoImporte').value),
-                fecha: new Date().toLocaleDateString('es-ES'),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                fecha: new Date().toLocaleDateString('es-ES')
             };
+
             try {
-                await dbAdmin.collection('economia').add(ecoData);
+                if (ecoId) {
+                    await dbAdmin.collection('economia').doc(ecoId).update(ecoData);
+                    alert("¡Movimiento actualizado correctamente!");
+                } else {
+                    ecoData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await dbAdmin.collection('economia').add(ecoData);
+                    alert("¡Movimiento financiero registrado correctamente!");
+                }
                 closeEcoModal();
                 e.target.reset();
-                alert("¡Movimiento financiero registrado!");
-            } catch (err) { console.error(err); }
+            } catch (err) {
+                console.error(err);
+                alert("Error al guardar el movimiento.");
+            }
         }
 
         async function deleteEco(id) {
